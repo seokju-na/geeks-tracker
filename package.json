@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
     "tauri": "tauri",
-    "tauri:dev": "tauri dev"
+    "tauri:dev": "tauri dev",
+    "test": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace",
+    "check": "cargo check --manifest-path src-tauri/Cargo.toml --workspace"
   },
   "dependencies": {
     "@stitches/react": "^1.2.6",

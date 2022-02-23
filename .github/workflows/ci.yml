@@ -1,0 +1,35 @@
+name: CI
+on: [pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use nodejs v16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: use rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: rust cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: run yarn install
+        run: yarn install --immutable --immutable-cache --check-cache
+      - name: check
+        run: yarn check
+      - name: test
+        run: yarn test
+      - name: build
+        run: yarn build
