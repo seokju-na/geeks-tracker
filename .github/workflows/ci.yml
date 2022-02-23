@@ -29,6 +29,8 @@ jobs:
         run: yarn install --immutable --immutable-cache --check-cache
       - name: check
         run: yarn check
+      - name: lint
+        run: yarn lint
       - name: test
         run: yarn test
       - name: build
