@@ -44,6 +44,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
+          override: true
       - name: install webkit2gtk (ubuntu only)
         if: matrix.platform == 'ubuntu-latest'
         run: |
