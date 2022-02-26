@@ -2,4 +2,5 @@
 pub enum EventstoreError {
   StreamNotExists,
   EventsAreEmpty,
+  RecordError,
 }
