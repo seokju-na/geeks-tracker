@@ -2,11 +2,13 @@ name: CI
 on: [pull_request]
 jobs:
   ci:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - name: essential packages
-        run: sudo apt-get install build-essential libgtk-3-dev
       - name: checkout
         uses: actions/checkout@v2
       - name: use nodejs v16
@@ -27,13 +29,16 @@ jobs:
             ~/.cargo/git/db/
             src-tauri/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: install webkit2gtk (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.0
       - name: run yarn install
         run: yarn install --immutable --immutable-cache
-      - name: check
-        run: yarn check
-      - name: lint
-        run: yarn lint
       - name: test
         run: yarn test
       - name: build
-        run: yarn build
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

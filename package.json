@@ -7,9 +7,7 @@
     "build": "tsc && vite build",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "test": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace",
-    "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "check": "cargo check --manifest-path src-tauri/Cargo.toml --workspace"
+    "test": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace"
   },
   "dependencies": {
     "@stitches/react": "^1.2.6",
