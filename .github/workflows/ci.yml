@@ -1,7 +1,32 @@
 name: CI
 on: [pull_request]
 jobs:
-  ci:
+  typecheck-lint:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use nodejs v16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/*.tsbuildinfo
+            **/.eslintcache
+          key: typecheck-lint-cache-${{ hashFiles('**/*.tsbuildinfo') }}-${{ hashFiles('**/.eslintcache') }}
+          restore-keys: |
+            typecheck-lint-cache-
+      - name: run yarn install
+        run: yarn install --immutable --immutable-cache
+      - name: lint
+        run: yarn lint
+      - name: typecheck
+        run: yarn typecheck
+  test-build:
     strategy:
       fail-fast: false
       matrix:
