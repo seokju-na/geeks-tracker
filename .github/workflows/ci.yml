@@ -85,8 +85,8 @@ jobs:
         run: yarn install --immutable --immutable-cache
       - name: webview build
         run: yarn build
-      - name: test
-        run: yarn test
+#      - name: test
+#        run: yarn test
       - name: build
         uses: tauri-apps/tauri-action@v0
         env:
