@@ -1,5 +1,3 @@
-#![feature(async_stream)]
-#![feature(associated_type_defaults)]
 #![cfg_attr(
   all(not(debug_assertions), target_os = "windows"),
   windows_subsystem = "windows"
