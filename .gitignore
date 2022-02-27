@@ -29,3 +29,6 @@ dist-ssr
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+.eslintcache
+tsconfig.tsbuildinfo
