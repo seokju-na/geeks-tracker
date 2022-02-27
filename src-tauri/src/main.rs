@@ -3,11 +3,11 @@
   windows_subsystem = "windows"
 )]
 
-use tauri::GlobalShortcutManager;
-
 fn main() {
   tauri::Builder::default()
     .setup(|app| {
+      use tauri::GlobalShortcutManager;
+
       let mut shortcut = app.global_shortcut_manager();
       shortcut
         .register("Cmd+G", || {
