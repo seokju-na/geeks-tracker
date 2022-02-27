@@ -884,13 +884,9 @@ name = "eventstore"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "git2",
  "nanoid",
- "regex",
- "run_script",
  "serde",
  "serde_json",
- "thiserror",
  "tokio",
 ]
 
@@ -1260,6 +1256,16 @@ dependencies = [
  "libc",
  "system-deps 6.0.2",
  "winapi",
+]
+
+[[package]]
+name = "git-utils"
+version = "0.1.0"
+dependencies = [
+ "git2",
+ "regex",
+ "testing",
+ "thiserror",
 ]
 
 [[package]]
@@ -3478,6 +3484,13 @@ dependencies = [
  "futf",
  "mac",
  "utf-8",
+]
+
+[[package]]
+name = "testing"
+version = "0.1.0"
+dependencies = [
+ "run_script",
 ]
 
 [[package]]
