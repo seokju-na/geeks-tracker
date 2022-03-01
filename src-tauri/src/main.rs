@@ -4,7 +4,6 @@
 )]
 
 mod app_error;
-mod constants;
 mod git_eventstore;
 
 fn main() {

@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 use git_utils::GitUtils;
 
 use crate::app_error::AppError;
-use crate::constants::LINE_ENDING;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Event {
@@ -50,28 +49,16 @@ impl RecordedEvent {
   }
 
   fn stringify_event(event: &Event) -> String {
-    format!(
-      "[event] {}{}{}{}",
-      event.name, LINE_ENDING, LINE_ENDING, event.data
-    )
+    GitUtils::format_commit_message(&format!("[event] {}", event.name), &event.data)
   }
 
   fn parse_event_message(event_message: &str) -> Result<(String, String), AppError> {
-    let lines: Vec<_> = event_message.split(LINE_ENDING).collect();
-    let subject = lines.get(0);
-    let body = lines[2..].join("");
+    let (subject, body) = GitUtils::parse_commit_message(event_message);
 
-    if let None = subject {
+    if !subject.starts_with("[event] ") {
       return Err(AppError::ParseRecordEventError);
     }
 
-    if let Some(x) = subject {
-      if !x.starts_with("[event] ") {
-        return Err(AppError::ParseRecordEventError);
-      }
-    }
-
-    let subject = subject.unwrap();
     let subject_splits: Vec<_> = subject.split(" ").collect();
     let event_name = subject_splits[1..].join("");
 
@@ -139,15 +126,11 @@ mod git_eventstore_tests {
 
     assert_eq!(
       event1_commit.message().unwrap(),
-      r#"[event] a
-
-{"text":"123"}"#
+      GitUtils::format_commit_message("[event] a", r#"{"text":"123"}"#)
     );
     assert_eq!(
       event2_commit.message().unwrap(),
-      r#"[event] b
-
-{"flag":true}"#
+      GitUtils::format_commit_message("[event] b", r#"{"flag":true}"#)
     );
   }
 
@@ -184,13 +167,7 @@ mod git_eventstore_tests {
     let eventstore = GitEventstore::new(&repo);
 
     let long_data = json!({
-      "a": nanoid!(),
-      "b": nanoid!(),
-      "c": nanoid!(),
-      "d": nanoid!(),
-      "f": nanoid!(),
-      "g": nanoid!(),
-      "h": nanoid!(),
+      "some_very_long_data": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
     });
 
     eventstore
