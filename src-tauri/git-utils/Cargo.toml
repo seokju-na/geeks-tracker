@@ -7,6 +7,7 @@ rust-version = "1.57"
 
 [dependencies]
 git2 = "0.13.25"
+constants = { path = "../constants" }
 
 [dev-dependencies]
 testing = { path = "../testing" }

@@ -1,5 +1,7 @@
 use git2::{Commit, Error as Git2Error, Oid, Repository};
 
+use constants::EOL;
+
 pub struct GitUtils {}
 
 impl GitUtils {
@@ -45,6 +47,22 @@ impl GitUtils {
 
     Ok(commits)
   }
+
+  pub fn parse_commit_message(message: &str) -> (String, String) {
+    let lines: Vec<_> = message.split(EOL).collect();
+    let subject = lines.get(0).unwrap_or(&"");
+    let body = if lines.len() > 2 {
+      lines[2..].join(EOL)
+    } else {
+      "".to_string()
+    };
+
+    (subject.to_string(), body)
+  }
+
+  pub fn format_commit_message(subject: &str, body: &str) -> String {
+    format!("{}{}{}{}", subject, EOL, EOL, body)
+  }
 }
 
 #[cfg(test)]
@@ -83,20 +101,24 @@ mod git_utils_tests {
   }
 
   #[test]
-  fn should_aaa() {
-    let fixture = FixtureRepository::setup_with_script(
-      r#"
-    echo -e "a" >> a.txt
-    mkdir -p A/ && echo -e "b" >> A/b.txt
-    git add -A
-    "#,
-    );
-    let repo = Repository::open(&fixture.path).unwrap();
+  fn should_parse_commit_message() {
+    let subject = "subject";
+    let body = format!("line1{}line2{}line3", EOL, EOL);
+    let message = format!("{}{}{}{}", subject, EOL, EOL, body);
 
-    let index = repo.index().unwrap();
+    let result = GitUtils::parse_commit_message(&message);
 
-    for entry in index.iter() {
-      println!("{} {}", from_utf8(&entry.path).unwrap(), entry.id);
-    }
+    assert_eq!(result.0, subject);
+    assert_eq!(result.1, body);
+  }
+
+  #[test]
+  fn should_parse_subject_only_commit_message() {
+    let subject = "subject";
+
+    let result = GitUtils::parse_commit_message(&subject);
+
+    assert_eq!(result.0, subject);
+    assert_eq!(result.1, "");
   }
 }
