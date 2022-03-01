@@ -1,4 +1,4 @@
-use git2::{Commit, Repository};
+use git2::{Commit, IndexAddOption, Repository};
 use serde::{Deserialize, Serialize};
 
 use git_utils::GitUtils;
@@ -6,9 +6,15 @@ use git_utils::GitUtils;
 use crate::app_error::AppError;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+struct EventMetadata {
+  pub add_paths: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Event {
   pub name: String,
   pub data: String,
+  pub meta: Option<EventMetadata>,
 }
 
 impl Event {
@@ -16,7 +22,12 @@ impl Event {
     Self {
       name: name.to_string(),
       data: serde_json::to_string(data).unwrap(),
+      meta: None,
     }
+  }
+
+  pub fn with_meta(&mut self, meta: EventMetadata) {
+    self.meta = Some(meta);
   }
 }
 
@@ -29,6 +40,12 @@ struct RecordedEvent {
 
 impl RecordedEvent {
   pub fn create(repo: &Repository, event: &Event) -> Result<Self, AppError> {
+    if let Some(meta) = &event.meta {
+      let mut index = repo.index()?;
+      index.add_all(meta.add_paths.iter(), IndexAddOption::DEFAULT, None)?;
+      index.write()?;
+    }
+
     let commit_id = GitUtils::commit_on_head(&repo, &RecordedEvent::stringify_event(event))?;
 
     Ok(Self {
@@ -102,8 +119,9 @@ impl<'repo> GitEventstore<'repo> {
 
 #[cfg(test)]
 mod git_eventstore_tests {
-  use nanoid::nanoid;
   use serde_json::json;
+  use std::path::Path;
+  use std::str::from_utf8;
 
   use testing::git::FixtureRepository;
 
@@ -131,6 +149,43 @@ mod git_eventstore_tests {
     assert_eq!(
       event2_commit.message().unwrap(),
       GitUtils::format_commit_message("[event] b", r#"{"flag":true}"#)
+    );
+  }
+
+  #[test]
+  fn should_append_event_with_files() {
+    let fixture = FixtureRepository::setup_with_script(
+      r#"
+    echo "a" > a.txt
+    mkdir -p 1/
+    echo "1/b" > 1/b.txt
+    "#,
+    );
+    let repo = Repository::open(&fixture.path).unwrap();
+
+    let eventstore = GitEventstore::new(&repo);
+    let mut event = Event::new("a", &json!({ "data": "data" }));
+    event.with_meta(EventMetadata {
+      add_paths: vec!["a.txt".to_string(), "1/b.txt".to_string()],
+    });
+
+    eventstore.append(vec![event]).unwrap();
+
+    let index = repo.index().unwrap();
+    let entry_paths: Vec<_> = index
+      .iter()
+      .map(|entry| {
+        let path = from_utf8(&entry.path[..]).unwrap();
+        path.to_owned()
+      })
+      .collect();
+
+    assert_eq!(
+      entry_paths,
+      vec![
+        Path::new("1/b.txt").to_str().unwrap(),
+        Path::new("a.txt").to_str().unwrap(),
+      ]
     );
   }
 
