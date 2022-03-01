@@ -44,6 +44,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+      - name: setup git
+        run: |
+          git config --global user.name "Seokju Na"
+          git config --global user.email "seokju.me@gmail.com"
       - name: use rust stable
         uses: actions-rs/toolchain@v1
         with:
