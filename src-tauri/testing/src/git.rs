@@ -1,11 +1,20 @@
+use nanoid::nanoid;
 use run_script::ScriptOptions;
+use std::path::PathBuf;
 
 pub struct FixtureRepository {
   pub path: String,
 }
 
 impl FixtureRepository {
-  pub fn open(path: &str, setup_script: &str) -> Self {
+  pub fn setup() -> Self {
+    Self::setup_with_script("")
+  }
+
+  pub fn setup_with_script(setup_script: &str) -> Self {
+    let path: PathBuf = ["test-fixtures", &nanoid!()].iter().collect();
+    let path = path.to_str().unwrap();
+
     let init_script = format!(
       r#"
             mkdir -p {}

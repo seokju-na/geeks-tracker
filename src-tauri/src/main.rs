@@ -3,6 +3,9 @@
   windows_subsystem = "windows"
 )]
 
+mod app_error;
+mod git_eventstore;
+
 fn main() {
   tauri::Builder::default()
     .setup(|app| {
