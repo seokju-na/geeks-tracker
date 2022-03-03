@@ -2,6 +2,8 @@ use git2::{Commit, Error as Git2Error, Oid, Repository};
 
 use constants::EOL;
 
+const NO_PARENTS: [&Commit<'_>; 0] = [];
+
 pub struct GitUtils {}
 
 impl GitUtils {
@@ -10,14 +12,15 @@ impl GitUtils {
     let tree_id = index.write_tree()?;
     let tree = repo.find_tree(tree_id)?;
 
-    let head_id = repo.refname_to_id("HEAD")?;
-    let parent = repo.find_commit(head_id)?;
-
     let sig = repo.signature()?;
 
-    let commit_id = repo.commit(Some("HEAD"), &sig, &sig, message, &tree, &[&parent])?;
-
-    Ok(commit_id)
+    match repo.refname_to_id("HEAD") {
+      Ok(head_id) => {
+        let parent = repo.find_commit(head_id)?;
+        repo.commit(Some("HEAD"), &sig, &sig, message, &tree, &[&parent])
+      }
+      Err(_) => repo.commit(Some("HEAD"), &sig, &sig, message, &tree, &NO_PARENTS),
+    }
   }
 
   pub fn read_commits_from_head(repo: &Repository) -> Result<Vec<Commit<'_>>, Git2Error> {
@@ -67,8 +70,6 @@ impl GitUtils {
 
 #[cfg(test)]
 mod git_utils_tests {
-  use std::str::from_utf8;
-
   use testing::git::FixtureRepository;
 
   use super::*;
@@ -80,7 +81,7 @@ mod git_utils_tests {
     let commit_id = GitUtils::commit_on_head(&repo, "latest").unwrap();
 
     let commits = GitUtils::read_commits_from_head(&repo).unwrap();
-    assert_eq!(commits.len(), 2);
+    assert_eq!(commits.len(), 1);
 
     let latest_commit = commits.get(0).unwrap();
     assert_eq!(latest_commit.id(), commit_id);
@@ -97,7 +98,7 @@ mod git_utils_tests {
     }
 
     let commits = GitUtils::read_commits_from_head(&repo).unwrap();
-    assert_eq!(commits.len(), 6);
+    assert_eq!(commits.len(), 5);
   }
 
   #[test]
