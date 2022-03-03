@@ -20,8 +20,6 @@ impl FixtureRepository {
             mkdir -p {}
             cd {}
             git init
-            git add .
-            git commit --allow-empty -m "initial"
             {}
             "#,
       path, path, setup_script
