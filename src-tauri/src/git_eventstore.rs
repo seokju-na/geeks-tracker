@@ -6,12 +6,12 @@ use git_utils::GitUtils;
 use crate::app_error::AppError;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct EventMetadata {
+pub struct EventMetadata {
   pub add_paths: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Event {
+pub struct Event {
   pub name: String,
   pub data: String,
   pub meta: Option<EventMetadata>,
@@ -32,7 +32,7 @@ impl Event {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct RecordedEvent {
+pub struct RecordedEvent {
   pub id: String,
   pub name: String,
   pub data: String,
