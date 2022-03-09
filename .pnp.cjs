@@ -36,7 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.6"],
-            ["@tauri-apps/api", "npm:1.0.0-rc.1"],
+            ["@tauri-apps/api", "npm:1.0.0-rc.2"],
             ["@tauri-apps/cli", "npm:1.0.0-rc.5"],
             ["@types/eslint", "npm:8.4.1"],
             ["@types/react", "npm:17.0.39"],
@@ -637,11 +637,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@tauri-apps/api", [
-        ["npm:1.0.0-rc.1", {
-          "packageLocation": "./.yarn/cache/@tauri-apps-api-npm-1.0.0-rc.1-51c933370b-eb726f7f73.zip/node_modules/@tauri-apps/api/",
+        ["npm:1.0.0-rc.2", {
+          "packageLocation": "./.yarn/cache/@tauri-apps-api-npm-1.0.0-rc.2-df3219d9d1-f417a76c1f.zip/node_modules/@tauri-apps/api/",
           "packageDependencies": [
-            ["@tauri-apps/api", "npm:1.0.0-rc.1"],
-            ["type-fest", "npm:2.11.2"]
+            ["@tauri-apps/api", "npm:1.0.0-rc.2"],
+            ["type-fest", "npm:2.12.0"]
           ],
           "linkType": "HARD",
         }]
@@ -2469,7 +2469,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["geeks-tracker", "workspace:."],
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.6"],
-            ["@tauri-apps/api", "npm:1.0.0-rc.1"],
+            ["@tauri-apps/api", "npm:1.0.0-rc.2"],
             ["@tauri-apps/cli", "npm:1.0.0-rc.5"],
             ["@types/eslint", "npm:8.4.1"],
             ["@types/react", "npm:17.0.39"],
@@ -4265,10 +4265,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:2.11.2", {
-          "packageLocation": "./.yarn/cache/type-fest-npm-2.11.2-6c71768264-b36f73b9e7.zip/node_modules/type-fest/",
+        ["npm:2.12.0", {
+          "packageLocation": "./.yarn/cache/type-fest-npm-2.12.0-6c6df3f1e5-3ebe6529db.zip/node_modules/type-fest/",
           "packageDependencies": [
-            ["type-fest", "npm:2.11.2"]
+            ["type-fest", "npm:2.12.0"]
           ],
           "linkType": "HARD",
         }]
