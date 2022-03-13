@@ -23,7 +23,7 @@ thiserror = "1.0.30"
 anyhow = "1.0.55"
 git-utils = { path = "./git-utils" }
 nanoid = "0.4.0"
-constants = { path = "./constants" }
+common = { path = "common" }
 
 [dev-dependencies]
 testing = { path = "./testing" }
@@ -37,4 +37,4 @@ default = [ "custom-protocol" ]
 custom-protocol = [ "tauri/custom-protocol" ]
 
 [workspace]
-members = ["git-utils", "testing", "constants"]
+members = ["git-utils", "testing", "common"]

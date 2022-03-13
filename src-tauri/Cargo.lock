@@ -43,7 +43,7 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "constants",
+ "common",
  "git-utils",
  "git2",
  "nanoid",
@@ -460,6 +460,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "common"
+version = "0.1.0"
+
+[[package]]
 name = "concurrent-queue"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -473,10 +477,6 @@ name = "constant_time_eq"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
-
-[[package]]
-name = "constants"
-version = "0.1.0"
 
 [[package]]
 name = "convert_case"
@@ -1241,7 +1241,7 @@ dependencies = [
 name = "git-utils"
 version = "0.1.0"
 dependencies = [
- "constants",
+ "common",
  "git2",
  "testing",
 ]

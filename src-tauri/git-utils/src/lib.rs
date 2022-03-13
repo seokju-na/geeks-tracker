@@ -1,6 +1,6 @@
 use git2::{Commit, Error as Git2Error, IndexEntry, Oid, Repository};
 
-use constants::EOL;
+use common::constants::EOL;
 
 const NO_PARENTS: [&Commit<'_>; 0] = [];
 
@@ -79,6 +79,7 @@ impl GitUtils {
 mod git_utils_tests {
   use std::path::Path;
   use std::str::from_utf8;
+
   use testing::git::FixtureRepository;
 
   use super::*;
