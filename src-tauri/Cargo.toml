@@ -37,4 +37,4 @@ default = [ "custom-protocol" ]
 custom-protocol = [ "tauri/custom-protocol" ]
 
 [workspace]
-members = ["git-utils", "testing", "common", "eventstore"]
+members = ["git-utils", "testing", "common", "event-sourcing"]

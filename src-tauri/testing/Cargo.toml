@@ -8,4 +8,4 @@ rust-version = "1.57"
 [dependencies]
 nanoid = "0.4.0"
 run_script = "^0.9.0"
-eventstore = { path = "../eventstore" }
+event-sourcing = { path = "../event-sourcing" }

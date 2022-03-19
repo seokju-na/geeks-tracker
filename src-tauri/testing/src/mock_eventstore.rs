@@ -1,5 +1,5 @@
-use eventstore::eventstore::{Event, Eventstore, RecordedEvent};
-use eventstore::eventstore_error::EventstoreError;
+use event_sourcing::eventstore::{Event, Eventstore, RecordedEvent};
+use event_sourcing::eventstore_error::EventstoreError;
 use nanoid::nanoid;
 
 pub struct MockEventstore {
