@@ -3,11 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "tauri": "tauri",
-    "tauri:dev": "tauri dev",
-    "test": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace",
+    "dev": "tauri dev",
+    "dev:webview": "vite",
+    "build": "tauri build",
+    "build:webview": "tsc && vite build",
+    "test": "yarn test:tauri && yarn test:webview",
+    "test:tauri": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace",
+    "test:webview": "jest",
     "postinstall": "husky install",
     "lint": "eslint --cache -c .eslintrc.js 'src/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit --incremental"
