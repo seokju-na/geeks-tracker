@@ -30,6 +30,18 @@ jobs:
         run: yarn lint
       - name: typecheck
         run: yarn typecheck
+  check-peer-deps:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: use nodejs v16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: check peer deps
+        run: scripts/check-peer-deps.sh
   test-build:
     strategy:
       fail-fast: false
