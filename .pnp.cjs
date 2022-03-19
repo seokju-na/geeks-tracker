@@ -37,6 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tauri-apps/api", "npm:1.0.0-rc.2"],\
             ["@tauri-apps/cli", "npm:1.0.0-rc.5"],\
             ["@types/eslint", "npm:8.4.1"],\
+            ["@types/jest", "npm:27.4.1"],\
             ["@types/react", "npm:17.0.39"],\
             ["@types/react-dom", "npm:17.0.11"],\
             ["@typescript-eslint/eslint-plugin", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
@@ -1768,6 +1769,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/istanbul-reports", "npm:3.0.1"],\
             ["@types/istanbul-lib-report", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/jest", [\
+        ["npm:27.4.1", {\
+          "packageLocation": "./.yarn/cache/@types-jest-npm-27.4.1-31d07cd0d8-5184f3eef4.zip/node_modules/@types/jest/",\
+          "packageDependencies": [\
+            ["@types/jest", "npm:27.4.1"],\
+            ["jest-matcher-utils", "npm:27.5.1"],\
+            ["pretty-format", "npm:27.5.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4724,6 +4736,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tauri-apps/api", "npm:1.0.0-rc.2"],\
             ["@tauri-apps/cli", "npm:1.0.0-rc.5"],\
             ["@types/eslint", "npm:8.4.1"],\
+            ["@types/jest", "npm:27.4.1"],\
             ["@types/react", "npm:17.0.39"],\
             ["@types/react-dom", "npm:17.0.11"],\
             ["@typescript-eslint/eslint-plugin", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
@@ -8498,7 +8511,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/babel-jest", null],\
             ["@types/babel__core", null],\
             ["@types/esbuild", null],\
-            ["@types/jest", null],\
+            ["@types/jest", "npm:27.4.1"],\
             ["@types/typescript", null],\
             ["babel-jest", null],\
             ["bs-logger", "npm:0.2.6"],\
