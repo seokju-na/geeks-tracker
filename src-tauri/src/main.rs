@@ -10,7 +10,6 @@ use crate::workspace::Workspace;
 
 mod app_error;
 mod commands;
-mod git_eventstore;
 mod workspace;
 
 fn main() {
