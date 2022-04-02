@@ -1,2 +1,2 @@
-pub mod eventstore;
 pub mod git;
+pub mod mock_eventstore;
