@@ -1,6 +1,6 @@
-use eventstore::eventstore::{Event, Eventstore, RecordedEvent};
-use eventstore::eventstore_error::EventstoreError;
 use nanoid::nanoid;
+
+use event_sourcing::{Event, Eventstore, EventstoreError, RecordedEvent};
 
 pub struct MockEventstore {
   store: Vec<RecordedEvent>,
