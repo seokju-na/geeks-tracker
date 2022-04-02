@@ -223,9 +223,9 @@ dependencies = [
 
 [[package]]
 name = "autocfg"
-version = "1.1.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
+checksum = "cdb031dd78e28731d87d56cc8ffef4a8f36ca26c38fe2de700543e627f8a464a"
 
 [[package]]
 name = "base64"
@@ -483,6 +483,18 @@ name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6245d59a3e82a7fc217c5828a6692dbc6dfb63a0c8c90495621f7b9d79704a0e"
+
+[[package]]
+name = "core"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "events_emitter",
+ "serde",
+ "serde_json",
+ "testing",
+ "thiserror",
+]
 
 [[package]]
 name = "core-foundation"
@@ -881,6 +893,12 @@ dependencies = [
  "testing",
  "thiserror",
 ]
+
+[[package]]
+name = "events_emitter"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19ea822752927b9dcf033c360608f2ff455aae4eac992f501353bb518b1c486a"
 
 [[package]]
 name = "fastrand"
