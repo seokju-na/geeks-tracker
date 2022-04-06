@@ -15,18 +15,20 @@ rust-version = "1.57"
 tauri-build = { version = "1.0.0-rc.4", features = [] }
 
 [dependencies]
+geeks-tracker-core = { path = "core" }
+geeks-tracker-common = { path = "common" }
+geeks-tracker-git = { path = "./git" }
+
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.0.0-rc.4", features = ["api-all"] }
 git2 = "0.13.25"
 thiserror = "1.0.30"
 anyhow = "1.0.55"
-git-utils = { path = "./git-utils" }
 nanoid = "0.4.0"
-common = { path = "common" }
 
 [dev-dependencies]
-testing = { path = "./testing" }
+geeks-tracker-testing = { path = "./testing" }
 
 [features]
 # by default Tauri runs in production mode
@@ -37,4 +39,4 @@ default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
 
 [workspace]
-members = ["git-utils", "testing", "core", "common", "event-sourcing"]
+members = ["git", "testing", "core", "common"]

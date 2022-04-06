@@ -1,5 +1,5 @@
 [package]
-name = "common"
+name = "geeks-tracker-common"
 version = "0.1.0"
 authors = ["Seokju Na <seokju.me@gmail.com"]
 edition = "2021"
