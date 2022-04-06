@@ -2,7 +2,7 @@
 
 use std::str::from_utf8;
 
-use git_utils::GitUtils;
+use geeks_tracker_git::GitUtils;
 
 use crate::app_error::AppError;
 use crate::Workspace;
