@@ -1,19 +1,12 @@
 use std::error::Error;
 
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde::de::DeserializeOwned;
+use serde::Serialize;
 
 use crate::aggregate::AggregateState;
 use crate::event::Event;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CommandData {
-  pub name: String,
-  pub aggregate_id: String,
-  pub payload: Option<Value>,
-}
-
-pub trait Command<S>: TryFrom<CommandData>
+pub trait Command<S>: Serialize + DeserializeOwned
 where
   S: AggregateState,
 {

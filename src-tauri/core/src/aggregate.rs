@@ -52,67 +52,102 @@ where
     event.handle(state);
     *version += 1;
 
-    Ok(event.into())
+    Ok(event.to_event_data())
   }
 }
 
 #[cfg(test)]
 mod aggregate_tests {
+  use std::assert_matches::assert_matches;
+
   use serde_json::json;
 
-  use crate::testing::{CreateItemPayload, ItemCommand, ItemState, UpdateItemTitlePayload};
-  use crate::Aggregate;
+  use crate::testing::{TodoCommand, TodoError, TodoState};
+  use crate::{Aggregate, EventData};
 
   #[test]
-  fn execute_command_returns_event_data() {
-    let mut aggregate = Aggregate::<ItemState>::new();
-    let command = ItemCommand::Create(CreateItemPayload {
-      id: "item_0".to_string(),
-      title: "Hello".to_string(),
-    });
+  fn execute_command_and_returns_event_data() {
+    let mut aggregate = Aggregate::<TodoState>::new();
+    let command = TodoCommand::CreateTodo {
+      id: "todo_0".to_string(),
+      title: "Eat pizza".to_string(),
+    };
 
     let event_data = aggregate.execute_command(command).unwrap();
-    assert_eq!(event_data.name, "ItemCreated");
-    assert_eq!(event_data.aggregate_id, "item_0");
-    assert_eq!(event_data.payload, json!({ "title": "Hello" }))
+    assert_matches!(
+      event_data,
+      EventData { name, aggregate_id, aggregate_version, payload, .. }
+      if name == "TodoCreated"
+      && aggregate_id == "todo_0"
+      && aggregate_version == 0
+      && payload == json!({
+        "title": "Eat pizza"
+      })
+    );
   }
 
   #[test]
-  fn execute_command_mutates_aggregate_state() {
-    let mut aggregate = Aggregate::<ItemState>::new();
-    assert!(matches!(aggregate.get_state("item_0"), None));
+  fn execute_command_can_mutates_state() {
+    let mut aggregate = Aggregate::<TodoState>::new();
+    assert_matches!(aggregate.get_state("todo_0"), None);
 
-    let command = ItemCommand::Create(CreateItemPayload {
-      id: "item_0".to_string(),
-      title: "Hello".to_string(),
-    });
-    aggregate.execute_command(command).unwrap();
-
-    let state = aggregate.get_state("item_0");
-    let _expected = ItemState {
-      exists: true,
-      title: Some("Hello".to_string()),
+    let command1 = TodoCommand::CreateTodo {
+      id: "todo_0".to_string(),
+      title: "Eat rice".to_string(),
     };
-    assert!(matches!(state, Some(_expected)));
+    aggregate.execute_command(command1).unwrap();
+
+    let state = aggregate.get_state("todo_0").unwrap();
+    assert_matches!(&state.title, Some(x) if x == "Eat rice");
+
+    let command2 = TodoCommand::UpdateTodoTitle {
+      id: "todo_0".to_string(),
+      title: "More rice".to_string(),
+    };
+    aggregate.execute_command(command2).unwrap();
+
+    let state = aggregate.get_state("todo_0").unwrap();
+    assert_matches!(&state.title, Some(x) if x == "More rice");
   }
 
   #[test]
-  fn execute_command_increase_state_version() {
-    let mut aggregate = Aggregate::<ItemState>::new();
-    assert_eq!(aggregate.get_version("item_0"), None);
+  fn execute_command_should_increase_state_version() {
+    let mut aggregate = Aggregate::<TodoState>::new();
+    assert_matches!(aggregate.get_version("todo_0"), None);
 
-    let command1 = ItemCommand::Create(CreateItemPayload {
-      id: "item_0".to_string(),
-      title: "Hello".to_string(),
-    });
+    let command1 = TodoCommand::CreateTodo {
+      id: "todo_0".to_string(),
+      title: "Eat rice".to_string(),
+    };
     aggregate.execute_command(command1).unwrap();
-    assert_eq!(aggregate.get_version("item_0"), Some(&1));
+    assert_matches!(aggregate.get_version("todo_0"), Some(1));
 
-    let command2 = ItemCommand::UpdateTitle(UpdateItemTitlePayload {
-      id: "item_0".to_string(),
-      title: "Hello Again".to_string(),
-    });
+    let command2 = TodoCommand::UpdateTodoTitle {
+      id: "todo_0".to_string(),
+      title: "More rice".to_string(),
+    };
     aggregate.execute_command(command2).unwrap();
-    assert_eq!(aggregate.get_version("item_0"), Some(&2));
+    assert_matches!(aggregate.get_version("todo_0"), Some(2));
+  }
+
+  #[test]
+  fn error_when_execute_command_fail() {
+    let mut aggregate = Aggregate::<TodoState>::new();
+
+    let command1 = TodoCommand::CreateTodo {
+      id: "todo_0".to_string(),
+      title: "Watch movie".to_string(),
+    };
+    aggregate.execute_command(command1).unwrap();
+
+    let command2 = TodoCommand::CreateTodo {
+      id: "todo_0".to_string(),
+      title: "Again watch movie".to_string(),
+    };
+    let err = aggregate
+      .execute_command(command2)
+      .unwrap_err()
+      .downcast::<TodoError>()
+      .unwrap();
   }
 }

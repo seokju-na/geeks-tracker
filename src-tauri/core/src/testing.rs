@@ -2,198 +2,195 @@ use std::error::Error;
 
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use serde_json::{from_value, json};
+use serde_json::{from_value, to_value};
 
-use crate::{AggregateState, Command, CommandData, Event, EventData};
+use crate::{AggregateState, Command, Event, EventData, EventParseError};
 
-pub const ITEM_CREATED: &'static str = "ItemCreated";
-pub const ITEM_TITLE_UPDATED: &'static str = "ItemTitleUpdated";
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum TodoStatus {
+  #[serde(rename = "todo")]
+  Todo,
+  #[serde(rename = "in-progress")]
+  InProgress,
+  #[serde(rename = "done")]
+  Done,
+}
 
-pub const CREATE_ITEM: &'static str = "CreateItem";
-pub const UPDATE_ITEM_TITLE: &'static str = "UpdateItemTitle";
-
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct ItemState {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TodoState {
   pub exists: bool,
   pub title: Option<String>,
+  pub status: TodoStatus,
+  pub created_at: Option<i64>,
+  pub updated_at: Option<i64>,
 }
 
-impl AggregateState for ItemState {}
-
-#[derive(thiserror::Error, Debug)]
-pub enum ItemError {
-  #[error("Item already exists")]
-  ItemAlreadyExists,
-  #[error("Item not exists")]
-  ItemNotExists,
-  #[error("No event matches")]
-  NoEventMatches,
-  #[error("No command matches")]
-  NoCommandMatches,
-  #[error("Parse event fail")]
-  ParseEventFail,
-  #[error("Parse command fail")]
-  ParseCommandFail,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ItemCreatedPayload {
-  pub id: String,
-  pub version: i64,
-  pub title: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ItemTitleUpdatedPayload {
-  pub id: String,
-  pub version: i64,
-  pub title: String,
-}
-
-#[derive(Debug)]
-pub enum ItemEvent {
-  Created(ItemCreatedPayload),
-  TitleUpdated(ItemTitleUpdatedPayload),
-}
-
-impl TryFrom<EventData> for ItemEvent {
-  type Error = ItemError;
-
-  fn try_from(data: EventData) -> Result<Self, Self::Error> {
-    match data.name.as_str() {
-      ITEM_CREATED => {
-        let payload =
-          from_value::<ItemCreatedPayload>(data.payload).map_err(|_| ItemError::ParseEventFail)?;
-        Ok(ItemEvent::Created(payload))
-      }
-      ITEM_TITLE_UPDATED => {
-        let payload = from_value::<ItemTitleUpdatedPayload>(data.payload)
-          .map_err(|_| ItemError::ParseEventFail)?;
-        Ok(ItemEvent::TitleUpdated(payload))
-      }
-      _ => Err(ItemError::NoEventMatches),
+impl Default for TodoState {
+  fn default() -> Self {
+    Self {
+      exists: false,
+      title: None,
+      status: TodoStatus::Todo,
+      created_at: None,
+      updated_at: None,
     }
   }
 }
 
-impl Into<EventData> for ItemEvent {
-  fn into(self) -> EventData {
-    let timestamp = Utc::now().timestamp();
+impl AggregateState for TodoState {}
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TodoCreatedPayload {
+  pub title: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TodoTitleUpdatedPayload {
+  pub title: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(tag = "name")]
+pub enum TodoEvent {
+  TodoCreated {
+    id: String,
+    version: i64,
+    timestamp: i64,
+    payload: TodoCreatedPayload,
+  },
+  TodoTitleUpdated {
+    id: String,
+    version: i64,
+    timestamp: i64,
+    payload: TodoTitleUpdatedPayload,
+  },
+}
+
+impl Event<TodoState> for TodoEvent {
+  fn from_event_data(event_data: EventData) -> Result<Self, EventParseError> {
+    match event_data.name.as_str() {
+      "TodoCreated" => {
+        let payload = from_value::<TodoCreatedPayload>(event_data.payload)
+          .map_err(|_| EventParseError::Fail)?;
+        Ok(TodoEvent::TodoCreated {
+          id: event_data.aggregate_id,
+          version: event_data.aggregate_version,
+          timestamp: event_data.timestamp,
+          payload,
+        })
+      }
+      "TodoTitleUpdated" => {
+        let payload = from_value::<TodoTitleUpdatedPayload>(event_data.payload)
+          .map_err(|_| EventParseError::Fail)?;
+        Ok(TodoEvent::TodoTitleUpdated {
+          id: event_data.aggregate_id,
+          version: event_data.aggregate_version,
+          timestamp: event_data.timestamp,
+          payload,
+        })
+      }
+      _ => Err(EventParseError::NoMatches),
+    }
+  }
+
+  fn to_event_data(self) -> EventData {
     match self {
-      ItemEvent::Created(payload) => EventData {
-        name: ITEM_CREATED.to_string(),
-        aggregate_id: payload.id.to_owned(),
-        aggregate_version: payload.version,
+      TodoEvent::TodoCreated {
+        id,
+        version,
         timestamp,
-        payload: json!({
-          "title": payload.title
-        }),
+        payload,
+      } => EventData {
+        name: "TodoCreated".to_string(),
+        aggregate_id: id,
+        aggregate_version: version,
+        timestamp,
+        payload: to_value(payload).unwrap(),
       },
-      ItemEvent::TitleUpdated(payload) => EventData {
-        name: ITEM_TITLE_UPDATED.to_string(),
-        aggregate_id: payload.id.to_owned(),
-        aggregate_version: payload.version,
+      TodoEvent::TodoTitleUpdated {
+        id,
+        version,
         timestamp,
-        payload: json!({
-          "title": payload.title
-        }),
+        payload,
+      } => EventData {
+        name: "TodoTitleUpdated".to_string(),
+        aggregate_id: id,
+        aggregate_version: version,
+        timestamp,
+        payload: to_value(payload).unwrap(),
       },
     }
   }
-}
 
-impl Event<ItemState> for ItemEvent {
-  fn handle(&self, state: &mut ItemState) -> () {
+  fn handle(&self, state: &mut TodoState) -> () {
     match self {
-      ItemEvent::Created(payload) => {
+      TodoEvent::TodoCreated {
+        timestamp, payload, ..
+      } => {
         state.exists = true;
         state.title = Some(payload.title.to_owned());
+        state.created_at = Some(timestamp.to_owned());
+        state.updated_at = Some(timestamp.to_owned());
       }
-      ItemEvent::TitleUpdated(payload) => {
+      TodoEvent::TodoTitleUpdated {
+        timestamp, payload, ..
+      } => {
         state.title = Some(payload.title.to_owned());
+        state.updated_at = Some(timestamp.to_owned());
       }
     }
   }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateItemPayload {
-  pub id: String,
-  pub title: String,
+#[derive(thiserror::Error, Debug)]
+pub enum TodoError {
+  #[error("Todo already exists")]
+  TodoAlreadyExists,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct UpdateItemTitlePayload {
-  pub id: String,
-  pub title: String,
+#[serde(tag = "name")]
+pub enum TodoCommand {
+  CreateTodo { id: String, title: String },
+  UpdateTodoTitle { id: String, title: String },
 }
 
-pub enum ItemCommand {
-  Create(CreateItemPayload),
-  UpdateTitle(UpdateItemTitlePayload),
-}
-
-impl TryFrom<CommandData> for ItemCommand {
-  type Error = ItemError;
-
-  fn try_from(data: CommandData) -> Result<Self, Self::Error> {
-    match data.name.as_str() {
-      CREATE_ITEM => {
-        let payload = if let Some(x) = data.payload {
-          from_value::<CreateItemPayload>(x).map_err(|_| ItemError::ParseEventFail)?
-        } else {
-          return Err(ItemError::ParseCommandFail);
-        };
-        Ok(ItemCommand::Create(payload))
-      }
-      UPDATE_ITEM_TITLE => {
-        let payload = if let Some(x) = data.payload {
-          from_value::<UpdateItemTitlePayload>(x).map_err(|_| ItemError::ParseEventFail)?
-        } else {
-          return Err(ItemError::ParseCommandFail);
-        };
-        Ok(ItemCommand::UpdateTitle(payload))
-      }
-      _ => Err(ItemError::NoCommandMatches),
-    }
-  }
-}
-
-impl Command<ItemState> for ItemCommand {
-  type Event = ItemEvent;
+impl Command<TodoState> for TodoCommand {
+  type Event = TodoEvent;
 
   fn aggregate_id(&self) -> &str {
     match self {
-      ItemCommand::Create(payload) => &payload.id,
-      ItemCommand::UpdateTitle(payload) => &payload.id,
+      TodoCommand::CreateTodo { id, title: _title } => id,
+      TodoCommand::UpdateTodoTitle { id, title: _title } => id,
     }
   }
 
-  fn handle(&self, state: &ItemState, version: i64) -> Result<ItemEvent, Box<dyn Error>> {
+  fn handle(&self, state: &TodoState, version: i64) -> Result<Self::Event, Box<dyn Error>> {
+    let timestamp = Utc::now().timestamp();
+
     match self {
-      ItemCommand::Create(payload) => {
+      TodoCommand::CreateTodo { id, title } => {
         if state.exists {
-          return Err(Box::new(ItemError::ItemAlreadyExists));
+          return Err(Box::new(TodoError::TodoAlreadyExists));
         }
 
-        Ok(ItemEvent::Created(ItemCreatedPayload {
-          id: payload.id.to_owned(),
+        Ok(TodoEvent::TodoCreated {
+          id: id.to_owned(),
           version,
-          title: payload.title.to_owned(),
-        }))
+          timestamp,
+          payload: TodoCreatedPayload {
+            title: title.to_owned(),
+          },
+        })
       }
-      ItemCommand::UpdateTitle(payload) => {
-        if !state.exists {
-          return Err(Box::new(ItemError::ItemNotExists));
-        }
-
-        Ok(ItemEvent::TitleUpdated(ItemTitleUpdatedPayload {
-          id: payload.id.to_owned(),
-          version,
-          title: payload.title.to_owned(),
-        }))
-      }
+      TodoCommand::UpdateTodoTitle { id, title } => Ok(TodoEvent::TodoTitleUpdated {
+        id: id.to_owned(),
+        version,
+        timestamp,
+        payload: TodoTitleUpdatedPayload {
+          title: title.to_owned(),
+        },
+      }),
     }
   }
 }
