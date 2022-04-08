@@ -1,0 +1,17 @@
+[package]
+name = "geeks-tracker-issues"
+version = "0.1.0"
+authors = ["Seokju Na <seokju.me@gmail.com"]
+edition = "2021"
+rust-version = "1.57"
+
+[dependencies]
+geeks-tracker-core = { path = "../core" }
+
+serde_json = "1.0.79"
+serde = { version = "1.0.136", features = ["derive"] }
+thiserror = "1.0.30"
+chrono = "0.4.19"
+
+[dev-dependencies]
+geeks-tracker-testing = { path = "../testing" }
