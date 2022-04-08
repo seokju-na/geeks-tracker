@@ -46,6 +46,7 @@ dependencies = [
  "geeks-tracker-common",
  "geeks-tracker-core",
  "geeks-tracker-git",
+ "geeks-tracker-issues",
  "geeks-tracker-testing",
  "git2",
  "nanoid",
@@ -1174,6 +1175,18 @@ dependencies = [
  "geeks-tracker-common",
  "geeks-tracker-testing",
  "git2",
+]
+
+[[package]]
+name = "geeks-tracker-issues"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "geeks-tracker-core",
+ "geeks-tracker-testing",
+ "serde",
+ "serde_json",
+ "thiserror",
 ]
 
 [[package]]
