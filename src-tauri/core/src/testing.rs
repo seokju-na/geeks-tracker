@@ -50,6 +50,11 @@ pub struct TodoTitleUpdatedPayload {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TodoStatusUpdatedPayload {
+  pub status: TodoStatus,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "name")]
 pub enum TodoEvent {
   TodoCreated {
@@ -64,18 +69,28 @@ pub enum TodoEvent {
     timestamp: i64,
     payload: TodoTitleUpdatedPayload,
   },
+  TodoStatusUpdated {
+    id: String,
+    version: i64,
+    timestamp: i64,
+    payload: TodoStatusUpdatedPayload,
+  },
 }
 
 impl Event<TodoState> for TodoEvent {
   fn from_event_data(event_data: EventData) -> Result<Self, EventParseError> {
+    let id = event_data.aggregate_id;
+    let version = event_data.aggregate_version;
+    let timestamp = event_data.timestamp;
+
     match event_data.name.as_str() {
       "TodoCreated" => {
         let payload = from_value::<TodoCreatedPayload>(event_data.payload)
           .map_err(|_| EventParseError::Fail)?;
         Ok(TodoEvent::TodoCreated {
-          id: event_data.aggregate_id,
-          version: event_data.aggregate_version,
-          timestamp: event_data.timestamp,
+          id,
+          version,
+          timestamp,
           payload,
         })
       }
@@ -83,9 +98,19 @@ impl Event<TodoState> for TodoEvent {
         let payload = from_value::<TodoTitleUpdatedPayload>(event_data.payload)
           .map_err(|_| EventParseError::Fail)?;
         Ok(TodoEvent::TodoTitleUpdated {
-          id: event_data.aggregate_id,
-          version: event_data.aggregate_version,
-          timestamp: event_data.timestamp,
+          id,
+          version,
+          timestamp,
+          payload,
+        })
+      }
+      "TodoStatusUpdated" => {
+        let payload = from_value::<TodoStatusUpdatedPayload>(event_data.payload)
+          .map_err(|_| EventParseError::Fail)?;
+        Ok(TodoEvent::TodoStatusUpdated {
+          id,
+          version,
+          timestamp,
           payload,
         })
       }
@@ -119,6 +144,18 @@ impl Event<TodoState> for TodoEvent {
         timestamp,
         payload: to_value(payload).unwrap(),
       },
+      TodoEvent::TodoStatusUpdated {
+        id,
+        version,
+        timestamp,
+        payload,
+      } => EventData {
+        name: "TodoStatusUpdated".to_string(),
+        aggregate_id: id,
+        aggregate_version: version,
+        timestamp,
+        payload: to_value(payload).unwrap(),
+      },
     }
   }
 
@@ -138,6 +175,12 @@ impl Event<TodoState> for TodoEvent {
         state.title = Some(payload.title.to_owned());
         state.updated_at = Some(timestamp.to_owned());
       }
+      TodoEvent::TodoStatusUpdated {
+        timestamp, payload, ..
+      } => {
+        state.status = payload.status.to_owned();
+        state.updated_at = Some(timestamp.to_owned());
+      }
     }
   }
 }
@@ -153,6 +196,7 @@ pub enum TodoError {
 pub enum TodoCommand {
   CreateTodo { id: String, title: String },
   UpdateTodoTitle { id: String, title: String },
+  UpdateTodoStatus { id: String, status: TodoStatus },
 }
 
 impl Command<TodoState> for TodoCommand {
@@ -160,8 +204,9 @@ impl Command<TodoState> for TodoCommand {
 
   fn aggregate_id(&self) -> &str {
     match self {
-      TodoCommand::CreateTodo { id, title: _title } => id,
-      TodoCommand::UpdateTodoTitle { id, title: _title } => id,
+      TodoCommand::CreateTodo { id, .. } => id,
+      TodoCommand::UpdateTodoTitle { id, .. } => id,
+      TodoCommand::UpdateTodoStatus { id, .. } => id,
     }
   }
 
@@ -189,6 +234,14 @@ impl Command<TodoState> for TodoCommand {
         timestamp,
         payload: TodoTitleUpdatedPayload {
           title: title.to_owned(),
+        },
+      }),
+      TodoCommand::UpdateTodoStatus { id, status } => Ok(TodoEvent::TodoStatusUpdated {
+        id: id.to_owned(),
+        version,
+        timestamp,
+        payload: TodoStatusUpdatedPayload {
+          status: status.to_owned(),
         },
       }),
     }
