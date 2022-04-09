@@ -13,4 +13,4 @@ mod command;
 mod event;
 mod eventstore;
 mod saga;
-mod testing;
+pub mod testing;
