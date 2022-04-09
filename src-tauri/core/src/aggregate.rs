@@ -48,9 +48,9 @@ where
       .entry(String::from(command.aggregate_id()))
       .or_default();
 
+    *version += 1;
     let event = command.handle(state, *version)?;
     event.handle(state);
-    *version += 1;
 
     Ok(event.to_event_data())
   }
@@ -62,7 +62,7 @@ mod aggregate_tests {
 
   use serde_json::json;
 
-  use crate::testing::{TodoCommand, TodoError, TodoState};
+  use crate::testing::{TodoCommand, TodoError, TodoState, TodoStatus};
   use crate::{Aggregate, EventData};
 
   #[test]
@@ -79,7 +79,7 @@ mod aggregate_tests {
       EventData { name, aggregate_id, aggregate_version, payload, .. }
       if name == "TodoCreated"
       && aggregate_id == "todo_0"
-      && aggregate_version == 0
+      && aggregate_version == 1
       && payload == json!({
         "title": "Eat pizza"
       })
@@ -108,6 +108,15 @@ mod aggregate_tests {
 
     let state = aggregate.get_state("todo_0").unwrap();
     assert_matches!(&state.title, Some(x) if x == "More rice");
+
+    let command3 = TodoCommand::UpdateTodoStatus {
+      id: "todo_0".to_string(),
+      status: TodoStatus::InProgress,
+    };
+    aggregate.execute_command(command3).unwrap();
+
+    let state = aggregate.get_state("todo_0").unwrap();
+    assert_matches!(&state.status, TodoStatus::InProgress);
   }
 
   #[test]
@@ -149,5 +158,7 @@ mod aggregate_tests {
       .unwrap_err()
       .downcast::<TodoError>()
       .unwrap();
+
+    assert_matches!(*err, TodoError::TodoAlreadyExists);
   }
 }
