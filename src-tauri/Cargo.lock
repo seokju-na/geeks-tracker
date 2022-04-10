@@ -1156,6 +1156,10 @@ dependencies = [
 [[package]]
 name = "geeks-tracker-common"
 version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "geeks-tracker-core"
@@ -1182,6 +1186,7 @@ name = "geeks-tracker-issues"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "geeks-tracker-common",
  "geeks-tracker-core",
  "geeks-tracker-testing",
  "serde",
