@@ -1,38 +1,42 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{from_value, to_value};
 
+use geeks_tracker_common::colors::RGB;
 use geeks_tracker_core::{Event, EventData, EventParseError};
 
-use crate::issue::IssueState;
+use crate::issue_status::state::IssueStatusState;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IssueCreatedPayload {
+pub struct IssueStatusCreatedPayload {
   pub title: String,
-  pub status_id: Option<String>,
+  pub color: Option<RGB>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "name")]
-pub enum IssueEvent {
+pub enum IssueStatusEvent {
   Created {
     id: String,
     version: i64,
     timestamp: i64,
-    payload: IssueCreatedPayload,
+    payload: IssueStatusCreatedPayload,
   },
 }
 
-impl Event<IssueState> for IssueEvent {
+impl Event<IssueStatusState> for IssueStatusEvent {
   fn from_event_data(event_data: EventData) -> Result<Self, EventParseError> {
-    match event_data.name.as_str() {
-      "IssueCreated" => {
-        let payload = from_value::<IssueCreatedPayload>(event_data.payload)
-          .map_err(|_| EventParseError::Fail)?;
+    let id = event_data.aggregate_id;
+    let version = event_data.aggregate_version;
+    let timestamp = event_data.timestamp;
 
-        Ok(IssueEvent::Created {
-          id: event_data.aggregate_id,
-          version: event_data.aggregate_version,
-          timestamp: event_data.timestamp,
+    match event_data.name.as_str() {
+      "IssueStatusCreated" => {
+        let payload = from_value::<IssueStatusCreatedPayload>(event_data.payload)
+          .map_err(|_| EventParseError::Fail)?;
+        Ok(IssueStatusEvent::Created {
+          id,
+          version,
+          timestamp,
           payload,
         })
       }
@@ -42,13 +46,13 @@ impl Event<IssueState> for IssueEvent {
 
   fn to_event_data(self) -> EventData {
     match self {
-      IssueEvent::Created {
+      IssueStatusEvent::Created {
         id,
         version,
         timestamp,
         payload,
       } => EventData {
-        name: "IssueCreated".to_string(),
+        name: "IssueStatusCreated".to_string(),
         aggregate_id: id,
         aggregate_version: version,
         timestamp,
@@ -57,17 +61,16 @@ impl Event<IssueState> for IssueEvent {
     }
   }
 
-  fn handle(&self, state: &mut IssueState) -> () {
+  fn handle(&self, state: &mut IssueStatusState) -> () {
     match self {
-      IssueEvent::Created {
+      IssueStatusEvent::Created {
         timestamp, payload, ..
       } => {
         state.exists = true;
         state.title = Some(payload.title.to_owned());
-        state.status_id = match &payload.status_id {
-          Some(x) => Some(x.to_string()),
-          None => None,
-        };
+        if let Some(x) = &payload.color {
+          state.color = x.to_owned();
+        }
         state.created_at = Some(*timestamp);
         state.updated_at = Some(*timestamp);
       }
