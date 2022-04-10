@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::error::Error;
 
 use crate::command::Command;
 use crate::event::Event;
@@ -34,10 +33,7 @@ where
     self.versions.get(aggregate_id)
   }
 
-  pub fn execute_command<C: Command<S>>(
-    &mut self,
-    command: C,
-  ) -> Result<EventData, Box<dyn Error>> {
+  pub fn execute_command<C: Command<S>>(&mut self, command: C) -> Result<EventData, C::Error> {
     let state = self
       .states
       .entry(String::from(command.aggregate_id()))
@@ -68,7 +64,7 @@ mod aggregate_tests {
   #[test]
   fn execute_command_and_returns_event_data() {
     let mut aggregate = Aggregate::<TodoState>::new();
-    let command = TodoCommand::CreateTodo {
+    let command = TodoCommand::Created {
       id: "todo_0".to_string(),
       title: "Eat pizza".to_string(),
     };
@@ -91,7 +87,7 @@ mod aggregate_tests {
     let mut aggregate = Aggregate::<TodoState>::new();
     assert_matches!(aggregate.get_state("todo_0"), None);
 
-    let command1 = TodoCommand::CreateTodo {
+    let command1 = TodoCommand::Created {
       id: "todo_0".to_string(),
       title: "Eat rice".to_string(),
     };
@@ -100,7 +96,7 @@ mod aggregate_tests {
     let state = aggregate.get_state("todo_0").unwrap();
     assert_matches!(&state.title, Some(x) if x == "Eat rice");
 
-    let command2 = TodoCommand::UpdateTodoTitle {
+    let command2 = TodoCommand::UpdateTitle {
       id: "todo_0".to_string(),
       title: "More rice".to_string(),
     };
@@ -109,7 +105,7 @@ mod aggregate_tests {
     let state = aggregate.get_state("todo_0").unwrap();
     assert_matches!(&state.title, Some(x) if x == "More rice");
 
-    let command3 = TodoCommand::UpdateTodoStatus {
+    let command3 = TodoCommand::UpdateStatus {
       id: "todo_0".to_string(),
       status: TodoStatus::InProgress,
     };
@@ -124,14 +120,14 @@ mod aggregate_tests {
     let mut aggregate = Aggregate::<TodoState>::new();
     assert_matches!(aggregate.get_version("todo_0"), None);
 
-    let command1 = TodoCommand::CreateTodo {
+    let command1 = TodoCommand::Created {
       id: "todo_0".to_string(),
       title: "Eat rice".to_string(),
     };
     aggregate.execute_command(command1).unwrap();
     assert_matches!(aggregate.get_version("todo_0"), Some(1));
 
-    let command2 = TodoCommand::UpdateTodoTitle {
+    let command2 = TodoCommand::UpdateTitle {
       id: "todo_0".to_string(),
       title: "More rice".to_string(),
     };
@@ -143,22 +139,20 @@ mod aggregate_tests {
   fn error_when_execute_command_fail() {
     let mut aggregate = Aggregate::<TodoState>::new();
 
-    let command1 = TodoCommand::CreateTodo {
+    let command1 = TodoCommand::Created {
       id: "todo_0".to_string(),
       title: "Watch movie".to_string(),
     };
     aggregate.execute_command(command1).unwrap();
 
-    let command2 = TodoCommand::CreateTodo {
+    let command2 = TodoCommand::Created {
       id: "todo_0".to_string(),
       title: "Again watch movie".to_string(),
     };
     let err = aggregate
       .execute_command(command2)
-      .unwrap_err()
-      .downcast::<TodoError>()
-      .unwrap();
+      .expect_err("should error");
 
-    assert_matches!(*err, TodoError::TodoAlreadyExists);
+    assert_matches!(err, TodoError::TodoAlreadyExists);
   }
 }
