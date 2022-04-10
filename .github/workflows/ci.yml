@@ -60,10 +60,10 @@ jobs:
         run: |
           git config --global user.name "Seokju Na"
           git config --global user.email "seokju.me@gmail.com"
-      - name: use rust stable
+      - name: use rust nightly
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           override: true
       - name: install webkit2gtk (ubuntu only)
         if: matrix.platform == 'ubuntu-latest'
@@ -79,11 +79,10 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             ~/.cargo/bin
-          key: ${{ matrix.platform }}-stable-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
+          key: ${{ matrix.platform }}-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ matrix.platform }}-stable-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
-            ${{ matrix.platform }}-stable-${{ env.cache-name }}-
-            ${{ matrix.platform }}-stable-
+            ${{ matrix.platform }}-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
+            ${{ matrix.platform }}-${{ env.cache-name }}-
             ${{ matrix.platform }}-
       - name: cache target
         uses: actions/cache@v2
@@ -93,9 +92,8 @@ jobs:
           path: target
           key: ${{ matrix.platform }}-stable-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ matrix.platform }}-stable-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
-            ${{ matrix.platform }}-stable-${{ env.cache-name }}-
-            ${{ matrix.platform }}-stable-
+            ${{ matrix.platform }}-${{ env.cache-name }}-${{ hashFiles('**/Cargo.toml') }}
+            ${{ matrix.platform }}-${{ env.cache-name }}-
             ${{ matrix.platform }}-
       - name: run yarn install
         run: yarn install --immutable --immutable-cache
