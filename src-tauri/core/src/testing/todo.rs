@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_value, to_value};
@@ -57,19 +55,19 @@ pub struct TodoStatusUpdatedPayload {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "name")]
 pub enum TodoEvent {
-  TodoCreated {
+  Created {
     id: String,
     version: i64,
     timestamp: i64,
     payload: TodoCreatedPayload,
   },
-  TodoTitleUpdated {
+  TitleUpdated {
     id: String,
     version: i64,
     timestamp: i64,
     payload: TodoTitleUpdatedPayload,
   },
-  TodoStatusUpdated {
+  StatusUpdated {
     id: String,
     version: i64,
     timestamp: i64,
@@ -87,7 +85,7 @@ impl Event<TodoState> for TodoEvent {
       "TodoCreated" => {
         let payload = from_value::<TodoCreatedPayload>(event_data.payload)
           .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::TodoCreated {
+        Ok(TodoEvent::Created {
           id,
           version,
           timestamp,
@@ -97,7 +95,7 @@ impl Event<TodoState> for TodoEvent {
       "TodoTitleUpdated" => {
         let payload = from_value::<TodoTitleUpdatedPayload>(event_data.payload)
           .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::TodoTitleUpdated {
+        Ok(TodoEvent::TitleUpdated {
           id,
           version,
           timestamp,
@@ -107,7 +105,7 @@ impl Event<TodoState> for TodoEvent {
       "TodoStatusUpdated" => {
         let payload = from_value::<TodoStatusUpdatedPayload>(event_data.payload)
           .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::TodoStatusUpdated {
+        Ok(TodoEvent::StatusUpdated {
           id,
           version,
           timestamp,
@@ -120,7 +118,7 @@ impl Event<TodoState> for TodoEvent {
 
   fn to_event_data(self) -> EventData {
     match self {
-      TodoEvent::TodoCreated {
+      TodoEvent::Created {
         id,
         version,
         timestamp,
@@ -132,7 +130,7 @@ impl Event<TodoState> for TodoEvent {
         timestamp,
         payload: to_value(payload).unwrap(),
       },
-      TodoEvent::TodoTitleUpdated {
+      TodoEvent::TitleUpdated {
         id,
         version,
         timestamp,
@@ -144,7 +142,7 @@ impl Event<TodoState> for TodoEvent {
         timestamp,
         payload: to_value(payload).unwrap(),
       },
-      TodoEvent::TodoStatusUpdated {
+      TodoEvent::StatusUpdated {
         id,
         version,
         timestamp,
@@ -161,7 +159,7 @@ impl Event<TodoState> for TodoEvent {
 
   fn handle(&self, state: &mut TodoState) -> () {
     match self {
-      TodoEvent::TodoCreated {
+      TodoEvent::Created {
         timestamp, payload, ..
       } => {
         state.exists = true;
@@ -169,13 +167,13 @@ impl Event<TodoState> for TodoEvent {
         state.created_at = Some(timestamp.to_owned());
         state.updated_at = Some(timestamp.to_owned());
       }
-      TodoEvent::TodoTitleUpdated {
+      TodoEvent::TitleUpdated {
         timestamp, payload, ..
       } => {
         state.title = Some(payload.title.to_owned());
         state.updated_at = Some(timestamp.to_owned());
       }
-      TodoEvent::TodoStatusUpdated {
+      TodoEvent::StatusUpdated {
         timestamp, payload, ..
       } => {
         state.status = payload.status.to_owned();
@@ -194,32 +192,33 @@ pub enum TodoError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "name")]
 pub enum TodoCommand {
-  CreateTodo { id: String, title: String },
-  UpdateTodoTitle { id: String, title: String },
-  UpdateTodoStatus { id: String, status: TodoStatus },
+  Created { id: String, title: String },
+  UpdateTitle { id: String, title: String },
+  UpdateStatus { id: String, status: TodoStatus },
 }
 
 impl Command<TodoState> for TodoCommand {
   type Event = TodoEvent;
+  type Error = TodoError;
 
   fn aggregate_id(&self) -> &str {
     match self {
-      TodoCommand::CreateTodo { id, .. } => id,
-      TodoCommand::UpdateTodoTitle { id, .. } => id,
-      TodoCommand::UpdateTodoStatus { id, .. } => id,
+      TodoCommand::Created { id, .. } => id,
+      TodoCommand::UpdateTitle { id, .. } => id,
+      TodoCommand::UpdateStatus { id, .. } => id,
     }
   }
 
-  fn handle(&self, state: &TodoState, version: i64) -> Result<Self::Event, Box<dyn Error>> {
+  fn handle(&self, state: &TodoState, version: i64) -> Result<Self::Event, Self::Error> {
     let timestamp = Utc::now().timestamp();
 
     match self {
-      TodoCommand::CreateTodo { id, title } => {
+      TodoCommand::Created { id, title } => {
         if state.exists {
-          return Err(Box::new(TodoError::TodoAlreadyExists));
+          return Err(TodoError::TodoAlreadyExists);
         }
 
-        Ok(TodoEvent::TodoCreated {
+        Ok(TodoEvent::Created {
           id: id.to_owned(),
           version,
           timestamp,
@@ -228,7 +227,7 @@ impl Command<TodoState> for TodoCommand {
           },
         })
       }
-      TodoCommand::UpdateTodoTitle { id, title } => Ok(TodoEvent::TodoTitleUpdated {
+      TodoCommand::UpdateTitle { id, title } => Ok(TodoEvent::TitleUpdated {
         id: id.to_owned(),
         version,
         timestamp,
@@ -236,7 +235,7 @@ impl Command<TodoState> for TodoCommand {
           title: title.to_owned(),
         },
       }),
-      TodoCommand::UpdateTodoStatus { id, status } => Ok(TodoEvent::TodoStatusUpdated {
+      TodoCommand::UpdateStatus { id, status } => Ok(TodoEvent::StatusUpdated {
         id: id.to_owned(),
         version,
         timestamp,
