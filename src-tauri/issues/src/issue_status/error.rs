@@ -1,5 +1,7 @@
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq, Eq)]
 pub enum IssueStatusError {
   #[error("Issue status already exists")]
-  IssueStatusAlreadyExists,
+  AlreadyExists,
+  #[error("Issue not exists")]
+  NotExists,
 }
