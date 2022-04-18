@@ -1,9 +1,9 @@
+pub use crate::issue::aggregate::*;
 pub use crate::issue::command::*;
 pub use crate::issue::error::*;
 pub use crate::issue::event::*;
-pub use crate::issue::state::*;
 
+mod aggregate;
 mod command;
 mod error;
 mod event;
-mod state;

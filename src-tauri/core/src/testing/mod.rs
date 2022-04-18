@@ -1,5 +1,3 @@
-pub use crate::testing::mock_eventstore::*;
-pub use crate::testing::todo::*;
+pub use self::todo::{Todo, TodoCommand, TodoError, TodoEvent, TodoStatus};
 
-mod mock_eventstore;
 mod todo;

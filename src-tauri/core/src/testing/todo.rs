@@ -1,10 +1,71 @@
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use serde_json::{from_value, to_value};
 
-use crate::{AggregateState, Command, Event, EventData, EventParseError};
+use crate::{Aggregate, Command, Event, Timestamp};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "name")]
+pub enum TodoEvent {
+  TodoCreated {
+    id: String,
+    title: String,
+    status: TodoStatus,
+  },
+  TodoTitleUpdated {
+    title: String,
+  },
+  TodoStatusUpdated {
+    status: TodoStatus,
+  },
+}
+
+impl Event for TodoEvent {
+  fn name(&self) -> &'static str {
+    match self {
+      TodoEvent::TodoCreated { .. } => "TodoCreated",
+      TodoEvent::TodoTitleUpdated { .. } => "TodoTitleUpdated",
+      TodoEvent::TodoStatusUpdated { .. } => "TodoStatusUpdated",
+    }
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "name")]
+pub enum TodoCommand {
+  CreateTodo {
+    id: String,
+    title: String,
+    status: Option<TodoStatus>,
+  },
+  UpdateTodoTitle {
+    id: String,
+    title: String,
+  },
+  UpdateTodoStatus {
+    id: String,
+    status: TodoStatus,
+  },
+}
+
+impl Command for TodoCommand {
+  fn name(&self) -> &'static str {
+    match self {
+      TodoCommand::CreateTodo { .. } => "CreateTodo",
+      TodoCommand::UpdateTodoTitle { .. } => "UpdateTodoTitle",
+      TodoCommand::UpdateTodoStatus { .. } => "UpdateTodoStatus",
+    }
+  }
+
+  fn aggregate_id(&self) -> &str {
+    match self {
+      TodoCommand::CreateTodo { id, .. } => id,
+      TodoCommand::UpdateTodoTitle { id, .. } => id,
+      TodoCommand::UpdateTodoStatus { id, .. } => id,
+    }
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum TodoStatus {
   #[serde(rename = "todo")]
   Todo,
@@ -14,235 +75,83 @@ pub enum TodoStatus {
   Done,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TodoState {
-  pub exists: bool,
-  pub title: Option<String>,
-  pub status: TodoStatus,
-  pub created_at: Option<i64>,
-  pub updated_at: Option<i64>,
-}
-
-impl Default for TodoState {
-  fn default() -> Self {
-    Self {
-      exists: false,
-      title: None,
-      status: TodoStatus::Todo,
-      created_at: None,
-      updated_at: None,
-    }
-  }
-}
-
-impl AggregateState for TodoState {}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TodoCreatedPayload {
-  pub title: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TodoTitleUpdatedPayload {
-  pub title: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TodoStatusUpdatedPayload {
-  pub status: TodoStatus,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "name")]
-pub enum TodoEvent {
-  Created {
-    id: String,
-    version: i64,
-    timestamp: i64,
-    payload: TodoCreatedPayload,
-  },
-  TitleUpdated {
-    id: String,
-    version: i64,
-    timestamp: i64,
-    payload: TodoTitleUpdatedPayload,
-  },
-  StatusUpdated {
-    id: String,
-    version: i64,
-    timestamp: i64,
-    payload: TodoStatusUpdatedPayload,
-  },
-}
-
-impl Event<TodoState> for TodoEvent {
-  fn from_event_data(event_data: EventData) -> Result<Self, EventParseError> {
-    let id = event_data.aggregate_id;
-    let version = event_data.aggregate_version;
-    let timestamp = event_data.timestamp;
-
-    match event_data.name.as_str() {
-      "TodoCreated" => {
-        let payload = from_value::<TodoCreatedPayload>(event_data.payload)
-          .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::Created {
-          id,
-          version,
-          timestamp,
-          payload,
-        })
-      }
-      "TodoTitleUpdated" => {
-        let payload = from_value::<TodoTitleUpdatedPayload>(event_data.payload)
-          .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::TitleUpdated {
-          id,
-          version,
-          timestamp,
-          payload,
-        })
-      }
-      "TodoStatusUpdated" => {
-        let payload = from_value::<TodoStatusUpdatedPayload>(event_data.payload)
-          .map_err(|_| EventParseError::Fail)?;
-        Ok(TodoEvent::StatusUpdated {
-          id,
-          version,
-          timestamp,
-          payload,
-        })
-      }
-      _ => Err(EventParseError::NoMatches),
-    }
-  }
-
-  fn to_event_data(self) -> EventData {
-    match self {
-      TodoEvent::Created {
-        id,
-        version,
-        timestamp,
-        payload,
-      } => EventData {
-        name: "TodoCreated".to_string(),
-        aggregate_id: id,
-        aggregate_version: version,
-        timestamp,
-        payload: to_value(payload).unwrap(),
-      },
-      TodoEvent::TitleUpdated {
-        id,
-        version,
-        timestamp,
-        payload,
-      } => EventData {
-        name: "TodoTitleUpdated".to_string(),
-        aggregate_id: id,
-        aggregate_version: version,
-        timestamp,
-        payload: to_value(payload).unwrap(),
-      },
-      TodoEvent::StatusUpdated {
-        id,
-        version,
-        timestamp,
-        payload,
-      } => EventData {
-        name: "TodoStatusUpdated".to_string(),
-        aggregate_id: id,
-        aggregate_version: version,
-        timestamp,
-        payload: to_value(payload).unwrap(),
-      },
-    }
-  }
-
-  fn handle(&self, state: &mut TodoState) -> () {
-    match self {
-      TodoEvent::Created {
-        timestamp, payload, ..
-      } => {
-        state.exists = true;
-        state.title = Some(payload.title.to_owned());
-        state.created_at = Some(timestamp.to_owned());
-        state.updated_at = Some(timestamp.to_owned());
-      }
-      TodoEvent::TitleUpdated {
-        timestamp, payload, ..
-      } => {
-        state.title = Some(payload.title.to_owned());
-        state.updated_at = Some(timestamp.to_owned());
-      }
-      TodoEvent::StatusUpdated {
-        timestamp, payload, ..
-      } => {
-        state.status = payload.status.to_owned();
-        state.updated_at = Some(timestamp.to_owned());
-      }
-    }
-  }
-}
-
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq, Eq, Clone)]
 pub enum TodoError {
   #[error("Todo already exists")]
-  TodoAlreadyExists,
+  AlreadyExists,
+  #[error("Todo not exists")]
+  NotExists,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "name")]
-pub enum TodoCommand {
-  Created { id: String, title: String },
-  UpdateTitle { id: String, title: String },
-  UpdateStatus { id: String, status: TodoStatus },
+pub struct Todo {
+  pub id: String,
+  pub title: String,
+  pub status: TodoStatus,
+  pub created_at: Timestamp,
+  pub updated_at: Timestamp,
 }
 
-impl Command<TodoState> for TodoCommand {
+impl Aggregate for Todo {
+  type Command = TodoCommand;
   type Event = TodoEvent;
   type Error = TodoError;
 
-  fn aggregate_id(&self) -> &str {
-    match self {
-      TodoCommand::Created { id, .. } => id,
-      TodoCommand::UpdateTitle { id, .. } => id,
-      TodoCommand::UpdateStatus { id, .. } => id,
+  fn id(&self) -> &str {
+    &self.id
+  }
+
+  fn handle_command(
+    this: Option<&Self>,
+    command: Self::Command,
+  ) -> Result<Self::Event, Self::Error> {
+    match command {
+      TodoCommand::CreateTodo { id, title, status } => {
+        if this.is_some() {
+          return Err(TodoError::AlreadyExists);
+        }
+
+        Ok(TodoEvent::TodoCreated {
+          id,
+          title,
+          status: status.unwrap_or(TodoStatus::Todo),
+        })
+      }
+      TodoCommand::UpdateTodoTitle { title, .. } => Ok(TodoEvent::TodoTitleUpdated { title }),
+      TodoCommand::UpdateTodoStatus { status, .. } => Ok(TodoEvent::TodoStatusUpdated { status }),
     }
   }
 
-  fn handle(&self, state: &TodoState, version: i64) -> Result<Self::Event, Self::Error> {
+  fn apply_event(this: Option<Self>, event: Self::Event) -> Result<Self, Self::Error> {
     let timestamp = Utc::now().timestamp();
 
-    match self {
-      TodoCommand::Created { id, title } => {
-        if state.exists {
-          return Err(TodoError::TodoAlreadyExists);
+    match event {
+      TodoEvent::TodoCreated { id, title, status } => {
+        if this.is_some() {
+          return Err(TodoError::AlreadyExists);
         }
-
-        Ok(TodoEvent::Created {
-          id: id.to_owned(),
-          version,
-          timestamp,
-          payload: TodoCreatedPayload {
-            title: title.to_owned(),
-          },
+        Ok(Todo {
+          id,
+          title,
+          status,
+          created_at: timestamp,
+          updated_at: timestamp,
         })
       }
-      TodoCommand::UpdateTitle { id, title } => Ok(TodoEvent::TitleUpdated {
-        id: id.to_owned(),
-        version,
-        timestamp,
-        payload: TodoTitleUpdatedPayload {
-          title: title.to_owned(),
-        },
-      }),
-      TodoCommand::UpdateStatus { id, status } => Ok(TodoEvent::StatusUpdated {
-        id: id.to_owned(),
-        version,
-        timestamp,
-        payload: TodoStatusUpdatedPayload {
-          status: status.to_owned(),
-        },
-      }),
+      TodoEvent::TodoTitleUpdated { title } => match this {
+        Some(mut todo) => {
+          todo.title = title;
+          Ok(todo)
+        }
+        None => Err(TodoError::NotExists),
+      },
+      TodoEvent::TodoStatusUpdated { status } => match this {
+        Some(mut todo) => {
+          todo.status = status;
+          Ok(todo)
+        }
+        None => Err(TodoError::NotExists),
+      },
     }
   }
 }
