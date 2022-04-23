@@ -70,9 +70,10 @@ where
 
 #[cfg(test)]
 mod test {
+  use std::assert_matches::assert_matches;
+
   use crate::testing::{Todo, TodoCommand, TodoError, TodoEvent, TodoStatus};
   use crate::{AggregateRoot, PersistedEvent};
-  use std::assert_matches::assert_matches;
 
   #[test]
   fn execute_command_and_returns_persisted_event() {
