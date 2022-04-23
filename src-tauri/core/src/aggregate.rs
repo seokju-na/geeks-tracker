@@ -52,10 +52,7 @@ where
   ) -> Result<PersistedEvent<T::Event>, T::Error> {
     let id = command.aggregate_id().to_owned();
     let event = T::handle_command(self.states.get(&id), command)?;
-    let state = match self.states.get(&id) {
-      Some(x) => T::apply_event(Some(x.clone()), event.clone())?,
-      None => T::apply_event(None, event.clone())?,
-    };
+    let state = T::apply_event(self.states.get(&id).cloned(), event.clone())?;
     self.states.insert(id.to_owned(), state);
 
     let version = self.versions.entry(id.to_owned()).or_insert(0);
