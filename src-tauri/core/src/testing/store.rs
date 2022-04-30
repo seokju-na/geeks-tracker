@@ -50,7 +50,7 @@ where
 #[async_trait]
 impl<T> Eventstore for InMemory<T>
 where
-  T: Event + Clone + Send + Sync,
+  T: Event + Clone,
 {
   type Event = T;
   type Error = Infallible;

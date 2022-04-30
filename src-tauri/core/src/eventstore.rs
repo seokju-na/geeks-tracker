@@ -13,7 +13,7 @@ pub type Stream<'a, Item, Err> = BoxStream<'a, Result<Item, Err>>;
 
 #[async_trait]
 pub trait Eventstore: Send + Sync {
-  type Event: Event + Send + Sync;
+  type Event: Event;
   type Error: Send + Sync;
 
   fn stream(

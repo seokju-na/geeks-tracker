@@ -84,7 +84,7 @@ mod test {
     assert_eq!(
       persisted,
       PersistedEvent {
-        aggregate_id: "issue_0".to_string(),
+        stream_id: "issue_0".to_string(),
         version: 1,
         event: IssueEvent::IssueCreated {
           id: "issue_0".to_string(),
