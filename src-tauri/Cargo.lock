@@ -1181,6 +1181,7 @@ dependencies = [
  "geeks-tracker-common",
  "geeks-tracker-testing",
  "git2",
+ "thiserror",
 ]
 
 [[package]]
