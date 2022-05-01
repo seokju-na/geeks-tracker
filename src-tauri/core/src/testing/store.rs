@@ -5,9 +5,8 @@ use std::{
 };
 
 use async_trait::async_trait;
-use futures::stream::{iter, StreamExt};
 
-use crate::{Event, Eventstore, PersistedEvent, Stream, VersionSelect};
+use crate::{Event, Eventstore, PersistedEvent, VersionSelect};
 
 #[derive(Debug)]
 struct InMemoryBackend<T>
@@ -59,20 +58,21 @@ where
     &self,
     id: &str,
     select: VersionSelect,
-  ) -> Stream<PersistedEvent<Self::Event>, Self::Error> {
+  ) -> Result<Vec<PersistedEvent<Self::Event>>, Self::Error> {
     let backend = self.backend.read().expect("locked");
-    let events = backend
+    let events: Vec<_> = backend
       .streams
       .get(id)
       .cloned()
       .unwrap_or_default()
       .into_iter()
-      .filter(move |event| match select {
+      .filter(|event| match select {
         VersionSelect::All => true,
         VersionSelect::From(v) => event.version >= v,
-      });
+      })
+      .collect();
 
-    iter(events).map(Ok).boxed()
+    Ok(events)
   }
 
   async fn append(

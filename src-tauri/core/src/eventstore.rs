@@ -1,5 +1,4 @@
 use async_trait::async_trait;
-use futures::stream::BoxStream;
 
 use crate::{Event, PersistedEvent, Version};
 
@@ -8,8 +7,6 @@ pub enum VersionSelect {
   All,
   From(Version),
 }
-
-pub type Stream<'a, Item, Err> = BoxStream<'a, Result<Item, Err>>;
 
 #[async_trait]
 pub trait Eventstore: Send + Sync {
@@ -20,7 +17,7 @@ pub trait Eventstore: Send + Sync {
     &self,
     id: &str,
     select: VersionSelect,
-  ) -> Stream<PersistedEvent<Self::Event>, Self::Error>;
+  ) -> Result<Vec<PersistedEvent<Self::Event>>, Self::Error>;
 
   async fn append(
     &self,

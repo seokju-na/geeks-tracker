@@ -43,6 +43,7 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "geeks-tracker-common",
  "geeks-tracker-core",
  "geeks-tracker-git",
@@ -1168,7 +1169,6 @@ dependencies = [
  "async-trait",
  "chrono",
  "events_emitter",
- "futures",
  "serde",
  "serde_json",
  "thiserror",
