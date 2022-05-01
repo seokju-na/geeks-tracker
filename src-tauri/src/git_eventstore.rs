@@ -2,7 +2,6 @@ use std::marker::PhantomData;
 use std::path::PathBuf;
 
 use async_trait::async_trait;
-use futures::stream::{iter, StreamExt};
 use git2::Repository;
 use serde::de::DeserializeOwned;
 use serde::Serialize;

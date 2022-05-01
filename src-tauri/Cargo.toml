@@ -27,6 +27,7 @@ git2 = "0.13.25"
 thiserror = "1.0.30"
 anyhow = "1.0.55"
 nanoid = "0.4.0"
+async-trait = "0.1.53"
 
 [dev-dependencies]
 geeks-tracker-testing = { path = "./testing" }
