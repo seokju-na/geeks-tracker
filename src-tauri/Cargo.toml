@@ -17,7 +17,10 @@ tauri-build = { version = "1.0.4", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.4", features = ["global-shortcut", "os-all", "system-tray", "window-start-dragging"] }
+tauri = { version = "1.0.4", features = ["api-all", "global-shortcut", "system-tray"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24.0"
 
 [features]
 # by default Tauri runs in production mode

@@ -1,8 +1,18 @@
-use tauri::{App, AppHandle, Manager, Result, Runtime, Size, Window, WindowEvent};
+use tauri::{App, AppHandle, Manager, Result, Runtime, Window, WindowEvent};
+
+#[cfg(target_os = "macos")]
+use crate::macos_titlebar_patch::TransparentTitlebar;
 
 const MAIN_WIN: &str = "main";
 
 pub fn setup_windows<R: Runtime>(app: &mut App<R>) {
+  // [macOS] set main window transparent titlebar
+  #[cfg(target_os = "macos")]
+  {
+    let win = app.get_main_window();
+    win.set_transparent_titlebar(true, true);
+  }
+
   // register window event.
   let win = app.get_main_window();
   win.clone().on_window_event(move |event| {

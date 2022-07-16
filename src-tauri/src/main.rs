@@ -12,6 +12,7 @@ use crate::tray::{handle_tray, tray};
 use crate::windows::setup_windows;
 
 mod global_shortcuts;
+mod macos_titlebar_patch;
 mod tray;
 mod windows;
 
