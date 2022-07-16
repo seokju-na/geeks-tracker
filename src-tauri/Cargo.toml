@@ -12,25 +12,12 @@ rust-version = "1.57"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.0.0-rc.4", features = [] }
+tauri-build = { version = "1.0.4", features = [] }
 
 [dependencies]
-geeks-tracker-core = { path = "core" }
-geeks-tracker-common = { path = "common" }
-geeks-tracker-git = { path = "./git" }
-geeks-tracker-issues = { path = "./issues" }
-
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.0-rc.4", features = ["api-all"] }
-git2 = "0.13.25"
-thiserror = "1.0.30"
-anyhow = "1.0.55"
-nanoid = "0.4.0"
-async-trait = "0.1.53"
-
-[dev-dependencies]
-geeks-tracker-testing = { path = "./testing" }
+tauri = { version = "1.0.4", features = ["api-all"] }
 
 [features]
 # by default Tauri runs in production mode
@@ -39,6 +26,3 @@ default = ["custom-protocol"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
-
-[workspace]
-members = ["git", "testing", "core", "common", "issues"]
