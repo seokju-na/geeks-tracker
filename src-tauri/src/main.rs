@@ -17,6 +17,12 @@ mod tray;
 mod windows;
 
 fn setup<R: Runtime>(app: &mut App<R>) -> Result<(), Box<dyn Error>> {
+  // https://github.com/tauri-apps/tauri/discussions/2684#discussioncomment-1433069
+  #[cfg(target_os = "macos")]
+  {
+    app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+  }
+
   setup_windows(app);
   setup_global_shortcuts(app);
 
