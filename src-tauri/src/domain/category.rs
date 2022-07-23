@@ -97,7 +97,7 @@ impl Aggregate for Category {
         CategoryCommand::UpdateTemplate { template, .. } => {
           Ok(CategoryEvent::TemplatedUpdated { template })
         }
-        _ => Err(CategoryError::AlreadyExists),
+        _ => Err(CategoryError::NotExists),
       },
       None => match command {
         CategoryCommand::Create {
@@ -109,7 +109,7 @@ impl Aggregate for Category {
           title,
           template,
         }),
-        _ => Err(CategoryError::NotExists),
+        _ => Err(CategoryError::AlreadyExists),
       },
     }
   }
