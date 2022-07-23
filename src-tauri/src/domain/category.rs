@@ -21,18 +21,18 @@ pub enum CategoryEvent {
     title: String,
     template: String,
   },
-  #[serde(rename = "CategoryEvent.Updated")]
-  Updated {
-    title: Option<String>,
-    template: Option<String>,
-  },
+  #[serde(rename = "CategoryEvent.TitleUpdated")]
+  TitleUpdated { title: String },
+  #[serde(rename = "CategoryEvent.TemplateUpdated")]
+  TemplatedUpdated { template: String },
 }
 
 impl Event for CategoryEvent {
   fn name(&self) -> &'static str {
     match self {
       CategoryEvent::Created { .. } => "CategoryEvent.Created",
-      CategoryEvent::Updated { .. } => "CategoryEvent.Updated",
+      CategoryEvent::TitleUpdated { .. } => "CategoryEvent.TitleUpdated",
+      CategoryEvent::TemplatedUpdated { .. } => "CategoryEvent.TemplatedUpdated",
     }
   }
 }
@@ -46,26 +46,26 @@ pub enum CategoryCommand {
     title: String,
     template: String,
   },
-  #[serde(rename = "CategoryCommand.Update")]
-  Update {
-    id: String,
-    title: Option<String>,
-    template: Option<String>,
-  },
+  #[serde(rename = "CategoryCommand.UpdateTitle")]
+  UpdateTitle { id: String, title: String },
+  #[serde(rename = "CategoryCommand.UpdateTemplate")]
+  UpdateTemplate { id: String, template: String },
 }
 
 impl Command for CategoryCommand {
   fn name(&self) -> &'static str {
     match self {
       CategoryCommand::Create { .. } => "CategoryCommand.Create",
-      CategoryCommand::Update { .. } => "CategoryCommand.Update",
+      CategoryCommand::UpdateTitle { .. } => "CategoryCommand.UpdateTitle",
+      CategoryCommand::UpdateTemplate { .. } => "CategoryCommand.UpdateTemplate",
     }
   }
 
   fn aggregate_id(&self) -> &str {
     match self {
       CategoryCommand::Create { id, .. } => &id,
-      CategoryCommand::Update { id, .. } => &id,
+      CategoryCommand::UpdateTitle { id, .. } => &id,
+      CategoryCommand::UpdateTemplate { id, .. } => &id,
     }
   }
 }
@@ -93,9 +93,10 @@ impl Aggregate for Category {
   ) -> Result<Self::Event, Self::Error> {
     match this {
       Some(_) => match command {
-        CategoryCommand::Update {
-          title, template, ..
-        } => Ok(CategoryEvent::Updated { title, template }),
+        CategoryCommand::UpdateTitle { title, .. } => Ok(CategoryEvent::TitleUpdated { title }),
+        CategoryCommand::UpdateTemplate { template, .. } => {
+          Ok(CategoryEvent::TemplatedUpdated { template })
+        }
         _ => Err(CategoryError::AlreadyExists),
       },
       None => match command {
@@ -118,13 +119,13 @@ impl Aggregate for Category {
 
     match this {
       Some(mut category) => match event {
-        CategoryEvent::Updated { title, template } => {
-          if let Some(_title) = title {
-            category.title = _title;
-          }
-          if let Some(_template) = template {
-            category.template = _template;
-          }
+        CategoryEvent::TitleUpdated { title } => {
+          category.title = title;
+          category.updated_at = timestamp;
+          Ok(category)
+        }
+        CategoryEvent::TemplatedUpdated { template } => {
+          category.template = template;
           category.updated_at = timestamp;
           Ok(category)
         }
