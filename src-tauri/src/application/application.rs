@@ -43,7 +43,7 @@ impl Application {
     workspace_dir: &Path,
   ) -> Result<AggregateRoot<Category>, ApplicationError> {
     let eventstore = GitEventstore::new(workspace_dir);
-    let snapshot = FileSnapshot::new(workspace_dir.join(".geeks/categories.json"));
+    let snapshot = FileSnapshot::new(&workspace_dir.join(".geeks/categories.json"));
 
     let mut root = snapshot.load().await.unwrap_or_default();
     let unsaved_events = eventstore.read_until_snapshot().await?;
