@@ -1,4 +1,4 @@
-import { assert, AssertionError } from '~/utils/assert';
+import { assert, AssertionError } from './assert';
 
 describe('assert', () => {
   it('should throw "AssertionError" when condition falsy', () => {

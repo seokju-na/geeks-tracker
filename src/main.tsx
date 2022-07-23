@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { injectTheme } from '~/styles';
 import App from './App';
 import './index.css';
+import { injectTheme } from './styles';
 
 injectTheme();
 
