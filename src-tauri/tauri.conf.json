@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "io.geeks-tracker",
+      "identifier": "io.geeks.tracker",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
