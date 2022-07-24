@@ -58,11 +58,16 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "label": "main",
         "title": "Geek's Tracker",
-        "width": 800
+        "width": 678,
+        "height": 428,
+        "resizable": false,
+        "fullscreen": false,
+        "alwaysOnTop": true,
+        "focus": true,
+        "skipTaskbar": true,
+        "visible": false
       }
     ]
   }
