@@ -20,6 +20,8 @@
   },
   "packageManager": "yarn@3.2.1",
   "dependencies": {
+    "@radix-ui/react-icons": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.0.0",
     "@stitches/react": "^1.2.6",
     "@tauri-apps/api": "^1.0.2",
     "react": "^17.0.2",
