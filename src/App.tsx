@@ -1,8 +1,11 @@
 import { GearIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { FlatTabs } from './components/FlatTabs';
+import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
 import { styled } from './styles';
 
 export default function App() {
+  useGlobalEscKeydown();
+
   return (
     <FlatTabs.Root defaultValue="Tasks" css={{ width: '100vw', height: '100vh' }}>
       <Header>
@@ -53,5 +56,8 @@ const IconButton = styled('button', {
   color: '$icon',
   '& + &': {
     borderLeft: '1px solid $divider',
+  },
+  '&:focus': {
+    backgroundColor: '$blue600',
   },
 });
