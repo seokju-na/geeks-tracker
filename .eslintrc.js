@@ -43,11 +43,12 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.js', '**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
+      files: ['**/*.js', '**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx', 'src/testing/**/*.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-inferrable-types': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
       },
     },
   ],
