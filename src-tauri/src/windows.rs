@@ -13,6 +13,12 @@ pub fn setup_windows<R: Runtime>(app: &mut App<R>) {
     win.set_transparent_titlebar(true, true);
   }
 
+  // register "hide" event for main window.
+  let win = app.get_main_window();
+  win.clone().listen("geeks-tracker://hide", move |_| {
+    win.hide().unwrap();
+  });
+
   // register window event.
   let win = app.get_main_window();
   win.clone().on_window_event(move |event| {
