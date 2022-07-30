@@ -25,6 +25,9 @@ const Trigger = styled(Primitives.Trigger, {
   '&[aria-selected="true"]': {
     backgroundColor: '$backgroundHighlighted',
   },
+  '&:focus': {
+    backgroundColor: '$blue600',
+  },
 });
 
 const Content = styled(Primitives.Content, {
