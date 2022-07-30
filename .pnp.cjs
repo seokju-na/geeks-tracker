@@ -33,6 +33,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["@codemirror/commands", "npm:6.0.1"],\
+            ["@codemirror/lang-markdown", "npm:6.0.1"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/language-data", "npm:6.1.0"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
             ["@radix-ui/react-icons", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.1.1"],\
             ["@radix-ui/react-tabs", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.0.0"],\
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.8"],\
@@ -1545,6 +1551,302 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@codemirror/autocomplete", [\
+        ["npm:6.1.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-autocomplete-npm-6.1.0-e0643d269b-f29b521935.zip/node_modules/@codemirror/autocomplete/",\
+          "packageDependencies": [\
+            ["@codemirror/autocomplete", "npm:6.1.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/@codemirror-autocomplete-virtual-6d14c029a7/0/cache/@codemirror-autocomplete-npm-6.1.0-e0643d269b-f29b521935.zip/node_modules/@codemirror/autocomplete/",\
+          "packageDependencies": [\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@types/codemirror__language", null],\
+            ["@types/codemirror__state", null],\
+            ["@types/codemirror__view", null],\
+            ["@types/lezer__common", null]\
+          ],\
+          "packagePeers": [\
+            "@codemirror/language",\
+            "@codemirror/state",\
+            "@types/codemirror__language",\
+            "@types/codemirror__state",\
+            "@types/codemirror__view",\
+            "@types/lezer__common"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/commands", [\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/@codemirror-commands-npm-6.0.1-05bce93704-7b3b73596c.zip/node_modules/@codemirror/commands/",\
+          "packageDependencies": [\
+            ["@codemirror/commands", "npm:6.0.1"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@lezer/common", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-cpp", [\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-cpp-npm-6.0.1-51be18dc05-082e8570db.zip/node_modules/@codemirror/lang-cpp/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-cpp", "npm:6.0.1"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/cpp", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-css", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-css-npm-6.0.0-3d1522e03c-855a040ec2.zip/node_modules/@codemirror/lang-css/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-css", "npm:6.0.0"],\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@lezer/css", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-html", [\
+        ["npm:6.1.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-html-npm-6.1.0-c047364f83-7a526c9b62.zip/node_modules/@codemirror/lang-html/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-html", "npm:6.1.0"],\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/lang-css", "npm:6.0.0"],\
+            ["@codemirror/lang-javascript", "npm:6.0.2"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/html", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-java", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-java-npm-6.0.0-f67395296f-27750c4634.zip/node_modules/@codemirror/lang-java/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-java", "npm:6.0.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/java", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-javascript", [\
+        ["npm:6.0.2", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-javascript-npm-6.0.2-aba4dfda4d-a63058e697.zip/node_modules/@codemirror/lang-javascript/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-javascript", "npm:6.0.2"],\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/lint", "npm:6.0.0"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/javascript", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-json", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-json-npm-6.0.0-dc2a16985f-9eb7b1842e.zip/node_modules/@codemirror/lang-json/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-json", "npm:6.0.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/json", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-markdown", [\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-markdown-npm-6.0.1-ef59008e87-fe87976f7e.zip/node_modules/@codemirror/lang-markdown/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-markdown", "npm:6.0.1"],\
+            ["@codemirror/lang-html", "npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/markdown", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-php", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-php-npm-6.0.0-b8a7232d34-c602530ef7.zip/node_modules/@codemirror/lang-php/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-php", "npm:6.0.0"],\
+            ["@codemirror/lang-html", "npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/php", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-python", [\
+        ["npm:6.0.1", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-python-npm-6.0.1-85df0ce7fb-8fb6728576.zip/node_modules/@codemirror/lang-python/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-python", "npm:6.0.1"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/python", "npm:1.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-rust", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-rust-npm-6.0.0-07a9e8517d-77f19ea1d9.zip/node_modules/@codemirror/lang-rust/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-rust", "npm:6.0.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/rust", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-sql", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-sql-npm-6.0.0-8333d0fa34-5e4ba7a34b.zip/node_modules/@codemirror/lang-sql/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-sql", "npm:6.0.0"],\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-wast", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-wast-npm-6.0.0-44a230504c-cf97dd49c3.zip/node_modules/@codemirror/lang-wast/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-wast", "npm:6.0.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lang-xml", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lang-xml-npm-6.0.0-ed330f4826-d601c3a5dd.zip/node_modules/@codemirror/lang-xml/",\
+          "packageDependencies": [\
+            ["@codemirror/lang-xml", "npm:6.0.0"],\
+            ["@codemirror/autocomplete", "virtual:3d1522e03c620a1fd9c1b47547095b639c9e3ef5e7dcce0498d0d4559afca1ee511fb90f17e1e1ea7389615eb65515dd6d377a749acf81bdb431d70df6b46e0a#npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/xml", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/language", [\
+        ["npm:6.2.1", {\
+          "packageLocation": "./.yarn/cache/@codemirror-language-npm-6.2.1-0052c93b38-e483eacf33.zip/node_modules/@codemirror/language/",\
+          "packageDependencies": [\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"],\
+            ["style-mod", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/language-data", [\
+        ["npm:6.1.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-language-data-npm-6.1.0-e3c5010ae5-785ac3025b.zip/node_modules/@codemirror/language-data/",\
+          "packageDependencies": [\
+            ["@codemirror/language-data", "npm:6.1.0"],\
+            ["@codemirror/lang-cpp", "npm:6.0.1"],\
+            ["@codemirror/lang-css", "npm:6.0.0"],\
+            ["@codemirror/lang-html", "npm:6.1.0"],\
+            ["@codemirror/lang-java", "npm:6.0.0"],\
+            ["@codemirror/lang-javascript", "npm:6.0.2"],\
+            ["@codemirror/lang-json", "npm:6.0.0"],\
+            ["@codemirror/lang-markdown", "npm:6.0.1"],\
+            ["@codemirror/lang-php", "npm:6.0.0"],\
+            ["@codemirror/lang-python", "npm:6.0.1"],\
+            ["@codemirror/lang-rust", "npm:6.0.0"],\
+            ["@codemirror/lang-sql", "npm:6.0.0"],\
+            ["@codemirror/lang-wast", "npm:6.0.0"],\
+            ["@codemirror/lang-xml", "npm:6.0.0"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/legacy-modes", "npm:6.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/legacy-modes", [\
+        ["npm:6.1.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-legacy-modes-npm-6.1.0-c7bbf4c22c-bc0e3b7713.zip/node_modules/@codemirror/legacy-modes/",\
+          "packageDependencies": [\
+            ["@codemirror/legacy-modes", "npm:6.1.0"],\
+            ["@codemirror/language", "npm:6.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/lint", [\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-lint-npm-6.0.0-915d1bdcc0-e1da165ad3.zip/node_modules/@codemirror/lint/",\
+          "packageDependencies": [\
+            ["@codemirror/lint", "npm:6.0.0"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["crelt", "npm:1.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/state", [\
+        ["npm:6.1.0", {\
+          "packageLocation": "./.yarn/cache/@codemirror-state-npm-6.1.0-fbfc32911b-5185df31f2.zip/node_modules/@codemirror/state/",\
+          "packageDependencies": [\
+            ["@codemirror/state", "npm:6.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@codemirror/view", [\
+        ["npm:6.1.2", {\
+          "packageLocation": "./.yarn/cache/@codemirror-view-npm-6.1.2-a9fba72e7e-4ba84d4453.zip/node_modules/@codemirror/view/",\
+          "packageDependencies": [\
+            ["@codemirror/view", "npm:6.1.2"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["style-mod", "npm:4.0.0"],\
+            ["w3c-keyname", "npm:2.2.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@eslint/eslintrc", [\
         ["npm:1.1.0", {\
           "packageLocation": "./.yarn/cache/@eslint-eslintrc-npm-1.1.0-66eebb2bc3-784aa2157e.zip/node_modules/@eslint/eslintrc/",\
@@ -1966,6 +2268,157 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jridgewell/trace-mapping", "npm:0.3.4"],\
             ["@jridgewell/resolve-uri", "npm:3.0.5"],\
             ["@jridgewell/sourcemap-codec", "npm:1.4.11"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/common", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-common-npm-1.0.0-2b393671a9-0ba652b39f.zip/node_modules/@lezer/common/",\
+          "packageDependencies": [\
+            ["@lezer/common", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/cpp", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-cpp-npm-1.0.0-4ce3b8dc28-6829550db0.zip/node_modules/@lezer/cpp/",\
+          "packageDependencies": [\
+            ["@lezer/cpp", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/css", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-css-npm-1.0.0-b584bfa7e8-094b178254.zip/node_modules/@lezer/css/",\
+          "packageDependencies": [\
+            ["@lezer/css", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/highlight", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-highlight-npm-1.0.0-ffceff70f6-9ce6c4ea04.zip/node_modules/@lezer/highlight/",\
+          "packageDependencies": [\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/common", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/html", [\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/cache/@lezer-html-npm-1.0.1-605dff3bc6-3672c6a665.zip/node_modules/@lezer/html/",\
+          "packageDependencies": [\
+            ["@lezer/html", "npm:1.0.1"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/java", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-java-npm-1.0.0-5b6ca5f732-0dcd3ea2aa.zip/node_modules/@lezer/java/",\
+          "packageDependencies": [\
+            ["@lezer/java", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/javascript", [\
+        ["npm:1.0.2", {\
+          "packageLocation": "./.yarn/cache/@lezer-javascript-npm-1.0.2-3fc4cecf9d-d828da05af.zip/node_modules/@lezer/javascript/",\
+          "packageDependencies": [\
+            ["@lezer/javascript", "npm:1.0.2"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/json", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-json-npm-1.0.0-ac471ba4cd-c1ca0cdf68.zip/node_modules/@lezer/json/",\
+          "packageDependencies": [\
+            ["@lezer/json", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/lr", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-lr-npm-1.2.0-462701b40d-6fda874083.zip/node_modules/@lezer/lr/",\
+          "packageDependencies": [\
+            ["@lezer/lr", "npm:1.2.0"],\
+            ["@lezer/common", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/markdown", [\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/cache/@lezer-markdown-npm-1.0.1-804ac1a19f-f43e43496c.zip/node_modules/@lezer/markdown/",\
+          "packageDependencies": [\
+            ["@lezer/markdown", "npm:1.0.1"],\
+            ["@lezer/common", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/php", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-php-npm-1.0.0-cb3a36f6c1-06d20c4230.zip/node_modules/@lezer/php/",\
+          "packageDependencies": [\
+            ["@lezer/php", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/python", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-python-npm-1.1.0-880b103f2a-5afff3fada.zip/node_modules/@lezer/python/",\
+          "packageDependencies": [\
+            ["@lezer/python", "npm:1.1.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/rust", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-rust-npm-1.0.0-7198881c9a-0c42f41567.zip/node_modules/@lezer/rust/",\
+          "packageDependencies": [\
+            ["@lezer/rust", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@lezer/xml", [\
+        ["npm:1.0.0", {\
+          "packageLocation": "./.yarn/cache/@lezer-xml-npm-1.0.0-b2763a8e18-0fefcae142.zip/node_modules/@lezer/xml/",\
+          "packageDependencies": [\
+            ["@lezer/xml", "npm:1.0.0"],\
+            ["@lezer/highlight", "npm:1.0.0"],\
+            ["@lezer/lr", "npm:1.2.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4230,6 +4683,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["crelt", [\
+        ["npm:1.0.5", {\
+          "packageLocation": "./.yarn/cache/crelt-npm-1.0.5-6dad646a54-04a618c587.zip/node_modules/crelt/",\
+          "packageDependencies": [\
+            ["crelt", "npm:1.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["cross-spawn", [\
         ["npm:6.0.5", {\
           "packageLocation": "./.yarn/cache/cross-spawn-npm-6.0.5-2deab6c280-f893bb0d96.zip/node_modules/cross-spawn/",\
@@ -5908,6 +6370,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["geeks-tracker", "workspace:."],\
+            ["@codemirror/commands", "npm:6.0.1"],\
+            ["@codemirror/lang-markdown", "npm:6.0.1"],\
+            ["@codemirror/language", "npm:6.2.1"],\
+            ["@codemirror/language-data", "npm:6.1.0"],\
+            ["@codemirror/state", "npm:6.1.0"],\
+            ["@codemirror/view", "npm:6.1.2"],\
             ["@radix-ui/react-icons", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.1.1"],\
             ["@radix-ui/react-tabs", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.0.0"],\
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.8"],\
@@ -9670,6 +10138,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["style-mod", [\
+        ["npm:4.0.0", {\
+          "packageLocation": "./.yarn/cache/style-mod-npm-4.0.0-dffb5d3925-c19f73d660.zip/node_modules/style-mod/",\
+          "packageDependencies": [\
+            ["style-mod", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["supports-color", [\
         ["npm:5.5.0", {\
           "packageLocation": "./.yarn/cache/supports-color-npm-5.5.0-183ac537bc-95f6f4ba5a.zip/node_modules/supports-color/",\
@@ -10168,6 +10645,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["w3c-hr-time", "npm:1.0.2"],\
             ["browser-process-hrtime", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["w3c-keyname", [\
+        ["npm:2.2.5", {\
+          "packageLocation": "./.yarn/cache/w3c-keyname-npm-2.2.5-435fd52c39-1451f51198.zip/node_modules/w3c-keyname/",\
+          "packageDependencies": [\
+            ["w3c-keyname", "npm:2.2.5"]\
           ],\
           "linkType": "HARD"\
         }]\

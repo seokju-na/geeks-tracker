@@ -20,6 +20,12 @@
   },
   "packageManager": "yarn@3.2.1",
   "dependencies": {
+    "@codemirror/commands": "^6.0.1",
+    "@codemirror/lang-markdown": "^6.0.1",
+    "@codemirror/language": "^6.2.1",
+    "@codemirror/language-data": "^6.1.0",
+    "@codemirror/state": "^6.1.0",
+    "@codemirror/view": "^6.1.2",
     "@radix-ui/react-icons": "^1.1.1",
     "@radix-ui/react-tabs": "^1.0.0",
     "@stitches/react": "^1.2.8",
