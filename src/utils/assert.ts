@@ -1,4 +1,4 @@
-import type { AnyObject } from './object';
+import type { AnyObject } from './types';
 
 export class AssertionError extends Error {
   readonly name = 'AssertionError';
