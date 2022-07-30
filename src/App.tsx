@@ -25,9 +25,15 @@ export default function App() {
         </Buttons>
       </Header>
       <main>
-        <FlatTabs.Content value="Tasks">Tasks</FlatTabs.Content>
-        <FlatTabs.Content value="Idea">Idea</FlatTabs.Content>
-        <FlatTabs.Content value="Notes">Notes</FlatTabs.Content>
+        <FlatTabs.Content value="Tasks">
+          <Editor initialDoc="Tasks" />
+        </FlatTabs.Content>
+        <FlatTabs.Content value="Idea">
+          <Editor initialDoc="Idea" />
+        </FlatTabs.Content>
+        <FlatTabs.Content value="Notes">
+          <Editor initialDoc="Notes" />
+        </FlatTabs.Content>
       </main>
     </FlatTabs.Root>
   );
