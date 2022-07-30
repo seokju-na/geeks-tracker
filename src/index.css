@@ -10,6 +10,10 @@ body, html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  overflow: hidden;
+}
+
 @media (prefers-color-scheme: light) {
   body, html {
     background-color: #f3f3f3;
