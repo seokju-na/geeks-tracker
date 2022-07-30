@@ -8,7 +8,15 @@ export default function App() {
   useGlobalEscKeydown();
 
   return (
-    <FlatTabs.Root defaultValue="Tasks" css={{ width: '100vw', height: '100vh' }}>
+    <FlatTabs.Root
+      defaultValue="Tasks"
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+      }}
+    >
       <Header data-tauri-drag-region>
         <FlatTabs.List aria-label="Categories">
           <FlatTabs.Trigger value="Tasks">Tasks</FlatTabs.Trigger>
@@ -24,7 +32,7 @@ export default function App() {
           </IconButton>
         </Buttons>
       </Header>
-      <main>
+      <Main>
         <FlatTabs.Content value="Tasks">
           <Editor initialDoc="Tasks" />
         </FlatTabs.Content>
@@ -34,7 +42,7 @@ export default function App() {
         <FlatTabs.Content value="Notes">
           <Editor initialDoc="Notes" />
         </FlatTabs.Content>
-      </main>
+      </Main>
     </FlatTabs.Root>
   );
 }
@@ -46,6 +54,11 @@ const Header = styled('header', {
   width: '100%',
   borderBottom: '1px solid $divider',
   userSelect: 'none',
+});
+
+const Main = styled('main', {
+  flex: 1,
+  overflowY: 'auto',
 });
 
 const Buttons = styled('div', {
