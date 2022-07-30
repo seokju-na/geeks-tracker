@@ -1,4 +1,5 @@
 import { GearIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Editor } from './components/Editor';
 import { FlatTabs } from './components/FlatTabs';
 import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
 import { styled } from './styles';
@@ -8,7 +9,7 @@ export default function App() {
 
   return (
     <FlatTabs.Root defaultValue="Tasks" css={{ width: '100vw', height: '100vh' }}>
-      <Header>
+      <Header data-tauri-drag-region>
         <FlatTabs.List aria-label="Categories">
           <FlatTabs.Trigger value="Tasks">Tasks</FlatTabs.Trigger>
           <FlatTabs.Trigger value="Idea">Idea</FlatTabs.Trigger>
@@ -38,6 +39,7 @@ const Header = styled('header', {
   justifyContent: 'space-between',
   width: '100%',
   borderBottom: '1px solid $divider',
+  userSelect: 'none',
 });
 
 const Buttons = styled('div', {
