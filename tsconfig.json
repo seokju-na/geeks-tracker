@@ -19,7 +19,5 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["jest"]
-  },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  }
 }
