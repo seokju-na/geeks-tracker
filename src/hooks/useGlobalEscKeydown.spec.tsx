@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { it, vitest } from 'vitest';
 import { mockTauriEvent } from '../testing/mockIPC';
 import { useGlobalEscKeydown } from './useGlobalEscKeydown';
 
 it('emit hide event when press "ESC" key without any focused element', async () => {
-  const callback = jest.fn();
+  const callback = vitest.fn();
   mockTauriEvent('geeks-tracker://hide', callback);
 
   function Test() {
@@ -35,7 +36,7 @@ it('blur active element when press "ESC" key if active element is not document',
   expect(document.activeElement).toBe(document.body);
 
   // 2. hit ESC key once again
-  const callback = jest.fn();
+  const callback = vitest.fn();
   mockTauriEvent('geeks-tracker://hide', callback);
   await userEvent.keyboard('{Escape}');
   expect(callback).toHaveBeenCalled();
