@@ -29,6 +29,13 @@ module.exports = {
     curly: ['error', 'all'],
     eqeqeq: ['error', 'always', { null: 'ignore' }],
     'import/no-duplicates': 'error',
+    'import/order': [
+      'error',
+      {
+        groups: [['builtin', 'external', 'internal'], 'parent', 'sibling', 'index'],
+        alphabetize: { order: 'asc' },
+      },
+    ],
     'react/prop-types': 'off',
     'react/display-name': 'off',
     'react-hooks/rules-of-hooks': 'error',
