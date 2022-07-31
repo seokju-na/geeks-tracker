@@ -1,5 +1,6 @@
 import type { TauriCommand } from '@tauri-apps/api/helpers/tauri';
 import { mockIPC as mockTauriIPC } from '@tauri-apps/api/mocks';
+import { afterEach, beforeEach } from 'vitest';
 
 type Handler = (args: Record<string, unknown>) => any;
 const tauriEventHandlers = new Map<string, Handler>(); // handlers for tauri event
