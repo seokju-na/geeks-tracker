@@ -1,23 +1,23 @@
 [package]
-name = "app"
+name = "geeks-tracker-app"
 version = "0.1.0"
-description = "A Tauri App"
+description = "Tracker for geeks"
 authors = ["Seokju Na <seokju.me@gmail.com>"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "geeks-tracker-app"
 edition = "2021"
 rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.0.4", features = [] }
+tauri-build = { version = "=1.0.4", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.4", features = ["global-shortcut", "system-tray", "window-start-dragging"] }
+tauri = { version = "=1.0.4", features = ["global-shortcut", "system-tray", "window-start-dragging"] }
 thiserror = "1.0"
 chrono = "0.4.19"
 tokio = { version = "1.20", features = ["full"] }
