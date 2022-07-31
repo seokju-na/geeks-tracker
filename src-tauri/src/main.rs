@@ -5,9 +5,9 @@
 
 use std::error::Error;
 
-use crate::app_state::setup_app_state;
 use tauri::{App, Runtime};
 
+use crate::app_state::setup_app_state;
 use crate::global_shortcuts::setup_global_shortcuts;
 use crate::tray::{handle_tray, tray};
 use crate::windows::setup_windows;
