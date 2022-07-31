@@ -18,6 +18,7 @@ tauri-build = { version = "=1.0.4", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "=1.0.4", features = ["global-shortcut", "system-tray", "window-start-dragging"] }
+tauri-plugin-store = { git = "https://github.com/tauri-apps/tauri-plugin-store", branch = "dev" }
 thiserror = "1.0"
 chrono = "0.4.19"
 tokio = { version = "1.20", features = ["full"] }
