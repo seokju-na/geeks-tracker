@@ -11,10 +11,12 @@ import { usePreservedCallback } from './usePreservedCallback';
 interface Props {
   initialDoc?: string | Text;
   onChange?: (state: EditorState) => void;
+  onSave?: () => void;
 }
 
-export function useEditor<T extends Element>({ initialDoc = '', onChange = noop }: Props = {}) {
+export function useEditor<T extends Element>({ initialDoc = '', onChange = noop, onSave = noop }: Props = {}) {
   const elemRef = useRef<T>(null);
+  const saveCallback = usePreservedCallback(onSave);
   const changeCallback = usePreservedCallback(onChange);
   const [view, setView] = useState<EditorView>();
 
@@ -26,7 +28,17 @@ export function useEditor<T extends Element>({ initialDoc = '', onChange = noop 
     const startState = EditorState.create({
       doc: initialDoc,
       extensions: [
-        keymap.of(defaultKeymap),
+        keymap.of([
+          ...defaultKeymap,
+          {
+            key: 'Ctrl-s',
+            mac: 'Cmd-s',
+            run: () => {
+              saveCallback();
+              return true;
+            },
+          },
+        ]),
         lineNumbers(),
         highlightActiveLineGutter(),
         indentOnInput(),
