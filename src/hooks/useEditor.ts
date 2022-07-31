@@ -3,7 +3,7 @@ import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { bracketMatching, indentOnInput } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
 import { EditorState, Text } from '@codemirror/state';
-import { EditorView, highlightActiveLine, highlightActiveLineGutter, keymap, lineNumbers } from '@codemirror/view';
+import { EditorView, highlightActiveLine, highlightActiveLineGutter, keymap } from '@codemirror/view';
 import { useEffect, useRef, useState } from 'react';
 import { noop } from '../utils/noop';
 import { usePreservedCallback } from './usePreservedCallback';
@@ -39,7 +39,6 @@ export function useEditor<T extends Element>({ initialDoc = '', onChange = noop,
             },
           },
         ]),
-        lineNumbers(),
         highlightActiveLineGutter(),
         indentOnInput(),
         bracketMatching(),
