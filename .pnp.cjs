@@ -66,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.0.0"],\
             ["eslint-plugin-react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:7.28.0"],\
             ["eslint-plugin-react-hooks", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.3.0"],\
+            ["hotkeys-js", "npm:3.9.4"],\
             ["husky", "npm:7.0.4"],\
             ["jsdom", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:20.0.0"],\
             ["nanoid", "npm:4.0.0"],\
@@ -4238,6 +4239,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.0.0"],\
             ["eslint-plugin-react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:7.28.0"],\
             ["eslint-plugin-react-hooks", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.3.0"],\
+            ["hotkeys-js", "npm:3.9.4"],\
             ["husky", "npm:7.0.4"],\
             ["jsdom", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:20.0.0"],\
             ["nanoid", "npm:4.0.0"],\
@@ -4427,6 +4429,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/has-unicode-npm-2.0.1-893adb4747-1eab07a743.zip/node_modules/has-unicode/",\
           "packageDependencies": [\
             ["has-unicode", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["hotkeys-js", [\
+        ["npm:3.9.4", {\
+          "packageLocation": "./.yarn/cache/hotkeys-js-npm-3.9.4-72eb676c60-98c3121d45.zip/node_modules/hotkeys-js/",\
+          "packageDependencies": [\
+            ["hotkeys-js", "npm:3.9.4"]\
           ],\
           "linkType": "HARD"\
         }]\
