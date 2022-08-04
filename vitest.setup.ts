@@ -1,7 +1,7 @@
-import { clearMocks } from '@tauri-apps/api/mocks';
+import { clearMocks, mockWindows } from '@tauri-apps/api/mocks';
 import '@testing-library/jest-dom';
 import { randomFillSync } from 'node:crypto';
-import * as React from 'react';
+import { afterEach, beforeAll, beforeEach } from 'vitest';
 import { queryClient } from './src/queryClient';
 
 // jsdom doesn't come with a WebCrypto implementation
@@ -13,10 +13,11 @@ beforeAll(() => {
   };
 });
 
+beforeEach(() => {
+  mockWindows('main');
+});
+
 afterEach(() => {
   clearMocks();
   queryClient.clear();
 });
-
-// shims for jsx
-global.React = React;
