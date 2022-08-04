@@ -7,6 +7,7 @@ export const queryClient = new QueryClient({
       refetchInterval: false,
       refetchOnReconnect: false,
       keepPreviousData: true,
+      suspense: true,
     },
   },
 });
