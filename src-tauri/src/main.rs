@@ -17,6 +17,7 @@ mod application;
 mod domain;
 mod global_shortcuts;
 mod macos_titlebar_patch;
+mod os_type;
 mod tray;
 mod windows;
 mod workspace;
@@ -29,7 +30,7 @@ fn setup<R: Runtime>(app: &mut App<R>) -> Result<(), Box<dyn Error>> {
   }
 
   setup_app_state(app);
-  setup_windows(app);
+  setup_windows(app)?;
   setup_global_shortcuts(app);
 
   Ok(())

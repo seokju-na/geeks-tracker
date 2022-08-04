@@ -59,19 +59,6 @@
     "updater": {
       "active": false
     },
-    "windows": [
-      {
-        "label": "main",
-        "title": "Geek's Tracker",
-        "width": 600,
-        "height": 400,
-        "resizable": false,
-        "fullscreen": false,
-        "alwaysOnTop": true,
-        "focus": true,
-        "skipTaskbar": true,
-        "visible": false
-      }
-    ]
+    "windows": []
   }
 }

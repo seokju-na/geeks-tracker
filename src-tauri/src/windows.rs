@@ -1,15 +1,44 @@
-use tauri::{App, AppHandle, Manager, Result, Runtime, Window, WindowEvent};
+use tauri::{
+  App, AppHandle, Manager, Result, Runtime, Window, WindowBuilder, WindowEvent, WindowUrl,
+};
+use url::Url;
 
 #[cfg(target_os = "macos")]
 use crate::macos_titlebar_patch::TransparentTitlebar;
+use crate::os_type::os_type;
 
 const MAIN_WIN: &str = "main";
 
-pub fn setup_windows<R: Runtime>(app: &mut App<R>) {
+pub fn setup_windows<R: Runtime>(app: &mut App<R>) -> Result<()> {
+  setup_main_window(app)?;
+
+  Ok(())
+}
+
+fn setup_main_window<R: Runtime>(app: &mut App<R>) -> Result<()> {
+  let url = WindowUrl::External(Url::parse("http://localhost:5173").unwrap());
+  #[cfg(not(debug_assertions))]
+  let url = WindowUrl::App("../dist/index.html".into());
+
+  let builder = WindowBuilder::new(app, MAIN_WIN, url)
+    .title("Geek's Tracker")
+    .inner_size(600_f64, 400_f64)
+    .resizable(false)
+    .fullscreen(false)
+    .always_on_top(true)
+    .skip_taskbar(true)
+    .visible(false)
+    .initialization_script(&format!(
+      r#"
+    window.__TAURI_OS_TYPE__ = '{os_type}';
+    "#,
+      os_type = os_type()
+    ));
+
+  let win = builder.build()?;
   // [macOS] set main window transparent titlebar
   #[cfg(target_os = "macos")]
   {
-    let win = app.get_main_window();
     win.set_transparent_titlebar(true, true);
   }
 
@@ -30,6 +59,8 @@ pub fn setup_windows<R: Runtime>(app: &mut App<R>) {
       }
     }
   });
+
+  Ok(())
 }
 
 pub trait AppExtra<R: Runtime> {
