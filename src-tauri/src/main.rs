@@ -9,6 +9,7 @@ use tauri::{App, Runtime};
 
 use crate::app_state::setup_app_state;
 use crate::global_shortcuts::setup_global_shortcuts;
+use crate::ipc::{execute_category_command, list_categories};
 use crate::tray::{handle_tray, tray};
 use crate::windows::setup_windows;
 
@@ -16,6 +17,7 @@ mod app_state;
 mod application;
 mod domain;
 mod global_shortcuts;
+mod ipc;
 mod macos_titlebar_patch;
 mod os_type;
 mod tray;
@@ -42,6 +44,10 @@ fn main() {
     .system_tray(tray())
     .on_system_tray_event(handle_tray)
     .setup(setup)
+    .invoke_handler(tauri::generate_handler![
+      execute_category_command,
+      list_categories,
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
