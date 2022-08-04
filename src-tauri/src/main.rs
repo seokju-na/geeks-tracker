@@ -17,6 +17,7 @@ mod application;
 mod domain;
 mod global_shortcuts;
 mod macos_titlebar_patch;
+mod os_type;
 mod tray;
 mod windows;
 mod workspace;
