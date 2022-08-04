@@ -30,7 +30,7 @@ fn setup<R: Runtime>(app: &mut App<R>) -> Result<(), Box<dyn Error>> {
   }
 
   setup_app_state(app);
-  setup_windows(app);
+  setup_windows(app)?;
   setup_global_shortcuts(app);
 
   Ok(())
