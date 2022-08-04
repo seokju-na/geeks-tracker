@@ -3,6 +3,7 @@ import { Accelerator } from './components/Accelerator';
 import { Editor } from './components/Editor';
 import { FlatIconButton } from './components/FlatIconButton';
 import { FlatTabs } from './components/FlatTabs';
+import { ViewDateNavigator } from './components/ViewDateNavigator';
 import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
 import { styled } from './styles';
 
@@ -38,6 +39,7 @@ export default function App() {
           </Accelerator>
         </Buttons>
       </Header>
+      <ViewDateNavigator />
       <Main>
         <FlatTabs.Content value="Tasks">
           <Editor initialDoc="Tasks" />
