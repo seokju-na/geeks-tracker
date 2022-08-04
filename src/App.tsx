@@ -1,8 +1,5 @@
-import { GearIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Accelerator } from './components/Accelerator';
-import { Editor } from './components/Editor';
-import { FlatIconButton } from './components/FlatIconButton';
-import { FlatTabs } from './components/FlatTabs';
+import { CategoryTabs } from './components/CategoryTabs';
+import { NoteEditor } from './components/NoteEditor';
 import { ViewDateNavigator } from './components/ViewDateNavigator';
 import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
 import { styled } from './styles';
@@ -11,8 +8,7 @@ export default function App() {
   useGlobalEscKeydown();
 
   return (
-    <FlatTabs.Root
-      defaultValue="Tasks"
+    <CategoryTabs.Root
       css={{
         display: 'flex',
         flexDirection: 'column',
@@ -21,37 +17,15 @@ export default function App() {
       }}
     >
       <Header data-tauri-drag-region>
-        <FlatTabs.List aria-label="Categories">
-          <FlatTabs.Trigger value="Tasks">Tasks</FlatTabs.Trigger>
-          <FlatTabs.Trigger value="Idea">Idea</FlatTabs.Trigger>
-          <FlatTabs.Trigger value="Notes">Notes</FlatTabs.Trigger>
-        </FlatTabs.List>
-        <Buttons>
-          <Accelerator shortcut={['CmdOrCtrl', 'F']}>
-            <FlatIconButton aria-label="Search">
-              <MagnifyingGlassIcon />
-            </FlatIconButton>
-          </Accelerator>
-          <Accelerator shortcut={['CmdOrCtrl', ',']}>
-            <FlatIconButton aria-label="Preferences">
-              <GearIcon />
-            </FlatIconButton>
-          </Accelerator>
-        </Buttons>
+        <CategoryTabs.List />
       </Header>
       <ViewDateNavigator />
       <Main>
-        <FlatTabs.Content value="Tasks">
-          <Editor initialDoc="Tasks" />
-        </FlatTabs.Content>
-        <FlatTabs.Content value="Idea">
-          <Editor initialDoc="Idea" />
-        </FlatTabs.Content>
-        <FlatTabs.Content value="Notes">
-          <Editor initialDoc="Notes" />
-        </FlatTabs.Content>
+        <CategoryTabs.Content>
+          <NoteEditor />
+        </CategoryTabs.Content>
       </Main>
-    </FlatTabs.Root>
+    </CategoryTabs.Root>
   );
 }
 
@@ -67,13 +41,4 @@ const Header = styled('header', {
 const Main = styled('main', {
   flex: 1,
   overflowY: 'auto',
-});
-
-const Buttons = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  borderLeft: '1px solid $divider',
-  '> button + button': {
-    borderLeft: '1px solid $divider',
-  },
 });
