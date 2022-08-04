@@ -1,4 +1,5 @@
 import { GearIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Accelerator } from './components/Accelerator';
 import { Editor } from './components/Editor';
 import { FlatIconButton } from './components/FlatIconButton';
 import { FlatTabs } from './components/FlatTabs';
@@ -25,12 +26,16 @@ export default function App() {
           <FlatTabs.Trigger value="Notes">Notes</FlatTabs.Trigger>
         </FlatTabs.List>
         <Buttons>
-          <FlatIconButton aria-label="Search (⌘+F)">
-            <MagnifyingGlassIcon />
-          </FlatIconButton>
-          <FlatIconButton aria-label="Preferences (⌘+,)">
-            <GearIcon />
-          </FlatIconButton>
+          <Accelerator shortcut={['CmdOrCtrl', 'F']}>
+            <FlatIconButton aria-label="Search">
+              <MagnifyingGlassIcon />
+            </FlatIconButton>
+          </Accelerator>
+          <Accelerator shortcut={['CmdOrCtrl', ',']}>
+            <FlatIconButton aria-label="Preferences">
+              <GearIcon />
+            </FlatIconButton>
+          </Accelerator>
         </Buttons>
       </Header>
       <Main>
