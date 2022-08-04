@@ -5,7 +5,7 @@ env:
   CARGO_INCREMENTAL: 0 # This is set to 0 by the https://github.com/Swatinem/rust-cache
   CARGO_PROFILE_DEV_DEBUG: 0 # This would add unnecessary bloat to the target folder, decreasing cache efficiency.
 jobs:
-  typecheck-lint-test:
+  typecheck-lint:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
