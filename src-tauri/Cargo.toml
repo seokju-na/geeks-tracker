@@ -25,6 +25,7 @@ tokio = { version = "1.20", features = ["full"] }
 async-trait = "0.1.56"
 walkdir = "2.3.2"
 git2 = "0.14.4"
+url = "2.2.2"
 
 geeks_event_sourcing = "0.3.1"
 geeks_event_sourcing_git = "0.7.0"
