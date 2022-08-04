@@ -7,7 +7,7 @@ import { useCategories } from './useCategories';
 
 it('query categories', async () => {
   const categories = DummyCategory.buildList(10);
-  mockIPC('geeks-tracker://categories/list', () => categories);
+  mockIPC('list_categories', () => categories);
 
   const { result } = renderHookWithTestBed(() => useCategories());
   await waitFor(() => {
@@ -18,8 +18,8 @@ it('query categories', async () => {
 it('add category', async () => {
   const executeCommand = vitest.fn();
 
-  mockIPC('geeks-tracker://categories/list', () => DummyCategory.buildList(5));
-  mockIPC('geeks-tracker://categories/executeCommand', executeCommand);
+  mockIPC('list_categories', () => DummyCategory.buildList(5));
+  mockIPC('execute_category_command', executeCommand);
 
   const { result } = renderHookWithTestBed(() => useCategories());
   await waitFor(async () => {
