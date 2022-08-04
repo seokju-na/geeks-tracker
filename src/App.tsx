@@ -1,5 +1,6 @@
 import { GearIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Editor } from './components/Editor';
+import { FlatIconButton } from './components/FlatIconButton';
 import { FlatTabs } from './components/FlatTabs';
 import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
 import { styled } from './styles';
@@ -24,12 +25,12 @@ export default function App() {
           <FlatTabs.Trigger value="Notes">Notes</FlatTabs.Trigger>
         </FlatTabs.List>
         <Buttons>
-          <IconButton aria-label="Search (⌘+F)">
+          <FlatIconButton aria-label="Search (⌘+F)">
             <MagnifyingGlassIcon />
-          </IconButton>
-          <IconButton aria-label="Preferences (⌘+,)">
+          </FlatIconButton>
+          <FlatIconButton aria-label="Preferences (⌘+,)">
             <GearIcon />
-          </IconButton>
+          </FlatIconButton>
         </Buttons>
       </Header>
       <Main>
@@ -65,20 +66,7 @@ const Buttons = styled('div', {
   display: 'flex',
   alignItems: 'center',
   borderLeft: '1px solid $divider',
-});
-
-const IconButton = styled('button', {
-  all: 'unset',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 28,
-  padding: '0 $md',
-  color: '$icon',
-  '& + &': {
+  '> button + button': {
     borderLeft: '1px solid $divider',
-  },
-  '&:focus': {
-    backgroundColor: '$blue600',
   },
 });
