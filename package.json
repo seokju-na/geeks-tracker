@@ -9,7 +9,8 @@
     "build:webview": "vite build",
     "test": "yarn test:tauri && yarn test:webview",
     "test:tauri": "cargo test --manifest-path ./src-tauri/Cargo.toml --workspace",
-    "test:webview": "vitest",
+    "test:webview": "vitest --run",
+    "test:webview:watch": "vitest",
     "postinstall": "husky install",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache -c .eslintrc.js 'src/**/*.{ts,tsx}'"
