@@ -58,6 +58,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
             ["@typescript-eslint/parser", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
             ["@vitejs/plugin-react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:2.0.0"],\
+            ["date-fns", "npm:2.29.1"],\
             ["esbuild", "npm:0.14.51"],\
             ["eslint", "npm:8.9.0"],\
             ["eslint-config-prettier", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:8.4.0"],\
@@ -2889,6 +2890,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["date-fns", [\
+        ["npm:2.29.1", {\
+          "packageLocation": "./.yarn/cache/date-fns-npm-2.29.1-8c07562fd8-9d07f77dff.zip/node_modules/date-fns/",\
+          "packageDependencies": [\
+            ["date-fns", "npm:2.29.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["debug", [\
         ["npm:2.6.9", {\
           "packageLocation": "./.yarn/cache/debug-npm-2.6.9-7d4cb597dc-d2f51589ca.zip/node_modules/debug/",\
@@ -4264,6 +4274,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
             ["@typescript-eslint/parser", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:5.12.0"],\
             ["@vitejs/plugin-react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:2.0.0"],\
+            ["date-fns", "npm:2.29.1"],\
             ["esbuild", "npm:0.14.51"],\
             ["eslint", "npm:8.9.0"],\
             ["eslint-config-prettier", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:8.4.0"],\
