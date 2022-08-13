@@ -5,12 +5,15 @@ use geeks_event_sourcing_git::{commit_snapshot, GitEventstore};
 use geeks_git::GitError;
 
 use crate::application::{FileSnapshot, FileSnapshotError};
-use crate::domain::{Category, CategoryError};
+use crate::domain::{Category, CategoryError, NoteError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum ApplicationError {
   #[error("category error: {0}")]
   Category(#[from] CategoryError),
+
+  #[error("note error: {0}")]
+  Note(#[from] NoteError),
 
   #[error("file snapshot error: {0}")]
   FileSnapshot(#[from] FileSnapshotError),

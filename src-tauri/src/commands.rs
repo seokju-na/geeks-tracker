@@ -4,7 +4,7 @@ use tauri::State;
 
 use crate::app_state::AppState;
 use crate::application::{ApplicationError, CommandHandler, FileSnapshotError, QueryHandler};
-use crate::domain::{Category, CategoryCommand, CategoryError};
+use crate::domain::{Category, CategoryCommand, CategoryError, NoteError};
 
 #[tauri::command]
 pub async fn execute_category_command(
@@ -59,6 +59,18 @@ impl From<ApplicationError> for CommandError {
         },
         CategoryError::NotExists => CommandError {
           kind: "CategoryError".to_string(),
+          name: "NotExists".to_string(),
+          message: None,
+        },
+      },
+      ApplicationError::Note(e) => match e {
+        NoteError::AlreadyExists => CommandError {
+          kind: "NoteError".to_string(),
+          name: "AlreadyExists".to_string(),
+          message: None,
+        },
+        NoteError::NotExists => CommandError {
+          kind: "NoteError".to_string(),
           name: "NotExists".to_string(),
           message: None,
         },
