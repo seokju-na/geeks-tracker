@@ -37,28 +37,24 @@ impl Event for NoteEvent {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "name", rename_all = "camelCase")]
 pub enum NoteCommand {
-  #[serde(rename = "NoteEvent.Create")]
-  Create {
+  #[serde(rename = "NoteEvent.CreateOrUpdate")]
+  CreateOrUpdate {
     id: String,
     category_id: String,
     body: String,
   },
-  #[serde(rename = "NoteEvent.UpdateBody")]
-  UpdateBody { id: String, body: String },
 }
 
 impl Command for NoteCommand {
   fn name(&self) -> &'static str {
     match self {
-      NoteCommand::Create { .. } => "NoteEvent.Create",
-      NoteCommand::UpdateBody { .. } => "NoteEvent.UpdateBody",
+      NoteCommand::CreateOrUpdate { .. } => "NoteEvent.CreateOrUpdate",
     }
   }
 
   fn aggregate_id(&self) -> &str {
     match self {
-      NoteCommand::Create { id, .. } => &id,
-      NoteCommand::UpdateBody { id, .. } => &id,
+      NoteCommand::CreateOrUpdate { id, .. } => &id,
     }
   }
 }
@@ -86,11 +82,10 @@ impl Aggregate for Note {
   ) -> Result<Self::Event, Self::Error> {
     match this {
       Some(_) => match command {
-        NoteCommand::UpdateBody { body, .. } => Ok(NoteEvent::BodyUpdated { body }),
-        _ => Err(NoteError::NotExists),
+        NoteCommand::CreateOrUpdate { body, .. } => Ok(NoteEvent::BodyUpdated { body }),
       },
       None => match command {
-        NoteCommand::Create {
+        NoteCommand::CreateOrUpdate {
           id,
           category_id,
           body,
@@ -99,7 +94,6 @@ impl Aggregate for Note {
           category_id,
           body,
         }),
-        _ => Err(NoteError::AlreadyExists),
       },
     }
   }

@@ -1,14 +1,30 @@
+use geeks_event_sourcing::Command;
 use geeks_git::GitError;
 use serde::{Deserialize, Serialize};
 use tauri::State;
 
 use crate::app_state::AppState;
 use crate::application::{ApplicationError, CommandHandler, FileSnapshotError, QueryHandler};
-use crate::domain::{Category, CategoryCommand, CategoryError};
+use crate::domain::{Category, CategoryCommand, CategoryError, NoteCommand, NoteError};
 
 #[tauri::command]
 pub async fn execute_category_command(
   command: CategoryCommand,
+  app_state: State<'_, AppState>,
+) -> Result<(), CommandError> {
+  app_state
+    .application
+    .lock()
+    .await
+    .handle_command(command)
+    .await?;
+
+  Ok(())
+}
+
+#[tauri::command]
+pub async fn execute_note_command(
+  command: NoteCommand,
   app_state: State<'_, AppState>,
 ) -> Result<(), CommandError> {
   app_state
@@ -59,6 +75,18 @@ impl From<ApplicationError> for CommandError {
         },
         CategoryError::NotExists => CommandError {
           kind: "CategoryError".to_string(),
+          name: "NotExists".to_string(),
+          message: None,
+        },
+      },
+      ApplicationError::Note(e) => match e {
+        NoteError::AlreadyExists => CommandError {
+          kind: "NoteError".to_string(),
+          name: "AlreadyExists".to_string(),
+          message: None,
+        },
+        NoteError::NotExists => CommandError {
+          kind: "NoteError".to_string(),
           name: "NotExists".to_string(),
           message: None,
         },
