@@ -13,17 +13,17 @@ pub struct Category {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "name", rename_all = "camelCase")]
+#[serde(tag = "name")]
 pub enum CategoryEvent {
-  #[serde(rename = "CategoryEvent.Created")]
+  #[serde(rename = "CategoryEvent.Created", rename_all = "camelCase")]
   Created {
     id: String,
     title: String,
     template: String,
   },
-  #[serde(rename = "CategoryEvent.TitleUpdated")]
+  #[serde(rename = "CategoryEvent.TitleUpdated", rename_all = "camelCase")]
   TitleUpdated { title: String },
-  #[serde(rename = "CategoryEvent.TemplateUpdated")]
+  #[serde(rename = "CategoryEvent.TemplateUpdated", rename_all = "camelCase")]
   TemplatedUpdated { template: String },
 }
 
@@ -38,17 +38,17 @@ impl Event for CategoryEvent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "name", rename_all = "camelCase")]
+#[serde(tag = "name")]
 pub enum CategoryCommand {
-  #[serde(rename = "CategoryCommand.Create")]
+  #[serde(rename = "CategoryCommand.Create", rename_all = "camelCase")]
   Create {
     id: String,
     title: String,
     template: String,
   },
-  #[serde(rename = "CategoryCommand.UpdateTitle")]
+  #[serde(rename = "CategoryCommand.UpdateTitle", rename_all = "camelCase")]
   UpdateTitle { id: String, title: String },
-  #[serde(rename = "CategoryCommand.UpdateTemplate")]
+  #[serde(rename = "CategoryCommand.UpdateTemplate", rename_all = "camelCase")]
   UpdateTemplate { id: String, template: String },
 }
 
