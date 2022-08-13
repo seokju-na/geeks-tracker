@@ -13,15 +13,15 @@ pub struct Note {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "name", rename_all = "camelCase")]
+#[serde(tag = "name")]
 pub enum NoteEvent {
-  #[serde(rename = "NoteEvent.Created")]
+  #[serde(rename = "NoteEvent.Created", rename_all = "camelCase")]
   Created {
     id: String,
     category_id: String,
     body: String,
   },
-  #[serde(rename = "NoteEvent.BodyUpdated")]
+  #[serde(rename = "NoteEvent.BodyUpdated", rename_all = "camelCase")]
   BodyUpdated { body: String },
 }
 
@@ -35,9 +35,9 @@ impl Event for NoteEvent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "name", rename_all = "camelCase")]
+#[serde(tag = "name")]
 pub enum NoteCommand {
-  #[serde(rename = "NoteEvent.CreateOrUpdate")]
+  #[serde(rename = "NoteEvent.CreateOrUpdate", rename_all = "camelCase")]
   CreateOrUpdate {
     id: String,
     category_id: String,
