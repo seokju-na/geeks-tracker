@@ -34,9 +34,11 @@
     "date-fns": "^2.29.1",
     "hotkeys-js": "^3.9.4",
     "nanoid": "^4.0.0",
+    "observable-hooks": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",
+    "rxjs": "^7.5.6",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#ff1556a88025a9eff16e91e9790773cf600eabf1"
   },
   "devDependencies": {
