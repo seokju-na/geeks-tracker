@@ -63,9 +63,9 @@ impl Command for CategoryCommand {
 
   fn aggregate_id(&self) -> &str {
     match self {
-      CategoryCommand::Create { id, .. } => &id,
-      CategoryCommand::UpdateTitle { id, .. } => &id,
-      CategoryCommand::UpdateTemplate { id, .. } => &id,
+      CategoryCommand::Create { id, .. } => id,
+      CategoryCommand::UpdateTitle { id, .. } => id,
+      CategoryCommand::UpdateTemplate { id, .. } => id,
     }
   }
 }

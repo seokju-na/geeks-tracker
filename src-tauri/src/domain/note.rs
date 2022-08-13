@@ -54,7 +54,7 @@ impl Command for NoteCommand {
 
   fn aggregate_id(&self) -> &str {
     match self {
-      NoteCommand::CreateOrUpdate { id, .. } => &id,
+      NoteCommand::CreateOrUpdate { id, .. } => id,
     }
   }
 }
