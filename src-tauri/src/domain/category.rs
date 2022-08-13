@@ -180,3 +180,42 @@ impl Aggregate for Category {
     }
   }
 }
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn ord() {
+    let category1 = Category {
+      id: "category1".to_string(),
+      order: 1,
+      title: "category1_title".to_string(),
+      template: "category1_template".to_string(),
+      created_at: 1659846351697,
+      updated_at: 1659846351697,
+    };
+    let category2 = Category {
+      id: "category2".to_string(),
+      order: 2,
+      title: "category2_title".to_string(),
+      template: "category2_template".to_string(),
+      created_at: 1659846351697,
+      updated_at: 1659846351697,
+    };
+    let category3 = Category {
+      id: "category3".to_string(),
+      order: 2,
+      title: "category3_title".to_string(),
+      template: "category3_template".to_string(),
+      created_at: 1659846351698,
+      updated_at: 1659846351697,
+    };
+    let mut categories = vec![category3.clone(), category2.clone(), category1.clone()];
+    categories.sort();
+
+    assert_eq!(categories[0], category1);
+    assert_eq!(categories[1], category2);
+    assert_eq!(categories[2], category3);
+  }
+}
