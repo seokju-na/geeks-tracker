@@ -28,3 +28,7 @@ interface UpdateTemplateCommand extends Base {
 
 export type CategoryCommand = CreateCommand | UpdateTitleCommand | UpdateTemplateCommand;
 export type CategoryCommandOf<T extends CategoryCommandName> = Extract<CategoryCommand, { name: T }>;
+
+export function isCategoryCommand(command: unknown): command is CategoryCommand {
+  return command != null && (command as CategoryCommand)?.name?.startsWith('CategoryCommand');
+}
