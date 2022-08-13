@@ -8,7 +8,7 @@ use std::error::Error;
 use tauri::{App, Runtime};
 
 use crate::app_state::setup_app_state;
-use crate::commands::{execute_category_command, execute_note_command, list_categories};
+use crate::commands::{execute_category_command, execute_note_command, get_note, list_categories};
 use crate::global_shortcuts::setup_global_shortcuts;
 use crate::tray::{handle_tray, tray};
 use crate::windows::setup_windows;
@@ -48,6 +48,7 @@ fn main() {
       execute_category_command,
       execute_note_command,
       list_categories,
+      get_note,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

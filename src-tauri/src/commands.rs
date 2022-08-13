@@ -4,7 +4,7 @@ use tauri::State;
 
 use crate::app_state::AppState;
 use crate::application::{ApplicationError, CommandHandler, FileSnapshotError, QueryHandler};
-use crate::domain::{Category, CategoryCommand, CategoryError, NoteCommand, NoteError};
+use crate::domain::{Category, CategoryCommand, CategoryError, Note, NoteCommand, NoteError};
 
 #[tauri::command]
 pub async fn execute_category_command(
@@ -41,6 +41,15 @@ pub async fn list_categories(
   app_state: State<'_, AppState>,
 ) -> Result<Vec<Category>, CommandError> {
   let result = app_state.application.lock().await.list_categories();
+  Ok(result)
+}
+
+#[tauri::command]
+pub async fn get_note(
+  id: String,
+  app_state: State<'_, AppState>,
+) -> Result<Option<Note>, CommandError> {
+  let result = app_state.application.lock().await.get_note(id);
   Ok(result)
 }
 
