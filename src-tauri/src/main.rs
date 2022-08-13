@@ -8,16 +8,16 @@ use std::error::Error;
 use tauri::{App, Runtime};
 
 use crate::app_state::setup_app_state;
+use crate::commands::{execute_category_command, list_categories};
 use crate::global_shortcuts::setup_global_shortcuts;
-use crate::ipc::{execute_category_command, list_categories};
 use crate::tray::{handle_tray, tray};
 use crate::windows::setup_windows;
 
 mod app_state;
 mod application;
+mod commands;
 mod domain;
 mod global_shortcuts;
-mod ipc;
 mod macos_titlebar_patch;
 mod os_type;
 mod tray;
