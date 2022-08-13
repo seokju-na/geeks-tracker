@@ -4,7 +4,7 @@ import { useStore } from './useStore';
 
 export function useViewDate() {
   const { value, setValue } = useStore<string>('.history', 'viewDate');
-  const viewDate = safedateParse(value) ?? new Date();
+  const viewDate = safeParseISO(value) ?? new Date();
 
   const updateViewDate = useCallback(
     (viewDate: Date) => {
@@ -19,7 +19,7 @@ export function useViewDate() {
   } as const;
 }
 
-function safedateParse(dateStr: string | null | undefined): Date | null {
+function safeParseISO(dateStr: string | null | undefined): Date | null {
   if (dateStr == null) {
     return null;
   }
