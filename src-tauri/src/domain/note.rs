@@ -99,7 +99,7 @@ impl Aggregate for Note {
   }
 
   fn apply_event(this: Option<Self>, event: Self::Event) -> Result<Self, Self::Error> {
-    let timestamp = Utc::now().timestamp();
+    let timestamp = Utc::now().timestamp_millis();
 
     match this {
       Some(mut note) => match event {
