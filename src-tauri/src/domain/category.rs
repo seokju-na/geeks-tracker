@@ -1,15 +1,41 @@
+use std::cmp::Ordering;
+
 use chrono::Utc;
 use geeks_event_sourcing::{Aggregate, Command, Event};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Category {
   pub id: String,
   pub title: String,
   pub template: String,
+  pub order: usize,
   pub created_at: i64,
   pub updated_at: i64,
+}
+
+impl PartialEq<Self> for Category {
+  fn eq(&self, other: &Self) -> bool {
+    self.id == other.id
+  }
+}
+
+impl Eq for Category {}
+
+impl PartialOrd for Category {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Ord for Category {
+  fn cmp(&self, other: &Self) -> Ordering {
+    if self.order != other.order {
+      return self.order.cmp(&other.order);
+    }
+    self.created_at.cmp(&other.created_at)
+  }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -20,6 +46,7 @@ pub enum CategoryEvent {
     id: String,
     title: String,
     template: String,
+    order: usize,
   },
   #[serde(rename = "CategoryEvent.TitleUpdated", rename_all = "camelCase")]
   TitleUpdated { title: String },
@@ -45,6 +72,7 @@ pub enum CategoryCommand {
     id: String,
     title: String,
     template: String,
+    order: usize,
   },
   #[serde(rename = "CategoryCommand.UpdateTitle", rename_all = "camelCase")]
   UpdateTitle { id: String, title: String },
@@ -104,10 +132,12 @@ impl Aggregate for Category {
           id,
           title,
           template,
+          order,
         } => Ok(CategoryEvent::Created {
           id,
           title,
           template,
+          order,
         }),
         _ => Err(CategoryError::AlreadyExists),
       },
@@ -136,10 +166,12 @@ impl Aggregate for Category {
           id,
           title,
           template,
+          order,
         } => Ok(Category {
           id,
           title,
           template,
+          order,
           created_at: timestamp,
           updated_at: timestamp,
         }),

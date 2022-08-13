@@ -157,6 +157,7 @@ mod tests {
       id: "category_1".to_string(),
       title: "My Category".to_string(),
       template: "...".to_string(),
+      order: 1,
       created_at: 1658565790687,
       updated_at: 1658565790687,
     };
