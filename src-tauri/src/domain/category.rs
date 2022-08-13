@@ -1,15 +1,41 @@
+use std::cmp::Ordering;
+
 use chrono::Utc;
 use geeks_event_sourcing::{Aggregate, Command, Event};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Category {
   pub id: String,
   pub title: String,
   pub template: String,
+  pub order: usize,
   pub created_at: i64,
   pub updated_at: i64,
+}
+
+impl PartialEq<Self> for Category {
+  fn eq(&self, other: &Self) -> bool {
+    self.id == other.id
+  }
+}
+
+impl Eq for Category {}
+
+impl PartialOrd for Category {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Ord for Category {
+  fn cmp(&self, other: &Self) -> Ordering {
+    if self.order != other.order {
+      return self.order.cmp(&other.order);
+    }
+    self.created_at.cmp(&other.created_at)
+  }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -20,6 +46,7 @@ pub enum CategoryEvent {
     id: String,
     title: String,
     template: String,
+    order: usize,
   },
   #[serde(rename = "CategoryEvent.TitleUpdated", rename_all = "camelCase")]
   TitleUpdated { title: String },
@@ -45,6 +72,7 @@ pub enum CategoryCommand {
     id: String,
     title: String,
     template: String,
+    order: usize,
   },
   #[serde(rename = "CategoryCommand.UpdateTitle", rename_all = "camelCase")]
   UpdateTitle { id: String, title: String },
@@ -104,10 +132,12 @@ impl Aggregate for Category {
           id,
           title,
           template,
+          order,
         } => Ok(CategoryEvent::Created {
           id,
           title,
           template,
+          order,
         }),
         _ => Err(CategoryError::AlreadyExists),
       },
@@ -136,15 +166,56 @@ impl Aggregate for Category {
           id,
           title,
           template,
+          order,
         } => Ok(Category {
           id,
           title,
           template,
+          order,
           created_at: timestamp,
           updated_at: timestamp,
         }),
         _ => Err(CategoryError::AlreadyExists),
       },
     }
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  fn ord() {
+    let category1 = Category {
+      id: "category1".to_string(),
+      order: 1,
+      title: "category1_title".to_string(),
+      template: "category1_template".to_string(),
+      created_at: 1659846351697,
+      updated_at: 1659846351697,
+    };
+    let category2 = Category {
+      id: "category2".to_string(),
+      order: 2,
+      title: "category2_title".to_string(),
+      template: "category2_template".to_string(),
+      created_at: 1659846351697,
+      updated_at: 1659846351697,
+    };
+    let category3 = Category {
+      id: "category3".to_string(),
+      order: 2,
+      title: "category3_title".to_string(),
+      template: "category3_template".to_string(),
+      created_at: 1659846351698,
+      updated_at: 1659846351697,
+    };
+    let mut categories = vec![category3.clone(), category2.clone(), category1.clone()];
+    categories.sort();
+
+    assert_eq!(categories[0], category1);
+    assert_eq!(categories[1], category2);
+    assert_eq!(categories[2], category3);
   }
 }
