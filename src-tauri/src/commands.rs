@@ -1,4 +1,3 @@
-use geeks_event_sourcing::Command;
 use geeks_git::GitError;
 use serde::{Deserialize, Serialize};
 use tauri::State;
