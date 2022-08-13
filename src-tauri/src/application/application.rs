@@ -5,7 +5,7 @@ use geeks_event_sourcing_git::{commit_snapshot, GitEventstore};
 use geeks_git::GitError;
 
 use crate::application::{FileSnapshot, FileSnapshotError};
-use crate::domain::{Category, CategoryError, NoteError};
+use crate::domain::{Category, CategoryError, Note, NoteError};
 
 #[derive(thiserror::Error, Debug)]
 pub enum ApplicationError {
@@ -26,12 +26,14 @@ pub enum ApplicationError {
 pub struct Application {
   pub workspace_dir: PathBuf,
   pub categories: AggregateRoot<Category>,
+  pub notes: AggregateRoot<Note>,
 }
 
 impl Application {
   pub async fn init(workspace_dir: &Path) -> Result<Self, ApplicationError> {
     // load aggregates
     let categories = Application::load_categories(workspace_dir).await?;
+    let notes = Application::load_notes(workspace_dir).await?;
 
     // commit snapshot (if updated)
     commit_snapshot(workspace_dir)?;
@@ -39,6 +41,7 @@ impl Application {
     Ok(Self {
       workspace_dir: workspace_dir.to_path_buf(),
       categories,
+      notes,
     })
   }
 
@@ -47,6 +50,19 @@ impl Application {
   ) -> Result<AggregateRoot<Category>, ApplicationError> {
     let eventstore = GitEventstore::new(workspace_dir);
     let snapshot = FileSnapshot::new(&workspace_dir.join(".geeks/categories.json"));
+
+    let mut root = snapshot.load().await.unwrap_or_default();
+    let unsaved_events = eventstore.read_until_snapshot().await?;
+
+    root.save_events(unsaved_events)?;
+    snapshot.save(root.clone()).await?;
+
+    Ok(root)
+  }
+
+  async fn load_notes(workspace_dir: &Path) -> Result<AggregateRoot<Note>, ApplicationError> {
+    let eventstore = GitEventstore::new(workspace_dir);
+    let snapshot = FileSnapshot::new(&workspace_dir.join(".geeks/notes.json"));
 
     let mut root = snapshot.load().await.unwrap_or_default();
     let unsaved_events = eventstore.read_until_snapshot().await?;
