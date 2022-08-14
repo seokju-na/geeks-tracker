@@ -1,6 +1,6 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { queries, Queries, render, renderHook, RenderHookOptions, RenderOptions } from '@testing-library/react';
 import { ReactElement, ReactNode, Suspense } from 'react';
-import { QueryClientProvider } from 'react-query';
 import { queryClient } from '../queryClient';
 
 export function renderWithTestBed<

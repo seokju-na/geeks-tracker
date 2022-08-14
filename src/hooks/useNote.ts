@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { queryClient } from '../queryClient';
 import { getNote } from '../remotes/getNote';
 import { Note } from '../types/Note';
