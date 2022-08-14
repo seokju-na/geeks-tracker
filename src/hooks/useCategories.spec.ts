@@ -41,6 +41,7 @@ it('add category', async () => {
 it('get last selected id from ".history" store', async () => {
   const categories = DummyCategory.buildList(5);
   mockStore('.history').set('lastSelectedCategoryId', categories[2]!.id);
+  mockIPC('list_categories', () => categories);
 
   const { result } = renderHookWithTestBed(() => useCategories());
   await waitFor(() => {
