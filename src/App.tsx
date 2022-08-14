@@ -21,9 +21,7 @@ export default function App() {
       </Header>
       <ViewDateNavigator />
       <Main>
-        <CategoryTabs.Content>
-          <NoteEditor />
-        </CategoryTabs.Content>
+        <CategoryTabs.Content>{category => <NoteEditor category={category} />}</CategoryTabs.Content>
       </Main>
     </CategoryTabs.Root>
   );
