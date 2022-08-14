@@ -1,42 +1,20 @@
-import { CategoryTabs } from './components/CategoryTabs';
-import { NoteEditor } from './components/NoteEditor';
-import { ViewDateNavigator } from './components/ViewDateNavigator';
+import { Router } from '@tanstack/react-location';
 import { useGlobalEscKeydown } from './hooks/useGlobalEscKeydown';
-import { styled } from './styles';
+import { location } from './location';
+import { Main } from './routes/Main';
 
 export default function App() {
   useGlobalEscKeydown();
 
   return (
-    <CategoryTabs.Root
-      css={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <Header data-tauri-drag-region>
-        <CategoryTabs.List />
-      </Header>
-      <ViewDateNavigator />
-      <Main>
-        <CategoryTabs.Content>{category => <NoteEditor category={category} />}</CategoryTabs.Content>
-      </Main>
-    </CategoryTabs.Root>
+    <Router
+      location={location}
+      routes={[
+        {
+          path: '/',
+          element: <Main />,
+        },
+      ]}
+    />
   );
 }
-
-const Header = styled('header', {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-  borderBottom: '1px solid $divider',
-  userSelect: 'none',
-});
-
-const Main = styled('main', {
-  flex: 1,
-  overflowY: 'auto',
-});
