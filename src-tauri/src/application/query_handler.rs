@@ -8,7 +8,10 @@ pub trait QueryHandler {
 
 impl QueryHandler for Application {
   fn list_categories(&self) -> Vec<Category> {
-    self.categories.states.values().cloned().collect()
+    let mut categories: Vec<_> = self.categories.states.values().cloned().collect();
+    categories.sort();
+
+    categories
   }
 
   fn get_note(&self, id: String) -> Option<Note> {
