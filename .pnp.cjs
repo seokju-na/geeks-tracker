@@ -42,6 +42,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-icons", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.1.1"],\
             ["@radix-ui/react-tabs", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.0.0"],\
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.8"],\
+            ["@tanstack/react-location", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:3.7.4"],\
             ["@tanstack/react-query", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.1.3"],\
             ["@tauri-apps/api", "npm:1.0.2"],\
             ["@tauri-apps/cli", "npm:1.0.4"],\
@@ -1560,6 +1561,34 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tanstack-query-core-npm-4.1.3-66d1c688a7-8b8ac7c8b2.zip/node_modules/@tanstack/query-core/",\
           "packageDependencies": [\
             ["@tanstack/query-core", "npm:4.1.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/react-location", [\
+        ["npm:3.7.4", {\
+          "packageLocation": "./.yarn/cache/@tanstack-react-location-npm-3.7.4-dabe3d00a6-54dfa1c7d9.zip/node_modules/@tanstack/react-location/",\
+          "packageDependencies": [\
+            ["@tanstack/react-location", "npm:3.7.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:3.7.4", {\
+          "packageLocation": "./.yarn/__virtual__/@tanstack-react-location-virtual-23180170af/0/cache/@tanstack-react-location-npm-3.7.4-dabe3d00a6-54dfa1c7d9.zip/node_modules/@tanstack/react-location/",\
+          "packageDependencies": [\
+            ["@tanstack/react-location", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:3.7.4"],\
+            ["@babel/runtime", "npm:7.18.9"],\
+            ["@types/react", "npm:18.0.15"],\
+            ["@types/react-dom", "npm:18.0.6"],\
+            ["history", "npm:5.3.0"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4276,6 +4305,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-icons", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.1.1"],\
             ["@radix-ui/react-tabs", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.0.0"],\
             ["@stitches/react", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:1.2.8"],\
+            ["@tanstack/react-location", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:3.7.4"],\
             ["@tanstack/react-query", "virtual:f8956317205596178a4ecb28467021692e67dca1f5498de9aae8f25d1d10a6a2ddd14f07e90f756967a305bdc4d9e1adb20c2e316ad060974a23ddbac3c9fc85#npm:4.1.3"],\
             ["@tauri-apps/api", "npm:1.0.2"],\
             ["@tauri-apps/cli", "npm:1.0.4"],\
@@ -4494,6 +4524,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/has-unicode-npm-2.0.1-893adb4747-1eab07a743.zip/node_modules/has-unicode/",\
           "packageDependencies": [\
             ["has-unicode", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["history", [\
+        ["npm:5.3.0", {\
+          "packageLocation": "./.yarn/cache/history-npm-5.3.0-00136b6a63-d73c35df49.zip/node_modules/history/",\
+          "packageDependencies": [\
+            ["history", "npm:5.3.0"],\
+            ["@babel/runtime", "npm:7.18.9"]\
           ],\
           "linkType": "HARD"\
         }]\
