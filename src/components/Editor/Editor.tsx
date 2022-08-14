@@ -4,14 +4,12 @@ import { styled } from '../../styles';
 interface Props {
   initialDoc?: string;
   onChange?: (text: string) => void;
-  onSave?: () => void;
 }
 
-export function Editor({ initialDoc, onChange, onSave }: Props) {
+export function Editor({ initialDoc, onChange }: Props) {
   const [elemRef] = useEditor<HTMLDivElement>({
     initialDoc,
     onChange: state => onChange?.(state.doc.toString()),
-    onSave,
   });
 
   return <Wrapper ref={elemRef} />;
