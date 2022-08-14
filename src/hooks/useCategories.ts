@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { useQuery } from 'react-query';
 import { queryClient } from '../queryClient';
 import { executeCommand } from '../remotes/executeCommand';
 import { listCategories } from '../remotes/listCategories';
