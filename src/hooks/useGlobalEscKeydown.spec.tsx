@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { it, vitest } from 'vitest';
+import { location } from '../location';
 import { mockTauriEvent } from '../testing/mockIPC';
 import { useGlobalEscKeydown } from './useGlobalEscKeydown';
 
@@ -16,6 +17,19 @@ it('emit hide event when press "ESC" key without any focused element', async () 
   await userEvent.keyboard('{Escape}');
 
   expect(callback).toHaveBeenCalled();
+});
+
+it('history back if current path is not "/"', async () => {
+  location.navigate(location.buildNext(location.current.pathname, { to: '/something' }));
+
+  function Test() {
+    useGlobalEscKeydown();
+    return <div />;
+  }
+  render(<Test />);
+  await userEvent.keyboard('{Escape}');
+
+  expect(location.current.pathname).toEqual('/');
 });
 
 it('blur active element when press "ESC" key if active element is not document', async () => {

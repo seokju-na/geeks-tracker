@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { randomFillSync } from 'node:crypto';
 import { afterEach, beforeAll, beforeEach } from 'vitest';
 import { queryClient } from './src/queryClient';
+import { location } from './src/location';
 
 // jsdom doesn't come with a WebCrypto implementation
 beforeAll(() => {
@@ -20,4 +21,5 @@ beforeEach(() => {
 afterEach(() => {
   clearMocks();
   queryClient.clear();
+  location.destroy();
 });
