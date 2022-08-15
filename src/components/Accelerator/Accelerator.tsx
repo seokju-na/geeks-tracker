@@ -9,7 +9,7 @@ import { KeyboardShortcut } from './types';
 interface Props {
   shortcut: NonEmptyArray<KeyboardShortcut>;
   onKeyPress?: () => void;
-  children: ReactElement;
+  children?: ReactElement;
 }
 
 /** Register accelerator with shortcut */
@@ -18,21 +18,26 @@ export function Accelerator({ shortcut, onKeyPress = noop, children }: Props) {
     throw new Error('Accelerator key cannot be empty');
   }
 
-  const handleKeyPress = usePreservedCallback(onKeyPress);
+  const handleKeyPress = usePreservedCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    onKeyPress();
+  });
   const hotkey = createHotkey(shortcut);
   const hotkeyLabel = formatHotkey(shortcut);
 
-  const child = Children.only(children);
-  const cloned = cloneElement(Children.only(children), {
-    ...child.props,
-    onClick: (...args: unknown[]) => {
-      child.props.onClick?.(...args);
-      handleKeyPress();
-    },
-    'aria-label': `${child.props['aria-label'] ?? ''} (${hotkeyLabel})`.trimStart(),
-  });
+  const cloned =
+    children !== undefined
+      ? cloneElement(Children.only(children), {
+          ...children.props,
+          onClick: (...args: unknown[]) => {
+            children.props.onClick?.(...args);
+            onKeyPress();
+          },
+          'aria-label': `${children.props['aria-label'] ?? ''} (${hotkeyLabel})`.trimStart(),
+        })
+      : children;
 
-  const disabled = cloned.props.disabled ?? false;
+  const disabled = cloned?.props.disabled ?? false;
 
   useEffect(() => {
     if (disabled) {
