@@ -16,6 +16,7 @@ use crate::windows::setup_windows;
 mod app_state;
 mod application;
 mod commands;
+mod constants;
 mod domain;
 mod global_shortcuts;
 mod macos_titlebar_patch;
