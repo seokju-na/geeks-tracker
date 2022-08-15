@@ -1,3 +1,4 @@
+use serde::Serialize;
 use tauri::{
   App, AppHandle, Manager, Result, Runtime, Window, WindowBuilder, WindowEvent, WindowUrl,
 };
@@ -87,6 +88,12 @@ where
 
 pub trait WindowExtra {
   fn toggle(&self) -> Result<()>;
+  fn navigate<T: Into<String>>(&self, to: T) -> Result<()>;
+}
+
+#[derive(Clone, Serialize)]
+struct NavigatePayload {
+  to: String,
 }
 
 impl<R> WindowExtra for Window<R>
@@ -102,5 +109,12 @@ where
     }
 
     Ok(())
+  }
+
+  fn navigate<T: Into<String>>(&self, to: T) -> Result<()> {
+    self.emit(
+      "geeks-tracker://navigate",
+      NavigatePayload { to: to.into() },
+    )
   }
 }
