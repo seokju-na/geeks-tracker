@@ -1,5 +1,5 @@
 import { emit } from '@tauri-apps/api/event';
-import { location } from '../location';
+import { history } from '../location';
 import { useKeydown } from './useKeydown';
 
 export function useGlobalEscKeydown() {
@@ -9,20 +9,20 @@ export function useGlobalEscKeydown() {
     }
 
     const { activeElement } = document;
+    event.preventDefault();
 
     if (activeElement != null && activeElement !== document.body) {
       (activeElement as HTMLElement)?.blur();
       return;
     }
 
-    if (location.current.pathname !== '/') {
+    if (event.target === document.body) {
       event.preventDefault();
-      location.history.back();
-      return;
+      if (history.index > 0) {
+        history.back();
+      } else {
+        emit('geeks-tracker://hide');
+      }
     }
-
-    // Hide window when focus lost
-    event.preventDefault();
-    emit('geeks-tracker://hide');
   });
 }
