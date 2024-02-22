@@ -1,0 +1,12 @@
+[package]
+name = "geeks-tracker-cli"
+version = { workspace = true }
+rust-version = { workspace = true }
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+publish = { workspace = true }
+
+[[bin]]
+name = "geeks-tracker"
+path = "src/main.rs"
