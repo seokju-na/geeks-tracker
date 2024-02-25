@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "check": "biome check ./src",
-    "check:fix": "pnpm run check --apply-unsafe"
+    "check:fix": "pnpm run check --apply-unsafe",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@adobe/react-spectrum": "3.34.1",

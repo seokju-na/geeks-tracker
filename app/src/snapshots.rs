@@ -136,7 +136,7 @@ mod tests {
     fs::write(dir.path().join("tasks/#2.md"), "content")
       .await
       .unwrap();
-    let files = TaskFile::find_all(dir.path()).await.unwrap();
+    let files = TaskFile::find_all(&dir.path().join("tasks")).await.unwrap();
     assert_eq!(files.len(), 2);
   }
 

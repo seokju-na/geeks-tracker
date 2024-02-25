@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { getTask, listTasks, type ListTasksFilter } from './bridges';
+import { type ListTasksFilter, getTask, listTasks } from './bridges';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,5 +1,5 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
-import { lazy, Suspense } from 'react';
+import { Link, Outlet, createRootRoute } from '@tanstack/react-router';
+import { Suspense, lazy } from 'react';
 
 const Devtools = PRODUCTION
   ? () => null
