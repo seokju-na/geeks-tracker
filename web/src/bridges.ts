@@ -1,5 +1,5 @@
-import { invoke } from '@tauri-apps/api';
 import type { Command, Task, TaskStatus } from '@geeks-tracker/core';
+import { invoke } from '@tauri-apps/api';
 import { emit } from '@tauri-apps/api/event';
 
 export function hideApp() {

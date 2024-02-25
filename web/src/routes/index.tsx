@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { queryClient, taskQueries } from '../queries';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { runCommand } from '../bridges';
+import { queryClient, taskQueries } from '../queries';
 
 export const Route = createFileRoute('/')({
   component: Index,
