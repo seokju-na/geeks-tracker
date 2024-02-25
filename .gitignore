@@ -1,4 +1,7 @@
 .idea/
 .DS_Store*
 **/target/
-
+**/dist
+**/esm
+**/out
+**/node_modules

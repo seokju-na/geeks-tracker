@@ -1,5 +1,6 @@
 [workspace]
-members = ["crates/*"]
+members = ["app", "core", "testing"]
+default-members = ["app"]
 resolver = "2"
 
 [workspace.package]
@@ -8,7 +9,22 @@ rust-version = "1.75"
 authors = ["seokju.me@gmail.com"]
 edition = "2021"
 repository = "https://github.com/seokju-na/geeks-tracker"
+license = "MIT"
 publish = false
 
 [workspace.dependencies]
-geeks-tracker-cli = { path = "crates/cli" }
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+tokio = { version = "1.36.0", features = ["full"] }
+tauri = { version = "1.5", features = ["global-shortcut", "os-all", "system-tray", "window-start-dragging"] }
+tauri-build = { version = "1.5", features = [] }
+tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+typeshare = "1"
+git2 = "0.18"
+typed-builder = "0.18"
+log = "0.4"

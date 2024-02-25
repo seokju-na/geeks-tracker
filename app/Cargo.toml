@@ -1,0 +1,37 @@
+[package]
+name = "geeks-tracker-app"
+version = { workspace = true }
+rust-version = { workspace = true }
+authors = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+publish = { workspace = true }
+
+[build-dependencies]
+tauri-build = { workspace = true }
+
+[dependencies]
+geeks-tracker-core = { path = "../core" }
+chrono = { workspace = true }
+tauri = { workspace = true }
+tauri-plugin-store = { workspace = true }
+tauri-plugin-log = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+thiserror = { workspace = true }
+git2 = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+log = { workspace = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.25.0"
+
+[dev-dependencies]
+geeks-tracker-testing = { path = "../testing" }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

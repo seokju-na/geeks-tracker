@@ -1,0 +1,14 @@
+{
+  "name": "geeks-tracker-root",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^18",
+    "pnpm": "^8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@tauri-apps/cli": "1.5.10",
+    "typescript": "5.3.3"
+  }
+}

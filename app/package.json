@@ -1,0 +1,13 @@
+{
+  "name": "@geeks-tracker/app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "cargo clippy",
+    "test": "cargo test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "typescript": "5.3.3"
+  }
+}

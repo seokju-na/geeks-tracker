@@ -1,0 +1,19 @@
+{
+  "name": "@geeks-tracker/core",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "check": "cargo clippy",
+    "test": "cargo test",
+    "out": "typeshare ./ --lang=typescript --output-file=type.gen.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "typescript": "5.3.3"
+  }
+}
