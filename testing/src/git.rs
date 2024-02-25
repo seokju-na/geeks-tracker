@@ -1,4 +1,4 @@
-use std::fs::remove_dir_all;
+use std::fs;
 use std::path::Path;
 
 use git2::Repository;
@@ -32,6 +32,6 @@ impl FixtureRepository {
 
 impl Drop for FixtureRepository {
   fn drop(&mut self) {
-    let _ = remove_dir_all(self.path());
+    let _ = fs::remove_dir_all(self.path());
   }
 }
