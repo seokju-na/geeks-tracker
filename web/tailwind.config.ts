@@ -5,7 +5,6 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [],
 };
 
 export default config;
