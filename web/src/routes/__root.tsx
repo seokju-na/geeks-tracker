@@ -1,5 +1,8 @@
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { useSubscription } from 'observable-hooks';
 import { Suspense, lazy } from 'react';
+import { hideApp } from '../bridges';
+import { escKeydown$ } from '../events';
 
 const Devtools = PRODUCTION
   ? () => null
@@ -9,22 +12,31 @@ const Devtools = PRODUCTION
       }))
     );
 
-export const Route = createRootRoute({
-  component: () => (
+function Root() {
+  useSubscription(escKeydown$, e => {
+    const { activeElement } = document;
+    // Hide window when focus lost.
+    if (
+      activeElement === null ||
+      activeElement === document.body ||
+      (activeElement as HTMLInputElement)?.value === ''
+    ) {
+      e.preventDefault();
+      hideApp();
+    } else {
+      (activeElement as HTMLElement)?.blur();
+    }
+  });
+  return (
     <>
-      <div data-tauri-drag-region className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{' '}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
-      </div>
-      <hr />
       <Outlet />
       <Suspense>
         <Devtools />
       </Suspense>
     </>
-  ),
+  );
+}
+
+export const Route = createRootRoute({
+  component: Root,
 });

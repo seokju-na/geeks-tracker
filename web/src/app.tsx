@@ -1,3 +1,4 @@
+import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
@@ -17,7 +18,9 @@ declare module '@tanstack/react-router' {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <Provider theme={defaultTheme} UNSAFE_style={{ background: 'transparent' }}>
+        <RouterProvider router={router} />
+      </Provider>
     </QueryClientProvider>
   </StrictMode>
 );
