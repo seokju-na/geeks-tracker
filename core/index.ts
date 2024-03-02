@@ -1,6 +1,7 @@
 import type { TaskCommand } from './type.gen';
 
 export {
+  type TaskId,
   type Task,
   TaskStatus,
   type DispatchMessage,

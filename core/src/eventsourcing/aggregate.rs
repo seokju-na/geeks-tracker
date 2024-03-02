@@ -7,14 +7,15 @@ pub trait Aggregate: Sized + Send + Sync + Clone {
   type Event: Event;
   type Error: Send + Sync;
 
-  fn id(&self) -> &str;
+  fn id(&self) -> String;
 
   fn handle_command(
     this: Option<&Self>,
     command: Self::Command,
+    root: &AggregateRoot<Self>,
   ) -> Result<Self::Event, Self::Error>;
 
-  fn apply_event(this: Option<Self>, event: Self::Event) -> Result<Self, Self::Error>;
+  fn apply_event(this: Option<Self>, event: Self::Event) -> Result<(String, Option<Self>), Self::Error>;
 }
 
 #[derive(Debug, Clone)]
@@ -46,6 +47,10 @@ where
     Self { states, versions }
   }
 
+  pub fn ids(&self) -> Vec<&String> {
+    self.states.keys().collect::<Vec<_>>()
+  }
+
   pub fn get_state<K: AsRef<str>>(&self, id: K) -> Option<&T> {
     self.states.get(id.as_ref())
   }
@@ -56,15 +61,24 @@ where
 
   pub fn execute_command(&mut self, command: T::Command) -> Result<Persisted<T::Event>, T::Error> {
     let id = command.aggregate_id().to_owned();
-    let event = T::handle_command(self.states.get(&id), command)?;
-    let state = T::apply_event(self.states.get(&id).cloned(), event.clone())?;
-    self.states.insert(id.to_owned(), state);
-
+    let state = match id {
+      Some(id) => self.states.get(&id),
+      None => None,
+    };
+    let event = T::handle_command(state, command, self)?;
+    let (id, state) = T::apply_event(state.cloned(), event.clone())?;
     let version = self.versions.entry(id.to_owned()).or_insert(0);
     *version += 1;
-
+    match state {
+      Some(state) => {
+        self.states.insert(id.to_owned(), state);
+      },
+      None => {
+        self.states.remove(&id);
+      }
+    }
     let persisted = Persisted {
-      aggregate_id: id,
+      aggregate_id: id.to_owned(),
       version: *version,
       event,
     };
@@ -75,8 +89,11 @@ where
   pub fn save_events(&mut self, events: Vec<Persisted<T::Event>>) -> Result<(), T::Error> {
     for persisted in events {
       let id = persisted.aggregate_id.to_owned();
-      let state = T::apply_event(self.states.get(&id).cloned(), persisted.event)?;
-      self.states.insert(id.to_owned(), state);
+      let (id, state) = T::apply_event(self.states.get(&id).cloned(), persisted.event)?;
+      match state {
+        Some(state) => self.states.insert(id.to_owned(), state),
+        None => self.states.remove(&id),
+      };
       self.versions.insert(id.to_owned(), persisted.version);
     }
 
