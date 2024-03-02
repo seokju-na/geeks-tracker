@@ -1,6 +1,6 @@
 import { LRLanguage, LanguageSupport } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-import { parser } from '@geeks-tracker/parser';
+import { parser } from '@geeks-tracker/command';
 import { EditorView, minimalSetup } from 'codemirror';
 import { useRef } from 'react';
 

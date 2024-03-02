@@ -1,5 +1,5 @@
 {
-  "name": "@geeks-tracker/parser",
+  "name": "@geeks-tracker/command",
   "private": true,
   "type": "module",
   "main": "./index.cjs",
