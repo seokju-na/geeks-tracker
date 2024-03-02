@@ -6,7 +6,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-ci
   cancel-in-progress: true
 jobs:
-  web_check:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,8 +19,8 @@ jobs:
           node-version-file: .nvmrc
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter="./web" check
-  web_test:
+      - run: pnpm --filter="*" check
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
           node-version-file: .nvmrc
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter="./web" test
+      - run: pnpm --filter="*" test
   rust_clippy:
     runs-on: ubuntu-latest
     steps:

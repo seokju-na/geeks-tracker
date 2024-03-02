@@ -8,8 +8,8 @@
     ".": "./index.ts"
   },
   "scripts": {
-    "check": "cargo clippy",
-    "test": "cargo test",
+    "check": "biome check ./index.ts",
+    "check:fix": "pnpm run check --apply-unsafe",
     "out": "typeshare ./ --lang=typescript --output-file=type.gen.ts"
   },
   "devDependencies": {

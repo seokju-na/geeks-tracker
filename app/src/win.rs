@@ -23,6 +23,19 @@ pub fn setup_main_window(app: &mut App) -> Result<(), crate::error::Error> {
     win.set_transparent_titlebar(true, true);
   }
 
+  #[cfg(target_os = "macos")]
+  window_vibrancy::apply_vibrancy(
+    &get_main_window(app),
+    window_vibrancy::NSVisualEffectMaterial::HudWindow,
+    None,
+    None,
+  )
+  .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
+  #[cfg(target_os = "windows")]
+  window_vibrancy::apply_blur(&get_main_window(app), Some((18, 18, 18, 125)))
+    .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+
   let win = get_main_window(app);
   win.clone().listen("hide_app", move |_| {
     let _ = win.hide();
@@ -31,11 +44,20 @@ pub fn setup_main_window(app: &mut App) -> Result<(), crate::error::Error> {
   // register window event.
   let win = get_main_window(app);
   win.clone().on_window_event(move |event| {
-    // hide window when looses focuses (production only).
-    if let WindowEvent::Focused(focused) = event {
-      if win.is_visible().unwrap() && !(*focused) {
-        #[cfg(not(debug_assertions))]
-        win.hide().unwrap();
+    if let WindowEvent::Focused(ref focused) = event {
+      match focused {
+        true => {
+          let _ = win.emit("app_focused", true);
+        }
+        false => {
+          // hide window when looses focuses (production only).
+          #[cfg(not(debug_assertions))]
+          {
+            if win.is_visible().unwrap() {
+              let _ = win.hide();
+            }
+          }
+        }
       }
     }
   });

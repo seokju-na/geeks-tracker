@@ -1,0 +1,40 @@
+@top Command { NewCommand | SetCommand | DeleteCommand }
+
+@skip { space }
+
+@tokens {
+  space { @whitespace }
+  String { '"' !["]* '"' }
+  TaskId { "#" $[0-9]+ }
+  TaskStatus {
+    "backlog"
+    | "queue"
+    | "in_progress"
+    | "done"
+  }
+  Duration {
+    ($[1-9] $[0-9]*) ("w" | "d" | "h" | "m" | "s" | "weeks" | "week" | "days" | "day" | "hours" | "hour" | "minutes" | "minute" | "seconds" | "second")?
+  }
+}
+
+NewCommand {
+  "new" String WithStatus?
+}
+
+SetCommand {
+  "set" TaskId (WithTitle | WithStatus)
+}
+
+DeleteCommand {
+  "delete" TaskId
+}
+
+WithTitle {
+  "title" String
+}
+
+WithStatus {
+  "status" TaskStatus Duration?
+}
+
+@external propSource geeksTrackerHighlight from "./highlight"

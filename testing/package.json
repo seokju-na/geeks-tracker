@@ -2,9 +2,6 @@
   "name": "@geeks-tracker/testing",
   "private": true,
   "type": "module",
-  "scripts": {
-    "check": "cargo clippy"
-  },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "typescript": "5.3.3"

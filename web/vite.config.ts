@@ -14,7 +14,4 @@ export default defineConfig({
   define: {
     PRODUCTION: (NODE_ENV === 'production').toString(),
   },
-  css: {
-    transformer: 'lightningcss',
-  },
 });
