@@ -2,7 +2,7 @@ import { LanguageSupport, LRLanguage } from '@codemirror/language';
 import { parser } from '@geeks-tracker/command';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { keymap, placeholder } from '@codemirror/view';
-import type { Command } from '@geeks-tracker/core';
+import type { Command, TaskStatus } from '@geeks-tracker/core';
 import { runCommand } from './bridges';
 import { EditorView } from 'codemirror';
 
@@ -11,17 +11,58 @@ function parseCommand(text: string): Command | null {
     const tree = parser.configure({ strict: true }).parse(text);
     let command: Command | null = null;
     tree.iterate({
-      enter: node => {
-        switch (node.type.name) {
-          case 'NewCommand':
+      enter: ref => {
+        switch (ref.type.name) {
+          case 'NewCommand': {
+            const titleNode = ref.node.getChild('String')!;
+            const title = text.slice(titleNode.from, titleNode.to);
+            const withStatusNode = ref.node.getChild('WithStatus');
+            const statusNode = withStatusNode?.getChild('TaskStatus');
+            const status = statusNode != null
+              ? text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus
+              : undefined;
+            command = {
+              name: 'task.create',
+              data: {
+                title,
+                status,
+              },
+            };
             break;
-          case 'SetCommand':
-            break;
-          default:
+          }
+          case 'SetCommand': {
+            const taskIdNode = ref.node.getChild('TaskId')!;
+            const taskId = text.slice(taskIdNode.from, taskIdNode.to);
+            const withTitleNode = ref.node.getChild('WithTitle');
+            if (withTitleNode != null) {
+              const titleNode = withTitleNode.getChild('String')!;
+              const title = text.slice(titleNode.from, titleNode.to);
+              command = {
+                name: 'task.updateTitle',
+                data: {
+                  id: taskId,
+                  title,
+                }
+              };
+            }
+            const withStatusNode = ref.node.getChild('WithStatus');
+            if (withStatusNode != null) {
+              const statusNode = withStatusNode.getChild('TaskStatus')!;
+              const status = text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus
+              command = {
+                name: 'task.updateStatus',
+                data: {
+                  id: taskId,
+                  status,
+                }
+              }
+            }
+          }
             break;
         }
       },
     });
+    return command;
   } catch {
     return null;
   }
@@ -52,8 +93,12 @@ const submit = keymap.of([
     run: view => {
       const command = parseCommand(view.state.doc.toString());
       if (command != null) {
-        runCommand(command);
-        clearEditor(view);
+        runCommand(command)
+          .then(() => clearEditor(view))
+          .catch(e => {
+            // TODO: tell user that command not worked
+            console.error(e);
+          })
       }
       return true;
     },
