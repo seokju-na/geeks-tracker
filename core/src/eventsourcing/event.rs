@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use typeshare::typeshare;
 
 use crate::eventsourcing::Version;
 
@@ -7,7 +8,9 @@ pub trait Event: Send + Sync + Clone {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct PersistedEvent<T>
+#[serde(rename_all = "camelCase")]
+#[typeshare]
+pub struct Persisted<T>
 where
   T: Event,
 {

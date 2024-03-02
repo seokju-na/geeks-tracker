@@ -1,10 +1,7 @@
-import { Provider, defaultTheme } from '@adobe/react-spectrum';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './app.css';
-import { queryClient } from './queries';
 import { routeTree } from './routeTree.gen';
 
 const router = createRouter({ routeTree });
@@ -17,10 +14,6 @@ declare module '@tanstack/react-router' {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider theme={defaultTheme} UNSAFE_style={{ background: 'transparent' }}>
-        <RouterProvider router={router} />
-      </Provider>
-    </QueryClientProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 );

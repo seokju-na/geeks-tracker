@@ -3,6 +3,10 @@ import type { TaskCommand } from './type.gen';
 export {
   type Task,
   TaskStatus,
+  type DispatchMessage,
+  type Persisted,
+  type Version,
+  type Timestamp,
 } from './type.gen';
 
 type AllCommand = TaskCommand;

@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 
-use crate::eventsourcing::{Event, PersistedEvent, Version};
+use crate::eventsourcing::{Event, Persisted, Version};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum VersionSelect {
@@ -17,7 +17,7 @@ pub trait Eventstore: Send + Sync {
     &self,
     aggregate_id: String,
     select: VersionSelect,
-  ) -> Result<Vec<PersistedEvent<Self::Event>>, Self::Error>;
+  ) -> Result<Vec<Persisted<Self::Event>>, Self::Error>;
 
-  async fn append(&self, events: Vec<PersistedEvent<Self::Event>>) -> Result<(), Self::Error>;
+  async fn append(&self, events: Vec<Persisted<Self::Event>>) -> Result<(), Self::Error>;
 }

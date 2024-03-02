@@ -8,7 +8,7 @@ use serde::Serialize;
 use serde_json::{from_str, to_string};
 
 use crate::eventsourcing::git::SNAPSHOT_MSG;
-use crate::eventsourcing::{Event, Eventstore, PersistedEvent, VersionSelect};
+use crate::eventsourcing::{Event, Eventstore, Persisted, VersionSelect};
 use crate::git;
 use crate::git::{commit, CommitInfo, CommitMessage, CommitReader};
 
@@ -33,7 +33,7 @@ where
     }
   }
 
-  fn event_to_commit_message(persisted: PersistedEvent<T>) -> CommitMessage {
+  fn event_to_commit_message(persisted: Persisted<T>) -> CommitMessage {
     CommitMessage {
       subject: format!(
         "{prefix} {event_name}",
@@ -44,7 +44,7 @@ where
     }
   }
 
-  fn commit_to_event(commit: CommitInfo) -> Option<PersistedEvent<T>> {
+  fn commit_to_event(commit: CommitInfo) -> Option<Persisted<T>> {
     if !commit.message.subject.contains(EVENT_MSG) {
       return None;
     }
@@ -55,7 +55,7 @@ where
     }
   }
 
-  pub async fn read_until_snapshot(&self) -> Result<Vec<PersistedEvent<T>>, git::Error> {
+  pub async fn read_until_snapshot(&self) -> Result<Vec<Persisted<T>>, git::Error> {
     let repo = Repository::open(&self.repo_path)?;
     let mut events: Vec<_> = CommitReader::new(&repo)?
       .start_on_head()
@@ -81,7 +81,7 @@ where
     &self,
     aggregate_id: String,
     select: VersionSelect,
-  ) -> Result<Vec<PersistedEvent<Self::Event>>, Self::Error> {
+  ) -> Result<Vec<Persisted<Self::Event>>, Self::Error> {
     let repo = Repository::open(&self.repo_path)?;
     let mut events: Vec<_> = CommitReader::new(&repo)?
       .start_on_head()
@@ -98,7 +98,7 @@ where
     Ok(events)
   }
 
-  async fn append(&self, events: Vec<PersistedEvent<Self::Event>>) -> Result<(), Self::Error> {
+  async fn append(&self, events: Vec<Persisted<Self::Event>>) -> Result<(), Self::Error> {
     let repo = Repository::open(&self.repo_path)?;
     let commit_messages = events
       .into_iter()
@@ -118,7 +118,7 @@ mod tests {
 
   use crate::eventsourcing::dummy::{TodoEvent, TodoStatus};
   use crate::eventsourcing::git::GitEventstore;
-  use crate::eventsourcing::{Event, Eventstore, PersistedEvent, VersionSelect};
+  use crate::eventsourcing::{Event, Eventstore, Persisted, VersionSelect};
 
   #[tokio::test]
   async fn should_read_events() {
@@ -135,12 +135,12 @@ mod tests {
     let eventstore = GitEventstore::new(fixture.path());
     eventstore
       .append(vec![
-        PersistedEvent {
+        Persisted {
           aggregate_id: "todo1".to_string(),
           version: 2,
           event: event2,
         },
-        PersistedEvent {
+        Persisted {
           aggregate_id: "todo1".to_string(),
           version: 1,
           event: event1,

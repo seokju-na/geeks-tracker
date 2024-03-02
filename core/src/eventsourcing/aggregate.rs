@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::eventsourcing::{Command, Event, PersistedEvent, Version};
+use crate::eventsourcing::{Command, Event, Persisted, Version};
 
 pub trait Aggregate: Sized + Send + Sync + Clone {
   type Command: Command;
@@ -54,10 +54,7 @@ where
     self.versions.get(id.as_ref())
   }
 
-  pub fn execute_command(
-    &mut self,
-    command: T::Command,
-  ) -> Result<PersistedEvent<T::Event>, T::Error> {
+  pub fn execute_command(&mut self, command: T::Command) -> Result<Persisted<T::Event>, T::Error> {
     let id = command.aggregate_id().to_owned();
     let event = T::handle_command(self.states.get(&id), command)?;
     let state = T::apply_event(self.states.get(&id).cloned(), event.clone())?;
@@ -66,7 +63,7 @@ where
     let version = self.versions.entry(id.to_owned()).or_insert(0);
     *version += 1;
 
-    let persisted = PersistedEvent {
+    let persisted = Persisted {
       aggregate_id: id,
       version: *version,
       event,
@@ -75,7 +72,7 @@ where
     Ok(persisted)
   }
 
-  pub fn save_events(&mut self, events: Vec<PersistedEvent<T::Event>>) -> Result<(), T::Error> {
+  pub fn save_events(&mut self, events: Vec<Persisted<T::Event>>) -> Result<(), T::Error> {
     for persisted in events {
       let id = persisted.aggregate_id.to_owned();
       let state = T::apply_event(self.states.get(&id).cloned(), persisted.event)?;
@@ -90,7 +87,7 @@ where
 #[cfg(test)]
 mod test {
   use crate::eventsourcing::dummy::{Todo, TodoCommand, TodoError, TodoEvent, TodoStatus};
-  use crate::eventsourcing::{AggregateRoot, PersistedEvent};
+  use crate::eventsourcing::{AggregateRoot, Persisted};
 
   #[test]
   fn execute_command_and_returns_persisted_event() {
@@ -104,7 +101,7 @@ mod test {
     let persisted = todo_root.execute_command(command).unwrap();
     assert_eq!(
       persisted,
-      PersistedEvent {
+      Persisted {
         aggregate_id: "todo_0".to_string(),
         version: 1,
         event: TodoEvent::TodoCreated {
@@ -198,7 +195,7 @@ mod test {
   #[test]
   fn save_events() {
     let events = vec![
-      PersistedEvent {
+      Persisted {
         aggregate_id: "todo_0".to_string(),
         version: 1,
         event: TodoEvent::TodoCreated {
@@ -207,7 +204,7 @@ mod test {
           status: TodoStatus::InProgress,
         },
       },
-      PersistedEvent {
+      Persisted {
         aggregate_id: "todo_0".to_string(),
         version: 2,
         event: TodoEvent::TodoTitleUpdated {

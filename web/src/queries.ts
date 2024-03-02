@@ -15,6 +15,7 @@ export const queryClient = new QueryClient({
 });
 
 export const taskQueries = {
+  all: ['tasks'],
   list: (filter: ListTasksFilter = {}) => ({
     queryKey: ['tasks', 'list', { filter }],
     queryFn: () => listTasks(filter),

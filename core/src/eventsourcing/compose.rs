@@ -1,11 +1,11 @@
 use crate::eventsourcing::{
-  Aggregate, AggregateRoot, Eventstore, PersistedEvent, Snapshot, VersionSelect,
+  Aggregate, AggregateRoot, Eventstore, Persisted, Snapshot, VersionSelect,
 };
 
 pub async fn get_unsaved_events<T, E>(
   root: &AggregateRoot<T>,
   eventstore: &E,
-) -> Result<Vec<PersistedEvent<T::Event>>, E::Error>
+) -> Result<Vec<Persisted<T::Event>>, E::Error>
 where
   T: Aggregate,
   E: Eventstore<Event = T::Event>,

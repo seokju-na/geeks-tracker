@@ -1,9 +1,9 @@
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use typed_builder::TypedBuilder;
 use typeshare::typeshare;
 
-use crate::eventsourcing::{Aggregate, Command, Event};
+use crate::eventsourcing::{Aggregate, Command, Event, Timestamp};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, TypedBuilder)]
 #[serde(rename_all = "camelCase")]
@@ -15,10 +15,10 @@ pub struct Task {
   pub body: Option<String>,
   #[builder(default)]
   pub status: TaskStatus,
-  #[builder(default = Utc::now())]
-  pub created_at: DateTime<Utc>,
-  #[builder(default = Utc::now())]
-  pub updated_at: DateTime<Utc>,
+  #[builder(default = Utc::now().timestamp())]
+  pub created_at: Timestamp,
+  #[builder(default = Utc::now().timestamp())]
+  pub updated_at: Timestamp,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -71,7 +71,7 @@ impl Aggregate for Task {
   }
 
   fn apply_event(this: Option<Self>, event: Self::Event) -> Result<Self, Self::Error> {
-    let now = Utc::now();
+    let now = Utc::now().timestamp();
     match this {
       Some(mut task) => match event {
         Self::Event::TitleUpdated { title } => {
@@ -113,22 +113,23 @@ impl Aggregate for Task {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "name")]
+#[typeshare]
+#[serde(tag = "name", content = "data")]
 pub enum TaskEvent {
-  #[serde(rename = "task.created")]
+  #[serde(rename = "task.created", rename_all = "camelCase")]
   Created {
     id: String,
     title: String,
     body: Option<String>,
     status: TaskStatus,
   },
-  #[serde(rename = "task.titleUpdated")]
+  #[serde(rename = "task.titleUpdated", rename_all = "camelCase")]
   TitleUpdated { title: String },
-  #[serde(rename = "task.statusUpdated")]
+  #[serde(rename = "task.statusUpdated", rename_all = "camelCase")]
   StatusUpdated { status: TaskStatus },
-  #[serde(rename = "task.bodyUpdated")]
+  #[serde(rename = "task.bodyUpdated", rename_all = "camelCase")]
   BodyUpdated { body: Option<String> },
-  #[serde(rename = "task.deleted")]
+  #[serde(rename = "task.deleted", rename_all = "camelCase")]
   Deleted {},
 }
 
