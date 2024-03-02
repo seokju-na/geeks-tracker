@@ -92,7 +92,7 @@ impl TaskFile {
 
   pub async fn save(&self, state: &Task, version: Version) -> Result<(), crate::error::Error> {
     let data = SnapshotData {
-      id: state.id.to_owned(),
+      id: state.id.to_string(),
       version,
       state,
     };
@@ -121,6 +121,7 @@ impl TaskFile {
 #[cfg(test)]
 mod tests {
   use tokio::fs;
+  use geeks_tracker_core::domain::task::TaskId;
 
   use geeks_tracker_testing::tempdir;
 
@@ -144,7 +145,7 @@ mod tests {
   async fn save_and_parse_file() {
     let dir = tempdir::TempDir::new("workspace").unwrap();
     let task = Task::builder()
-      .id("#1".to_string())
+      .id(TaskId::new(1))
       .title("Hello".to_string())
       .build();
     let file = TaskFile::new(&task, dir.path());

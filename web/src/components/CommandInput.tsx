@@ -1,29 +1,26 @@
-import { LRLanguage, LanguageSupport } from '@codemirror/language';
-import { EditorState } from '@codemirror/state';
-import { parser } from '@geeks-tracker/command';
-import { EditorView, minimalSetup } from 'codemirror';
+import type { EditorView } from 'codemirror';
+import { useSubscription } from 'observable-hooks';
 import { useRef } from 'react';
-
-const commandLanguage = LRLanguage.define({ name: 'geeks-tracker', parser });
-const forceSingleLine = EditorState.transactionFilter.of(tr => (tr.newDoc.lines > 1 ? [] : [tr]));
-
-function editor() {
-  const state = EditorState.create({
-    doc: '',
-    extensions: [minimalSetup, forceSingleLine, new LanguageSupport(commandLanguage, [])],
-  });
-  return state;
-}
+import { createEditor, isEditorEmpty, selectEditorAll } from '../editor';
+import { appFocused$ } from '../events';
 
 // WIP
 export function CommandInput() {
   const ref = useRef<EditorView>();
   const init = (elem: HTMLElement) => {
-    if (ref.current != null) {
-      return;
+    if (ref.current == null) {
+      ref.current = createEditor(elem);
     }
-    ref.current = new EditorView({ state: editor(), parent: elem });
   };
+  useSubscription(appFocused$, () => {
+    const editor = ref.current;
+    if (editor != null) {
+      editor.focus();
+      if (!isEditorEmpty(editor)) {
+        selectEditorAll(editor);
+      }
+    }
+  });
   return (
     <div
       ref={elem => {

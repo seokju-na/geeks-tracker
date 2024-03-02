@@ -66,12 +66,13 @@ impl Command for TodoCommand {
     }
   }
 
-  fn aggregate_id(&self) -> &str {
+  fn aggregate_id(&self) -> Option<String> {
     match self {
-      TodoCommand::CreateTodo { id, .. } => id,
-      TodoCommand::UpdateTodoTitle { id, .. } => id,
-      TodoCommand::UpdateTodoStatus { id, .. } => id,
+      TodoCommand::CreateTodo { ref id, .. } => Some(id),
+      TodoCommand::UpdateTodoTitle { ref id, .. } => Some(id),
+      TodoCommand::UpdateTodoStatus { ref id, .. } => Some(id),
     }
+    .map(|x| x.to_owned())
   }
 }
 
@@ -107,13 +108,14 @@ impl Aggregate for Todo {
   type Event = TodoEvent;
   type Error = TodoError;
 
-  fn id(&self) -> &str {
-    &self.id
+  fn id(&self) -> String {
+    self.id.to_owned()
   }
 
   fn handle_command(
     this: Option<&Self>,
     command: Self::Command,
+    _: &AggregateRoot<Self>,
   ) -> Result<Self::Event, Self::Error> {
     match command {
       TodoCommand::CreateTodo { id, title, status } => {
@@ -132,7 +134,10 @@ impl Aggregate for Todo {
     }
   }
 
-  fn apply_event(this: Option<Self>, event: Self::Event) -> Result<Self, Self::Error> {
+  fn apply_event(
+    this: Option<Self>,
+    event: Self::Event,
+  ) -> Result<(String, Option<Self>), Self::Error> {
     let timestamp = Utc::now().timestamp();
 
     match event {
@@ -140,25 +145,28 @@ impl Aggregate for Todo {
         if this.is_some() {
           return Err(TodoError::AlreadyExists);
         }
-        Ok(Todo {
-          id,
-          title,
-          status,
-          created_at: timestamp,
-          updated_at: timestamp,
-        })
+        Ok((
+          id.to_owned(),
+          Some(Todo {
+            id,
+            title,
+            status,
+            created_at: timestamp,
+            updated_at: timestamp,
+          }),
+        ))
       }
       TodoEvent::TodoTitleUpdated { title } => match this {
         Some(mut todo) => {
           todo.title = title;
-          Ok(todo)
+          Ok((todo.id.to_owned(), Some(todo)))
         }
         None => Err(TodoError::NotExists),
       },
       TodoEvent::TodoStatusUpdated { status } => match this {
         Some(mut todo) => {
           todo.status = status;
-          Ok(todo)
+          Ok((todo.id.to_owned(), Some(todo)))
         }
         None => Err(TodoError::NotExists),
       },
