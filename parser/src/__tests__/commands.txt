@@ -1,0 +1,47 @@
+# new task
+
+new "title"
+
+==>
+
+Command(NewCommand(String))
+
+# new task with status
+
+new "title" status done
+
+==>
+
+Command(NewCommand(String,WithStatus(TaskStatus)))
+
+# new task with status and duration
+
+new "title" status done 30m
+
+==>
+
+Command(NewCommand(String,WithStatus(TaskStatus,Duration)))
+
+# set task title
+
+set #123 title "new title"
+
+==>
+
+Command(SetCommand(TaskId,WithTitle(String)))
+
+# set task status
+
+set #123 status queue
+
+==>
+
+Command(SetCommand(TaskId,WithStatus(TaskStatus)))
+
+# set task status with duration
+
+set #123 status queue 30m
+
+==>
+
+Command(SetCommand(TaskId,WithStatus(TaskStatus,Duration)))
