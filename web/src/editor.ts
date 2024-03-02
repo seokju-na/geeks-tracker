@@ -1,10 +1,10 @@
-import { LanguageSupport, LRLanguage } from '@codemirror/language';
-import { parser } from '@geeks-tracker/command';
+import { LRLanguage, LanguageSupport } from '@codemirror/language';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { keymap, placeholder } from '@codemirror/view';
+import { parser } from '@geeks-tracker/command';
 import type { Command, TaskStatus } from '@geeks-tracker/core';
-import { runCommand } from './bridges';
 import { EditorView } from 'codemirror';
+import { runCommand } from './bridges';
 
 function parseCommand(text: string): Command | null {
   try {
@@ -18,9 +18,8 @@ function parseCommand(text: string): Command | null {
             const title = text.slice(titleNode.from, titleNode.to);
             const withStatusNode = ref.node.getChild('WithStatus');
             const statusNode = withStatusNode?.getChild('TaskStatus');
-            const status = statusNode != null
-              ? text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus
-              : undefined;
+            const status =
+              statusNode != null ? (text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus) : undefined;
             command = {
               name: 'task.create',
               data: {
@@ -30,34 +29,35 @@ function parseCommand(text: string): Command | null {
             };
             break;
           }
-          case 'SetCommand': {
-            const taskIdNode = ref.node.getChild('TaskId')!;
-            const taskId = text.slice(taskIdNode.from, taskIdNode.to);
-            const withTitleNode = ref.node.getChild('WithTitle');
-            if (withTitleNode != null) {
-              const titleNode = withTitleNode.getChild('String')!;
-              const title = text.slice(titleNode.from, titleNode.to);
-              command = {
-                name: 'task.updateTitle',
-                data: {
-                  id: taskId,
-                  title,
-                }
-              };
-            }
-            const withStatusNode = ref.node.getChild('WithStatus');
-            if (withStatusNode != null) {
-              const statusNode = withStatusNode.getChild('TaskStatus')!;
-              const status = text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus
-              command = {
-                name: 'task.updateStatus',
-                data: {
-                  id: taskId,
-                  status,
-                }
+          case 'SetCommand':
+            {
+              const taskIdNode = ref.node.getChild('TaskId')!;
+              const taskId = text.slice(taskIdNode.from, taskIdNode.to);
+              const withTitleNode = ref.node.getChild('WithTitle');
+              if (withTitleNode != null) {
+                const titleNode = withTitleNode.getChild('String')!;
+                const title = text.slice(titleNode.from, titleNode.to);
+                command = {
+                  name: 'task.updateTitle',
+                  data: {
+                    id: taskId,
+                    title,
+                  },
+                };
+              }
+              const withStatusNode = ref.node.getChild('WithStatus');
+              if (withStatusNode != null) {
+                const statusNode = withStatusNode.getChild('TaskStatus')!;
+                const status = text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus;
+                command = {
+                  name: 'task.updateStatus',
+                  data: {
+                    id: taskId,
+                    status,
+                  },
+                };
               }
             }
-          }
             break;
         }
       },
@@ -98,7 +98,7 @@ const submit = keymap.of([
           .catch(e => {
             // TODO: tell user that command not worked
             console.error(e);
-          })
+          });
       }
       return true;
     },

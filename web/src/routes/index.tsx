@@ -1,8 +1,8 @@
 import { Cell, Column, Divider, Flex, Row, TableBody, TableHeader, TableView } from '@adobe/react-spectrum';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { CommandInput } from '../components/CommandInput';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { taskQueries } from '../queries';
 
 export const Route = createFileRoute('/')({
@@ -40,9 +40,9 @@ function Tasks() {
               <Cell>{task.title}</Cell>
               <Cell>{task.status}</Cell>
             </Row>
-          )
+          );
         })}
       </TableBody>
     </TableView>
-  )
+  );
 }

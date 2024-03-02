@@ -1,8 +1,8 @@
 import type { EditorView } from 'codemirror';
-import { useRef } from 'react';
 import { useSubscription } from 'observable-hooks';
-import { appFocused$ } from '../events';
+import { useRef } from 'react';
 import { createEditor, isEditorEmpty, selectEditorAll } from '../editor';
+import { appFocused$ } from '../events';
 
 // WIP
 export function CommandInput() {

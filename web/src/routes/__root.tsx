@@ -1,11 +1,11 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { Provider, defaultTheme } from '@adobe/react-spectrum';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { useSubscription } from 'observable-hooks';
-import { lazy, Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { hideApp } from '../bridges';
 import { dispatcherMessages$, escKeydown$ } from '../events';
-import { defaultTheme, Provider } from '@adobe/react-spectrum';
 import { queryClient, taskQueries } from '../queries';
-import { QueryClientProvider } from '@tanstack/react-query';
 
 const Devtools = PRODUCTION
   ? () => null
