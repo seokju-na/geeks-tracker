@@ -31,9 +31,11 @@
         "alwaysOnTop": true,
         "focus": true,
         "skipTaskbar": true,
-        "visible": false
+        "visible": false,
+        "transparent": true
       }
     ],
+    "macOSPrivateApi": true,
     "security": {
       "csp": null
     },
