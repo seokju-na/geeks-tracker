@@ -2,7 +2,7 @@ import type { EditorView } from 'codemirror';
 import { useSubscription } from 'observable-hooks';
 import { useRef } from 'react';
 import { createEditor, isEditorEmpty, selectEditorAll } from '../editor';
-import { appFocused$ } from '../events';
+import { appFocused$ } from '../global';
 
 // WIP
 export function CommandInput() {

@@ -1,11 +1,12 @@
 import { Provider, defaultTheme } from '@adobe/react-spectrum';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { useSubscription } from 'observable-hooks';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
+import { filter } from 'rxjs';
 import { hideApp } from '../bridges';
-import { dispatcherMessages$, escKeydown$ } from '../events';
-import { queryClient, taskQueries } from '../queries';
+import { dispatcherMessages$, keyDowns$ } from '../global';
+import { taskQueries } from '../queries';
 
 const Devtools = PRODUCTION
   ? () => null
@@ -16,7 +17,22 @@ const Devtools = PRODUCTION
     );
 
 function Root() {
-  useSubscription(escKeydown$, e => {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            networkMode: 'always',
+            retry: false,
+            staleTime: Number.POSITIVE_INFINITY,
+          },
+          mutations: {
+            retry: false,
+          },
+        },
+      })
+  );
+  useSubscription(keyDowns$.pipe(filter(e => e.key === 'Escape')), e => {
     const { activeElement } = document;
     // Hide window when focus lost.
     if (
@@ -24,14 +40,14 @@ function Root() {
       activeElement === document.body ||
       (activeElement as HTMLInputElement)?.value === ''
     ) {
+      e.stopPropagation();
       e.preventDefault();
       hideApp();
     } else {
-      (activeElement as HTMLElement)?.blur();
+      // (activeElement as HTMLElement)?.blur();
     }
   });
   useSubscription(dispatcherMessages$, e => {
-    console.log(e);
     switch (e.payload.name) {
       case 'task.persisted':
         queryClient.invalidateQueries({ queryKey: taskQueries.all });

@@ -8,6 +8,7 @@ use crate::application::setup_application;
 use crate::commands::{list_tasks, run_task_command};
 use crate::dispatcher::setup_dispatcher;
 use crate::global_shortcut::setup_global_shortcut;
+use crate::schedule::setup_schedule;
 use crate::win::setup_main_window;
 use crate::workspace::setup_workspace;
 
@@ -17,6 +18,7 @@ mod dispatcher;
 mod error;
 mod global_shortcut;
 mod patches;
+mod schedule;
 mod snapshots;
 mod utils;
 mod win;
@@ -40,6 +42,7 @@ fn main() {
       setup_application(app).expect("fail to setup application");
       setup_main_window(app).expect("fail to setup main window");
       setup_global_shortcut(app).expect("fail to setup global shortcut");
+      setup_schedule(app);
       Ok(())
     })
     .invoke_handler(generate_handler![list_tasks, run_task_command])
