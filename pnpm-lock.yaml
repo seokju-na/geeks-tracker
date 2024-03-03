@@ -96,6 +96,9 @@ importers:
       '@geeks-tracker/language':
         specifier: workspace:^
         version: link:../language
+      '@lezer/highlight':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@tanstack/react-query':
         specifier: ^5.22.2
         version: 5.22.2(react@18.2.0)

@@ -1,4 +1,4 @@
-import { type Task, type TaskStatus, formatTaskStatus } from '@geeks-tracker/core';
+import { formatTaskStatus, type Task, type TaskStatus } from '@geeks-tracker/core';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { groupBy, objectEntries } from '@toss/utils';
 import { useSubscription } from 'observable-hooks';
@@ -8,6 +8,8 @@ import { ChevronDownIcon } from '../icons/ChevronDownIcon';
 import { ChevronUpIcon } from '../icons/ChevronUpIcon';
 import { taskQueries } from '../queries';
 import { useSettings, useUpdateSettings } from '../settings';
+import cx from 'classnames';
+import { ClockIcon } from '../icons/ClockIcon';
 
 export function Tasks() {
   // TODO: refactor this stuff
@@ -105,9 +107,9 @@ function TaskGroup({ expanded, status, selected, onExpandChange, tasks }: TaskGr
             onExpandChange(!expanded);
           }
         }}
-        className="flex items-center justify-between"
+        className="flex items-center bg-zinc-700 justify-between px-2 py-1 focus:outline-none text-zinc-400 focus-visible:bg-blue-700 focus-visible:text-white"
       >
-        <span>
+        <span className="text-sm font-semibold">
           {formatTaskStatus(status)} ({tasks.length})
         </span>
         {expanded ? <ChevronUpIcon size={16} /> : <ChevronDownIcon size={16} />}
@@ -116,14 +118,29 @@ function TaskGroup({ expanded, status, selected, onExpandChange, tasks }: TaskGr
         <ul>
           {tasks.map(task => {
             const isSelected = task.id === selected;
-            return (
-              <li key={task.id} data-selected={isSelected} className="data-[selected=true]:bg-amber-200">
-                {task.id} {task.title}
-              </li>
-            );
+            return <TaskItem key={task.id} task={task} selected={isSelected} />;
           })}
         </ul>
       ) : null}
     </section>
+  );
+}
+
+interface TaskItemProps {
+  task: Task;
+  selected?: boolean;
+  className?: string;
+}
+
+function TaskItem({ task, selected, className }: TaskItemProps) {
+  return (
+    <li
+      data-selected={selected}
+      className={cx('flex items-center text-sm text-white py-1 px-2 gap-2 border-b border-b-zinc-700', className)}
+    >
+      <span className="w-8">{task.id}</span>
+      <span className="flex-1 text-ellipsis overflow-hidden min-w-0">{task.title}</span>
+      {task.schedule != null ? <ClockIcon size={12} /> : null}
+    </li>
   );
 }

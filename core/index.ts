@@ -18,12 +18,12 @@ export type Command<T extends CommandName = CommandName> = Extract<AllCommand, {
 export function formatTaskStatus(status: TaskStatus): string {
   switch (status) {
     case TaskStatus.Backlog:
-      return 'BACKLOG';
+      return 'backlog';
     case TaskStatus.Queue:
-      return 'QUEUE';
+      return 'queue';
     case TaskStatus.InProgress:
-      return 'IN PROGRESS';
+      return 'in progress';
     case TaskStatus.Done:
-      return 'DONE';
+      return 'don';
   }
 }

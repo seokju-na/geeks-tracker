@@ -25,7 +25,6 @@ async-trait = { workspace = true }
 tokio = { workspace = true }
 tokio_schedule = { workspace = true }
 log = { workspace = true }
-window-vibrancy = { workspace = true }
 async-channel = { workspace = true }
 devtools = { workspace = true }
 

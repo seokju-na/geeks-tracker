@@ -2,7 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{generate_handler, CustomMenuItem, SystemTray, SystemTrayMenu};
-use tauri_plugin_log::LogTarget;
 
 use crate::application::setup_application;
 use crate::commands::{list_tasks, run_task_command};

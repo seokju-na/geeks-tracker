@@ -12,7 +12,9 @@ function Index() {
   return (
     <>
       <Titlebar />
-      <CommandInput />
+      <div className="flex py-1.5 px-1 items-center border-b border-b-zinc-700">
+        <CommandInput />
+      </div>
       <Suspense>
         <Tasks />
       </Suspense>
