@@ -31,3 +31,5 @@ typeshare = "1"
 git2 = "0.18"
 typed-builder = "0.18"
 log = "0.4"
+devtools = "0.3"
+

@@ -25,17 +25,19 @@ mod win;
 mod workspace;
 
 fn main() {
-  tauri::Builder::default()
+  #[cfg(debug_assertions)]
+  let devtools = devtools::init();
+
+  let builder = tauri::Builder::default();
+  #[cfg(debug_assertions)]
+  let builder = builder.plugin(devtools);
+
+  builder
     .system_tray(
       SystemTray::new()
         .with_menu(SystemTrayMenu::new().add_item(CustomMenuItem::new("quit", "Quit"))),
     )
     .plugin(tauri_plugin_store::Builder::default().build())
-    .plugin(
-      tauri_plugin_log::Builder::default()
-        .targets([LogTarget::Stdout])
-        .build(),
-    )
     .setup(|app| {
       setup_dispatcher(app);
       setup_workspace(app).expect("fail to setup workspace");
