@@ -1,0 +1,47 @@
+name: release
+on:
+  push:
+    branches:
+      - "releases/**"
+jobs:
+  publish:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ macos-latest ]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.1
+          run_install: false
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: "1.75.0"
+          override: true
+          components: clippy,rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            app/
+            core/
+            testing/
+      - run: pnpm --filter="web" build
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: app-v__VERSION__
+          releaseName: 'geeks-tracker v__VERSION__'
+          releaseDraft: true
+          prerelease: false
+          tauriScript: 'pnpm'
+          args: --config ./app/tauri.conf.json
