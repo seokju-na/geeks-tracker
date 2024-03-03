@@ -12,7 +12,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: transparent;
+  background-color: rgba(39, 39, 42, 0.75);
+  width: 100vw;
+  height: 100vh;
 }
 
 body {

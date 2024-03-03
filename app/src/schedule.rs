@@ -48,14 +48,17 @@ pub fn setup_schedule<R: Runtime>(app: &mut App<R>) {
               .await;
             if let (Ok(e1), Ok(e2)) = (e1, e2) {
               let _ = Notification::new("me.seokju.geeks-tracker")
-                .title(format!("{} status changed", task.id))
-                .body(format!("{} -> {}", prev, next))
+                .title(format!("{} {} -> {}", task.id, prev, next))
+                .body(task.title)
                 .show();
               let _ = dispatcher
                 .send(DispatchMessage::TaskPersisted {
                   events: vec![e1, e2],
                 })
                 .await;
+              log::trace!("notify: {:?}", task.id);
+            } else {
+              log::error!("schedule error");
             }
           }
         }

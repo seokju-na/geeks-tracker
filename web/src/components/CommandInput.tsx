@@ -28,7 +28,7 @@ export function CommandInput() {
           init(elem);
         }
       }}
-      className="w-full h-[44px] outline-none pointer-events-none"
+      className="w-full"
     />
   );
 }

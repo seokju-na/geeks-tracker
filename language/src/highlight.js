@@ -1,6 +1,6 @@
 import { styleTags, tags } from '@lezer/highlight';
 
-export const geeksTrackerHighlight = styleTags({
+export const highlighting = styleTags({
   new: tags.keyword,
   set: tags.keyword,
   delete: tags.keyword,
@@ -8,7 +8,7 @@ export const geeksTrackerHighlight = styleTags({
   status: tags.keyword,
   Number: tags.number,
   String: tags.string,
-  TaskId: tags.literal,
+  TaskId: tags.name,
   TaskStatus: tags.literal,
-  Duration: tags.operatorKeyword,
+  Duration: tags.literal,
 });

@@ -1,9 +1,10 @@
-import { LRLanguage, LanguageSupport } from '@codemirror/language';
+import { HighlightStyle, LRLanguage, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 import { EditorSelection, EditorState } from '@codemirror/state';
-import { keymap, placeholder } from '@codemirror/view';
-import { parser } from '@geeks-tracker/command';
+import { drawSelection, highlightSpecialChars, keymap, placeholder } from '@codemirror/view';
 import type { Command, TaskStatus } from '@geeks-tracker/core';
+import { tags } from '@lezer/highlight';
 import { EditorView } from 'codemirror';
+import { parser } from '../../language';
 import { runCommand } from './bridges';
 import ms, { type StringValue } from './ms';
 
@@ -16,11 +17,10 @@ function parseCommand(text: string): Command | null {
         switch (ref.type.name) {
           case 'NewCommand': {
             const titleNode = ref.node.getChild('String')!;
-            const title = text.slice(titleNode.from, titleNode.to);
+            const title = text.slice(titleNode.from + 1, titleNode.to - 1);
             const withStatusNode = ref.node.getChild('WithStatus');
             const statusNode = withStatusNode?.getChild('TaskStatus');
-            const status =
-              statusNode != null ? (text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus) : undefined;
+            const status = statusNode != null ? (text.slice(statusNode.from, statusNode.to) as TaskStatus) : undefined;
             const durationNode = withStatusNode?.getChild('Duration');
             const duration =
               durationNode != null ? ms(text.slice(durationNode.from, durationNode.to) as StringValue) : undefined;
@@ -52,7 +52,7 @@ function parseCommand(text: string): Command | null {
               const withTitleNode = ref.node.getChild('WithTitle');
               if (withTitleNode != null) {
                 const titleNode = withTitleNode.getChild('String')!;
-                const title = text.slice(titleNode.from, titleNode.to);
+                const title = text.slice(titleNode.from + 1, titleNode.to - 1);
                 command = {
                   name: 'task.updateTitle',
                   data: {
@@ -64,7 +64,7 @@ function parseCommand(text: string): Command | null {
               const withStatusNode = ref.node.getChild('WithStatus');
               if (withStatusNode != null) {
                 const statusNode = withStatusNode.getChild('TaskStatus')!;
-                const status = text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus;
+                const status = text.slice(statusNode.from, statusNode.to) as TaskStatus;
                 const durationNode = withStatusNode.getChild('Duration');
                 const duration =
                   durationNode != null ? ms(text.slice(durationNode.from, durationNode.to) as StringValue) : undefined;
@@ -140,6 +140,31 @@ const submit = keymap.of([
     },
   },
 ]);
+const theme = EditorView.theme(
+  {
+    '&': {
+      fontSize: '0.875rem',
+      fontWeight: 600,
+      color: 'white',
+      backgroundColor: 'transparent',
+    },
+    '.cm-cursor': {
+      borderLeftColor: 'white',
+    },
+    '.cm-content': {
+      caretColor: 'white',
+    },
+    '.cm-selectionBackground, ::selection': {
+      backgroundColor: '#5B9DD9 !important',
+    },
+  },
+  { dark: true }
+);
+const highlighting = HighlightStyle.define([
+  { tag: tags.keyword, color: '#cf8e6d' },
+  { tag: tags.string, color: '#6aab73' },
+  { tag: tags.name, color: '#56a8f5' },
+]);
 
 export function createEditor(
   elem: HTMLElement,
@@ -149,7 +174,16 @@ export function createEditor(
 ) {
   const state = EditorState.create({
     doc: '',
-    extensions: [forceSingleLine, placeholder(options?.placeholder ?? 'Input command...'), commandLanguage, submit],
+    extensions: [
+      theme,
+      drawSelection(),
+      highlightSpecialChars(),
+      syntaxHighlighting(highlighting, { fallback: true }),
+      forceSingleLine,
+      placeholder(options?.placeholder ?? 'Input command...'),
+      commandLanguage,
+      submit,
+    ],
   });
   const view = new EditorView({ state, parent: elem });
   return view;

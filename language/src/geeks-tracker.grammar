@@ -37,4 +37,4 @@ WithStatus {
   "status" TaskStatus Duration?
 }
 
-@external propSource geeksTrackerHighlight from "./highlight"
+@external propSource highlighting from "./highlight"

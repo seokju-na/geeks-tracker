@@ -1,8 +1,8 @@
-import { Divider, Flex } from '@adobe/react-spectrum';
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { CommandInput } from '../components/CommandInput';
 import { Tasks } from '../components/Tasks';
+import { Titlebar } from '../components/Titlebar';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -11,10 +11,10 @@ export const Route = createFileRoute('/')({
 function Index() {
   return (
     <>
-      <Flex data-tauri-drag-region alignItems="center" height="size-550">
+      <Titlebar />
+      <div className="flex py-1.5 px-1 items-center border-b border-b-zinc-700">
         <CommandInput />
-      </Flex>
-      <Divider size="S" />
+      </div>
       <Suspense>
         <Tasks />
       </Suspense>

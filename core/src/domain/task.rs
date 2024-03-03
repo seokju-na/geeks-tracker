@@ -107,7 +107,7 @@ pub struct TaskSchedule {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "snake_case")]
 #[typeshare]
 pub enum TaskStatus {
   Backlog,
@@ -122,10 +122,10 @@ impl Display for TaskStatus {
       f,
       "{}",
       match self {
-        Self::Backlog => "BACKLOG",
-        Self::Queue => "QUEUE",
-        Self::InProgress => "IN_PROGRESS",
-        Self::Done => "DONE",
+        Self::Backlog => "backlog",
+        Self::Queue => "queue",
+        Self::InProgress => "in_progress",
+        Self::Done => "done",
       }
     )
   }

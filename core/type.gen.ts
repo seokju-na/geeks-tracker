@@ -9,10 +9,10 @@ export type Version = number;
 export type Timestamp = number;
 
 export enum TaskStatus {
-	Backlog = "BACKLOG",
-	Queue = "QUEUE",
-	InProgress = "IN_PROGRESS",
-	Done = "DONE",
+	Backlog = "backlog",
+	Queue = "queue",
+	InProgress = "in_progress",
+	Done = "done",
 }
 
 export interface TaskSchedule {

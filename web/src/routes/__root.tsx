@@ -1,4 +1,3 @@
-import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { useSubscription } from 'observable-hooks';
@@ -56,12 +55,10 @@ function Root() {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider theme={defaultTheme} UNSAFE_style={{ background: 'transparent' }}>
-        <Outlet />
-        <Suspense>
-          <Devtools />
-        </Suspense>
-      </Provider>
+      <Outlet />
+      <Suspense>
+        <Devtools />
+      </Suspense>
     </QueryClientProvider>
   );
 }

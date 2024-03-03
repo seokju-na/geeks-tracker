@@ -1,5 +1,5 @@
 {
-  "name": "@geeks-tracker/command",
+  "name": "@geeks-tracker/language",
   "private": true,
   "type": "module",
   "main": "./index.cjs",
@@ -12,8 +12,8 @@
     }
   },
   "scripts": {
-    "postinstall": "pnpm run build",
-    "build": "lezer-generator ./src/geeks-tracker.grammar -o src/parser.js && rollup -c",
+    "postinstall": "pnpm run out",
+    "out": "lezer-generator ./src/geeks-tracker.grammar -o src/parser.js && rollup -c",
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {

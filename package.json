@@ -6,6 +6,9 @@
     "node": "^18",
     "pnpm": "^8"
   },
+  "scripts": {
+    "package": "tauri build --config app/tauri.conf.json"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "@tauri-apps/cli": "1.5.10",
