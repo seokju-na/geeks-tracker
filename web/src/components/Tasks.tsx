@@ -1,15 +1,15 @@
-import { formatTaskStatus, type Task, type TaskStatus } from '@geeks-tracker/core';
+import { type Task, type TaskStatus, formatTaskStatus } from '@geeks-tracker/core';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { groupBy, objectEntries } from '@toss/utils';
+import cx from 'classnames';
 import { useSubscription } from 'observable-hooks';
 import { useMemo, useState } from 'react';
 import { keyDowns$ } from '../global';
 import { ChevronDownIcon } from '../icons/ChevronDownIcon';
 import { ChevronUpIcon } from '../icons/ChevronUpIcon';
+import { ClockIcon } from '../icons/ClockIcon';
 import { taskQueries } from '../queries';
 import { useSettings, useUpdateSettings } from '../settings';
-import cx from 'classnames';
-import { ClockIcon } from '../icons/ClockIcon';
 
 export function Tasks() {
   // TODO: refactor this stuff

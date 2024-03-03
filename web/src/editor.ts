@@ -1,12 +1,12 @@
-import { HighlightStyle, LanguageSupport, LRLanguage, syntaxHighlighting } from '@codemirror/language';
+import { HighlightStyle, LRLanguage, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { drawSelection, highlightSpecialChars, keymap, placeholder } from '@codemirror/view';
-import { parser } from '../../language';
 import type { Command, TaskStatus } from '@geeks-tracker/core';
+import { tags } from '@lezer/highlight';
 import { EditorView } from 'codemirror';
+import { parser } from '../../language';
 import { runCommand } from './bridges';
 import ms, { type StringValue } from './ms';
-import { tags } from '@lezer/highlight';
 
 function parseCommand(text: string): Command | null {
   try {

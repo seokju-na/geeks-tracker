@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { app } from '@tauri-apps/api';
+import { useEffect, useState } from 'react';
 
 export function Titlebar() {
   const [version, setVersion] = useState<string>();

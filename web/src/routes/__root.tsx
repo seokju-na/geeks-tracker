@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { useSubscription } from 'observable-hooks';
-import { lazy, Suspense, useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { filter } from 'rxjs';
 import { hideApp } from '../bridges';
 import { dispatcherMessages$, keyDowns$ } from '../global';
