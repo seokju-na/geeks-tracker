@@ -5,6 +5,7 @@ import { parser } from '@geeks-tracker/command';
 import type { Command, TaskStatus } from '@geeks-tracker/core';
 import { EditorView } from 'codemirror';
 import { runCommand } from './bridges';
+import ms, { type StringValue } from './ms';
 
 function parseCommand(text: string): Command | null {
   try {
@@ -20,13 +21,28 @@ function parseCommand(text: string): Command | null {
             const statusNode = withStatusNode?.getChild('TaskStatus');
             const status =
               statusNode != null ? (text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus) : undefined;
-            command = {
-              name: 'task.create',
-              data: {
-                title,
-                status,
-              },
-            };
+            const durationNode = withStatusNode?.getChild('Duration');
+            const duration =
+              durationNode != null ? ms(text.slice(durationNode.from, durationNode.to) as StringValue) : undefined;
+            command =
+              status != null && duration != null
+                ? {
+                    name: 'task.create',
+                    data: {
+                      title,
+                      schedule: {
+                        at: Date.now() + duration,
+                        status,
+                      },
+                    },
+                  }
+                : {
+                    name: 'task.create',
+                    data: {
+                      title,
+                      status,
+                    },
+                  };
             break;
           }
           case 'SetCommand':
@@ -49,19 +65,39 @@ function parseCommand(text: string): Command | null {
               if (withStatusNode != null) {
                 const statusNode = withStatusNode.getChild('TaskStatus')!;
                 const status = text.slice(statusNode.from, statusNode.to).toUpperCase() as TaskStatus;
-                command = {
-                  name: 'task.updateStatus',
-                  data: {
-                    id: taskId,
-                    status,
-                  },
-                };
+                const durationNode = withStatusNode.getChild('Duration');
+                const duration =
+                  durationNode != null ? ms(text.slice(durationNode.from, durationNode.to) as StringValue) : undefined;
+                console.log(
+                  durationNode != null ? text.slice(durationNode.from, durationNode.to) : undefined,
+                  duration
+                );
+                command =
+                  duration != null
+                    ? {
+                        name: 'task.updateSchedule',
+                        data: {
+                          id: taskId,
+                          schedule: {
+                            at: Date.now() + duration,
+                            status,
+                          },
+                        },
+                      }
+                    : {
+                        name: 'task.updateStatus',
+                        data: {
+                          id: taskId,
+                          status,
+                        },
+                      };
               }
             }
             break;
         }
       },
     });
+    console.log('command', command);
     return command;
   } catch {
     return null;

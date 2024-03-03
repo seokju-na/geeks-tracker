@@ -20,6 +20,20 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter="*" check
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.1
+          run_install: false
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter="*" typecheck
   test:
     runs-on: ubuntu-latest
     steps:

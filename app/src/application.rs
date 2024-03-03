@@ -55,13 +55,6 @@ impl ApplicationInner {
   }
 }
 
-pub fn setup_application<R: Runtime>(app: &mut App<R>) -> Result<(), crate::error::Error> {
-  let workspace: State<Workspace> = app.state();
-  let application = block_on(ApplicationInner::new(&workspace))?;
-  app.manage(Application(Mutex::new(application)));
-  Ok(())
-}
-
 #[async_trait]
 pub trait CommandHandler<T, E>
 where
@@ -82,4 +75,12 @@ impl CommandHandler<TaskCommand, TaskEvent> for ApplicationInner {
     eventstore.append(vec![persisted.clone()]).await?;
     Ok(persisted)
   }
+}
+
+pub fn setup_application<R: Runtime>(app: &mut App<R>) -> Result<(), crate::error::Error> {
+  let workspace: State<Workspace> = app.state();
+  let application = block_on(ApplicationInner::new(&workspace))?;
+  app.manage(Application(Mutex::new(application)));
+
+  Ok(())
 }

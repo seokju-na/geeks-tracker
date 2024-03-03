@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::fmt::{Display, Formatter};
 
 use chrono::Utc;
 use serde::de::Error;
@@ -8,7 +8,7 @@ use typeshare::typeshare;
 
 use crate::eventsourcing::{Aggregate, AggregateRoot, Command, Event, Timestamp};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
 #[non_exhaustive]
 #[typeshare(serialized_as = "String")]
 pub struct TaskId {
@@ -28,8 +28,8 @@ impl Default for TaskId {
 }
 
 impl Display for TaskId {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "{}", format!("#{}", self.no))
+  fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    write!(f, "#{}", self.no)
   }
 }
 
@@ -77,6 +77,33 @@ pub struct Task {
   pub created_at: Timestamp,
   #[builder(default = Utc::now().timestamp())]
   pub updated_at: Timestamp,
+  #[builder(default)]
+  pub backlog_at: Option<Timestamp>,
+  #[builder(default)]
+  pub in_progress_at: Option<Timestamp>,
+  #[builder(default)]
+  pub queue_at: Option<Timestamp>,
+  #[builder(default)]
+  pub done_at: Option<Timestamp>,
+  #[builder(default)]
+  pub schedule: Option<TaskSchedule>,
+}
+
+impl Task {
+  pub fn schedule_available(&self) -> bool {
+    if let Some(schedule) = &self.schedule {
+      return schedule.at <= Utc::now().timestamp_millis();
+    }
+    false
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, TypedBuilder)]
+#[serde(rename_all = "camelCase")]
+#[typeshare]
+pub struct TaskSchedule {
+  pub at: Timestamp,
+  pub status: TaskStatus,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -87,6 +114,21 @@ pub enum TaskStatus {
   Queue,
   InProgress,
   Done,
+}
+
+impl Display for TaskStatus {
+  fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    write!(
+      f,
+      "{}",
+      match self {
+        Self::Backlog => "BACKLOG",
+        Self::Queue => "QUEUE",
+        Self::InProgress => "IN_PROGRESS",
+        Self::Done => "DONE",
+      }
+    )
+  }
 }
 
 impl Default for TaskStatus {
@@ -115,26 +157,23 @@ impl Aggregate for Task {
         Self::Command::UpdateStatus { status, .. } => Ok(Self::Event::StatusUpdated { status }),
         Self::Command::UpdateBody { body, .. } => Ok(Self::Event::BodyUpdated { body }),
         Self::Command::Delete { .. } => Ok(Self::Event::Deleted {}),
+        Self::Command::UpdateSchedule { schedule, .. } => {
+          Ok(Self::Event::ScheduleUpdated { schedule })
+        }
         _ => Err(crate::domain::Error::TaskNotExists),
       },
       None => match command {
-        Self::Command::Create { title, status } => {
-          let mut ids = root.ids();
-          ids.sort();
-          let no = ids
-            .last()
-            .map(|x| x.to_string())
-            .map(TaskId::try_from)
-            .and_then(|x| x.ok())
-            .map(|x| x.no)
-            .unwrap_or(0);
-          Ok(Self::Event::Created {
-            id: TaskId::new(no + 1),
-            title,
-            body: None,
-            status: status.unwrap_or_default(),
-          })
-        }
+        Self::Command::Create {
+          title,
+          status,
+          schedule,
+        } => Ok(Self::Event::Created {
+          id: get_next_task_id(&root),
+          title,
+          body: None,
+          status: status.unwrap_or_default(),
+          schedule,
+        }),
         _ => Err(crate::domain::Error::TaskAlreadyExists),
       },
     }
@@ -153,8 +192,9 @@ impl Aggregate for Task {
           Ok((task.id.to_string(), Some(task)))
         }
         Self::Event::StatusUpdated { status } => {
-          task.status = status;
+          task.status = status.to_owned();
           task.updated_at = now;
+          update_task_status_timestamp(&mut task, now);
           Ok((task.id.to_string(), Some(task)))
         }
         Self::Event::BodyUpdated { body } => {
@@ -163,6 +203,11 @@ impl Aggregate for Task {
           Ok((task.id.to_string(), Some(task)))
         }
         Self::Event::Deleted { .. } => Ok((task.id.to_string(), None)),
+        Self::Event::ScheduleUpdated { schedule, .. } => {
+          task.schedule = schedule;
+          task.updated_at = now;
+          Ok((task.id.to_string(), Some(task)))
+        }
         _ => Err(crate::domain::Error::TaskAlreadyExists),
       },
       None => match event {
@@ -171,21 +216,52 @@ impl Aggregate for Task {
           title,
           body,
           status,
-        } => Ok((
-          id.to_string(),
-          Some(Task {
-            id,
-            title,
-            body,
-            status,
-            created_at: now,
-            updated_at: now,
-          }),
-        )),
+          schedule,
+        } => {
+          let mut task = Task::builder()
+            .id(id)
+            .title(title)
+            .body(body)
+            .status(status)
+            .schedule(schedule)
+            .build();
+          update_task_status_timestamp(&mut task, now);
+          Ok((task.id.to_string(), Some(task)))
+        }
         _ => Err(crate::domain::Error::TaskNotExists),
       },
     }
   }
+}
+
+fn update_task_status_timestamp(task: &mut Task, at: Timestamp) {
+  match task.status {
+    TaskStatus::Backlog => {
+      task.backlog_at = Some(at);
+    }
+    TaskStatus::Queue => {
+      task.queue_at = Some(at);
+    }
+    TaskStatus::InProgress => {
+      task.in_progress_at = Some(at);
+    }
+    TaskStatus::Done => {
+      task.done_at = Some(at);
+    }
+  };
+}
+
+fn get_next_task_id(root: &AggregateRoot<Task>) -> TaskId {
+  let mut no_list = root
+    .ids()
+    .iter()
+    .map(|x| x.to_string())
+    .filter_map(|x| TaskId::try_from(x).ok())
+    .map(|x| x.no)
+    .collect::<Vec<_>>();
+  no_list.sort();
+  let last_no = no_list.last().cloned().unwrap_or(0);
+  TaskId::new(last_no + 1)
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -198,6 +274,7 @@ pub enum TaskEvent {
     title: String,
     body: Option<String>,
     status: TaskStatus,
+    schedule: Option<TaskSchedule>,
   },
   #[serde(rename = "task.titleUpdated", rename_all = "camelCase")]
   TitleUpdated { title: String },
@@ -207,6 +284,8 @@ pub enum TaskEvent {
   BodyUpdated { body: Option<String> },
   #[serde(rename = "task.deleted", rename_all = "camelCase")]
   Deleted {},
+  #[serde(rename = "task.scheduleUpdated", rename_all = "camelCase")]
+  ScheduleUpdated { schedule: Option<TaskSchedule> },
 }
 
 impl Event for TaskEvent {
@@ -217,6 +296,7 @@ impl Event for TaskEvent {
       Self::StatusUpdated { .. } => "task.statusUpdated",
       Self::BodyUpdated { .. } => "task.bodyUpdated",
       Self::Deleted { .. } => "task.deleted",
+      Self::ScheduleUpdated { .. } => "task.scheduleUpdated",
     }
   }
 }
@@ -229,6 +309,7 @@ pub enum TaskCommand {
   Create {
     title: String,
     status: Option<TaskStatus>,
+    schedule: Option<TaskSchedule>,
   },
   #[serde(rename = "task.updateTitle", rename_all = "camelCase")]
   UpdateTitle { id: TaskId, title: String },
@@ -238,6 +319,11 @@ pub enum TaskCommand {
   UpdateBody { id: TaskId, body: Option<String> },
   #[serde(rename = "task.delete", rename_all = "camelCase")]
   Delete { id: TaskId },
+  #[serde(rename = "task.updateSchedule", rename_all = "camelCase")]
+  UpdateSchedule {
+    id: TaskId,
+    schedule: Option<TaskSchedule>,
+  },
 }
 
 impl Command for TaskCommand {
@@ -248,6 +334,7 @@ impl Command for TaskCommand {
       Self::UpdateStatus { .. } => "task.updateStatus",
       Self::UpdateBody { .. } => "task.updateBody",
       Self::Delete { .. } => "task.delete",
+      Self::UpdateSchedule { .. } => "task.updateSchedule",
     }
   }
 
@@ -258,6 +345,7 @@ impl Command for TaskCommand {
       Self::UpdateStatus { id, .. } => Some(id),
       Self::UpdateBody { id, .. } => Some(id),
       Self::Delete { id } => Some(id),
+      Self::UpdateSchedule { id, .. } => Some(id),
     }
     .map(|x| x.to_string())
   }
