@@ -43,5 +43,5 @@ jobs:
           releaseName: 'geeks-tracker v__VERSION__'
           releaseDraft: true
           prerelease: false
-          tauriScript: 'pnpm'
+          tauriScript: 'pnpm tauri'
           args: --config ./app/tauri.conf.json
