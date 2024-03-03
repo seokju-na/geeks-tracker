@@ -1,8 +1,7 @@
-import { Provider, defaultTheme } from '@adobe/react-spectrum';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { useSubscription } from 'observable-hooks';
-import { Suspense, lazy, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { filter } from 'rxjs';
 import { hideApp } from '../bridges';
 import { dispatcherMessages$, keyDowns$ } from '../global';
@@ -56,12 +55,10 @@ function Root() {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider theme={defaultTheme} UNSAFE_style={{ background: 'transparent' }}>
-        <Outlet />
-        <Suspense>
-          <Devtools />
-        </Suspense>
-      </Provider>
+      <Outlet />
+      <Suspense>
+        <Devtools />
+      </Suspense>
     </QueryClientProvider>
   );
 }

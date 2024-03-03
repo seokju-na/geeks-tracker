@@ -1,7 +1,7 @@
 import { LRLanguage, LanguageSupport } from '@codemirror/language';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { keymap, placeholder } from '@codemirror/view';
-import { parser } from '@geeks-tracker/command';
+import { parser } from '../../language';
 import type { Command, TaskStatus } from '@geeks-tracker/core';
 import { EditorView } from 'codemirror';
 import { runCommand } from './bridges';
