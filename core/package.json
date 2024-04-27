@@ -13,7 +13,7 @@
     "out": "typeshare ./ --lang=typescript --output-file=type.gen.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "typescript": "5.3.3"
+    "@biomejs/biome": "1.7.1",
+    "typescript": "5.4.5"
   }
 }

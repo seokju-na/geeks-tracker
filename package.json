@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^18",
-    "pnpm": "^8"
+    "node": "^20",
+    "pnpm": "^9"
   },
   "scripts": {
-    "package": "tauri build --config app/tauri.conf.json"
+    "package": "pnpm --filter=\"web\" build && tauri build --config ./app/tauri.conf.json"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
+    "@biomejs/biome": "1.7.1",
     "@tauri-apps/cli": "1.5.10",
-    "typescript": "5.3.3"
+    "typescript": "5.4.5"
   }
 }

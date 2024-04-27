@@ -47,18 +47,6 @@
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
-      },
-      "nursery": {
-        "noUnusedImports": "error",
-        "useGroupedTypeImport": "error",
-        "useImportType": "error",
-        "useExportType": "error",
-        "useNodejsImportProtocol": "error",
-        "useShorthandFunctionType": "error",
-        "useNumberNamespace": "error",
-        "noGlobalAssign": "error",
-        "noGlobalEval": "error",
-        "noUselessTernary": "error"
       }
     }
   },
