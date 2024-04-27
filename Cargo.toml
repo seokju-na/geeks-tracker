@@ -20,7 +20,7 @@ thiserror = "1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_yaml = "0.9"
-tokio = { version = "1.36.0", features = ["full"] }
+tokio = { version = "1.37.0", features = ["full"] }
 tokio_schedule = "0.3"
 tauri = { version = "1.5", features = ["global-shortcut", "os-all", "system-tray", "window-start-dragging", "tracing", "macos-private-api", "notification"] }
 tauri-build = { version = "1.5", features = [] }
