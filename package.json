@@ -10,7 +10,7 @@
     "package": "tauri build --config app/tauri.conf.json"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
+    "@biomejs/biome": "1.7.1",
     "@tauri-apps/cli": "1.5.10",
     "typescript": "5.4.5"
   }

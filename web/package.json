@@ -34,7 +34,7 @@
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
+    "@biomejs/biome": "1.7.1",
     "@tanstack/router-devtools": "^1.16.6",
     "@tanstack/router-vite-plugin": "^1.16.5",
     "@testing-library/dom": "^9.3.4",
